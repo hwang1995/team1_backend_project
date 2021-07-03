@@ -2,8 +2,8 @@ package com.team1.healthcare.services;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-import com.team1.healthcare.vo.DiagnosisVO;
-import com.team1.healthcare.vo.UserInfoVO;
+import com.team1.healthcare.vo.auth.UserInfoVO;
+import com.team1.healthcare.vo.diagnosis.DiagnosisVO;
 
 @Service
 public class DiagnosisServiceImpl implements IDiagnosisService {

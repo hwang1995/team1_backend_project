@@ -1,4 +1,4 @@
-package com.team1.healthcare.vo;
+package com.team1.healthcare.vo.diagnosis;
 
 import java.time.LocalDateTime;
 import com.team1.healthcare.dto.DiagnosisDTO;
