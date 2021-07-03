@@ -1,4 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.DiagnosticTestsDAO">
+	<insert id="addDiagnosticTest" parameterType="diagnosticTests">
+		insert into
+		diagnostic_tests
+		(member_id, patient_id, inspection_status,
+		created_date, diag_id)
+		values
+		(#{memberId}, #{patientId},
+		#{inspectionStatus}, #{createdDate}, #{diagId})
+	</insert>
+
+	<select id="getDiagnosticTestListByDiagId" parameterType="int"
+		resultType="diagnosticTests">
+		select diag_test_id, member_id, patient_id,
+		inspection_status, created_date, diag_id
+		from diagnostic_tests
+		where
+		diag_id=#{diagId}
+	</select>
+
+	<select id="getWeeklyDiagnosticTestListByMemberId"
+		parameterType="dateWithMember" resultType="diagnosticTests">
+		select diag_test_id,
+		member_id, patient_id,
+		inspection_status, created_date, diag_id
+		from
+		diagnostic_tests
+		where
+		member_id=#{memberId} and
+		DATE(created_date)
+		between #{startDate} and #{endDate}
+	</select>
 </mapper>
