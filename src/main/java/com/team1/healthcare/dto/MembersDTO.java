@@ -1,6 +1,9 @@
 package com.team1.healthcare.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.team1.healthcare.commons.CommonAuth;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -60,9 +63,11 @@ public class MembersDTO {
   private String memberGender;
 
   // 임직원의 생년월일
-  private LocalDateTime memberBirth;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate memberBirth;
 
   // 임직원의 입사일
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime joinedDate;
 
   // 임직원의 자기 소개 (최대 333자 (한글로))
@@ -70,5 +75,15 @@ public class MembersDTO {
 
   // 프포필 색상이나 캘린더의 색상을 식별하기 위함.
   private String memberColor;
+
+  // 임직원의 입사일자를 세팅하기 위해 필요한 메서드
+  public void setCurrentTime() {
+    joinedDate = LocalDateTime.now();
+  }
+
+  public void encryptPassword() {
+    this.memberPw = CommonAuth.encryptPassword(memberPw);
+  }
+
 
 }

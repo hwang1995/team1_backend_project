@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team1.healthcare.dao.MembersDAO">
+	<insert id="insertMember" parameterType="members">
+		insert into members
+		(member_email, member_pw, member_name, member_tel, member_addr1,
+		member_addr2,
+		member_postal, member_authority, member_enabled,
+		hospital_code, doctor_room,
+		member_image, member_gender, member_birth,
+		joined_date,
+		member_introduction, member_color)
+		values
+		(#{memberEmail},
+		#{memberPw}, #{memberName}, #{memberTel}, #{memberAddr1},
+		#{memberAddr2}, #{memberPostal}, #{memberAuthority}, #{memberEnabled},
+		#{hospitalCode}, #{doctorRoom}, #{memberImage}, #{memberGender},
+		#{memberBirth},
+		#{joinedDate}, #{memberIntroduction}, #{memberColor})
+	</insert>
+
+	<select id="getLoginMemberInfo" parameterType="loginInfo" resultType="members">
+		select member_id, member_email, member_authority, hospital_code from members
+		where member_email=#{memberEmail}
+	</select>
+</mapper>

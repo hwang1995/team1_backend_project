@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.team1.healthcare.vo.DiagnosisVO;
+import com.team1.healthcare.vo.diagnosis.DiagnosisVO;
 
 @RestController
 @RequestMapping("/api/v1/diagnosis")

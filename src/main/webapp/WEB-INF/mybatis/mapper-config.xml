@@ -36,6 +36,12 @@
 
 		<typeAlias type="com.team1.healthcare.dto.TodosDTO"
 			alias="todos" />
+
+		<typeAlias type="com.team1.healthcare.dto.MembersDTO"
+			alias="members" />
+
+		<typeAlias type="com.team1.healthcare.vo.auth.LoginVO"
+			alias="loginInfo" />
 	</typeAliases>
 
 </configuration>
