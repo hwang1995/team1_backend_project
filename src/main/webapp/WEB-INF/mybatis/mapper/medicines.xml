@@ -9,4 +9,26 @@
 		medicines
 		where medicine_name = #{medicineName}
 	</select>
+
+	<select id="getMedicineInfoByMedicineNameWithMedicines"
+		parameterType="string" resultType="medicines">
+		select medicine_id, medicine_code,
+		medicine_name, medicine_type, medicine_unit, medicine_explain
+		from
+		medicines
+		where medicine_name = #{medicineName} and (medicine_type =
+		'내용약' OR medicine_type = '외용약')
+	</select>
+
+	<select id="getInjectorInfoByMedicineName"
+		parameterType="string" resultType="medicines">
+		select medicine_id, medicine_code,
+		medicine_name, medicine_type,
+		medicine_unit, medicine_explain
+		from
+		medicines
+		where medicine_name =
+		#{medicineName} and medicine_type =
+		'주사약'
+	</select>
 </mapper>

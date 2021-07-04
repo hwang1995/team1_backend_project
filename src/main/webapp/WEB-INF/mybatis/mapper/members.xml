@@ -19,8 +19,10 @@
 		#{joinedDate}, #{memberIntroduction}, #{memberColor})
 	</insert>
 
-	<select id="getLoginMemberInfo" parameterType="loginInfo" resultType="members">
-		select member_id, member_email, member_authority, hospital_code from members
+	<select id="getLoginMemberInfo" parameterType="loginInfo"
+		resultType="members">
+		select member_id, member_email, member_authority,
+		hospital_code from members
 		where member_email=#{memberEmail}
 	</select>
 </mapper>

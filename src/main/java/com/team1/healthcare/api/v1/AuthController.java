@@ -1,6 +1,5 @@
 package com.team1.healthcare.api.v1;
 
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.team1.healthcare.dto.HospitalsDTO;
 import com.team1.healthcare.dto.MembersDTO;
+import com.team1.healthcare.exception.UserNotFoundException;
 import com.team1.healthcare.security.JwtUtil;
 import com.team1.healthcare.services.AuthServiceImpl;
 import com.team1.healthcare.services.MemberServiceImpl;
@@ -36,16 +36,15 @@ public class AuthController {
 
 
   @GetMapping("")
-  public UserInfoVO getAuth(@RequestBody LoginVO loginInfo, HttpServletResponse response) {
-    // UserInfoVO userInfo = authService.processAuthentication(loginInfo);
+  public UserInfoVO getAuth(@RequestBody LoginVO loginInfo) {
     HospitalsDTO hospitalInfo = authService.isExistedHospital(loginInfo);
     String memberEmail = loginInfo.getMemberEmail();
     String memberPw = loginInfo.getMemberPw();
 
     if (hospitalInfo == null) {
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      return null;
+      throw new UserNotFoundException("병원 정보가 존재하지 않습니다.", new Throwable("no_hospital"));
     }
+
     try {
       UsernamePasswordAuthenticationToken upat =
           new UsernamePasswordAuthenticationToken(memberEmail, memberPw);
@@ -64,9 +63,7 @@ public class AuthController {
       e.printStackTrace();
     }
 
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    return null;
-
+    throw new UserNotFoundException("존재하지 않는 계정입니다.", new Throwable("no_account"));
 
   }
 

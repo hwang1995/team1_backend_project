@@ -10,4 +10,12 @@
 		(#{diagId}, #{bloodPressure}, #{pulse},
 		#{respirationRate}, #{temperature}, #{memberId})
 	</insert>
+
+	<select id="selectVitalRecordByDiagId" parameterType="int"
+		resultType="vitalRecords">
+		select vr_id, diag_id, blood_pressure, pulse, respiration_rate, temperature,
+		member_id
+		from vital_records
+		where diag_id = #{diagId}
+	</select>
 </mapper>

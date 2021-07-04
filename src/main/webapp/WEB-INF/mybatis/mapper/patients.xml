@@ -3,10 +3,22 @@
 <mapper namespace="com.team1.healthcare.dao.PatientsDAO">
 	<select id="selectPatientByPatientId" parameterType="int"
 		resultType="patients">
-		select patient_id, patient_name, patient_ssn, patient_gender, patient_tel,
-		patient_addr1, patient_addr2, patient_postal, patient_height,
-		patient_weight, recent_date, patient_birth
+		select patient_id, patient_name, patient_ssn,
+		patient_gender, patient_tel,
+		patient_addr1, patient_addr2,
+		patient_postal, patient_height,
+		patient_weight, recent_date,
+		patient_birth, hospital_code
 		from patients
 		where patient_id=#{patientId}
+	</select>
+
+	<select id="selectHospitalPatientByPatientName"
+		parameterType="map" resultType="patients">
+		select patient_id, patient_name,
+		patient_gender, patient_birth, hospital_code
+		from patients
+		where
+		patient_name = #{patientName} and hospital_code = #{hospitalCode}
 	</select>
 </mapper>

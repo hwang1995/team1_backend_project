@@ -54,4 +54,6 @@ public class PatientsDTO {
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDateTime patientBirth;
 
+  private String hospitalCode;
+
 }

@@ -68,6 +68,7 @@
 		<typeAlias
 			type="com.team1.healthcare.vo.diagnostic.DiagnosticTestResultVO"
 			alias="diagnosticTestResult" />
+			
 	</typeAliases>
 
 </configuration>

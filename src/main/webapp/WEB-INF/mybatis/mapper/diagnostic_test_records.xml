@@ -26,7 +26,7 @@
 		parameterType="diagnosticTestResult">
 		update diagnostic_test_records set
 		diag_test_value = #{diagTestValue},
-		diag_test_status = 'DIAGNOSTIC_COMPLETED',
+		diag_test_status = 'DIAGNOSTIC_COMPLETED
 		where
 		diag_test_record_id = #{diagTestRecordId}
 	</update>

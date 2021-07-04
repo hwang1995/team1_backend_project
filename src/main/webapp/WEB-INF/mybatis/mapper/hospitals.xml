@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.HospitalsDAO">
-	<select id="getHospitalInfo" parameterType="string" resultType="hospitals">
+	<select id="getHospitalInfo" parameterType="string"
+		resultType="hospitals">
 		select hospital_code,
-		hospital_name, hospital_tel, hospital_address from hospitals where
+		hospital_name, hospital_tel,
+		hospital_address from hospitals where
 		hospital_code=#{hospitalCode}
 	</select>
 </mapper>

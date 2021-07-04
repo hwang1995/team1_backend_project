@@ -5,17 +5,18 @@
 		insert into
 		diagnostic_tests
 		(member_id, patient_id, inspection_status,
-		created_date, diag_id)
+		created_date, diag_id, hospital_code)
 		values
 		(#{memberId}, #{patientId},
-		#{inspectionStatus}, #{createdDate}, #{diagId})
+		#{inspectionStatus}, #{createdDate}, #{diagId}, #{hospitalCode})
 	</insert>
 
 	<select id="getDiagnosticTestListByDiagId" parameterType="int"
 		resultType="diagnosticTests">
 		select diag_test_id, member_id, patient_id,
-		inspection_status, created_date, diag_id
-		from diagnostic_tests
+		inspection_status, created_date, diag_id, hospital_code
+		from
+		diagnostic_tests
 		where
 		diag_id=#{diagId}
 	</select>
@@ -24,12 +25,26 @@
 		parameterType="dateWithMember" resultType="diagnosticTests">
 		select diag_test_id,
 		member_id, patient_id,
-		inspection_status, created_date, diag_id
+		inspection_status, created_date, diag_id,
+		hospital_code
 		from
 		diagnostic_tests
 		where
 		member_id=#{memberId} and
 		DATE(created_date)
 		between #{startDate} and #{endDate}
+	</select>
+
+	<select id="getWeeklyDiagnosticTestListByHospitalCode"
+		parameterType="dateWithHospitalCode" resultType="diagnosticTests">
+		select diag_test_id,
+		member_id, patient_id, inspection_status, created_date, diag_id,
+		hospital_code
+		from diagnostic_tests
+		where hospital_code =
+		#{hospitalCode} and
+		DATE(created_date)
+		between #{startDate} and
+		#{endDate}
 	</select>
 </mapper>

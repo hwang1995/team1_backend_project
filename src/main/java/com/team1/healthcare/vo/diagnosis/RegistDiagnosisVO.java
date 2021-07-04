@@ -20,6 +20,9 @@ public class RegistDiagnosisVO {
   // 진료의 PK
   private int diagId;
 
+  // 병원 코드
+  private String hospitalCode;
+
   // 의사 의견
   private String drOpinion;
 

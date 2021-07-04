@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.team1.healthcare.dao.DiagnosticInspectionsDAO">
+<mapper
+	namespace="com.team1.healthcare.dao.DiagnosticInspectionsDAO">
+	<select id="selectInspectionListByBundleName"
+		parameterType="string" resultType="diagnosticInspections">
+		select diag_inspection_id,
+		bundle_code, bundle_name, pres_code, pres_name, pres_unit,
+		pres_lower_limit, pres_upper_limit, pres_vessel, pres_specimen_name
+		from diagnostic_inspections
+		where bundle_name=
+		#{bundleName}
+	</select>
+
+	<select id="selectInspectionListByBundleCode"
+		parameterType="string" resultType="diagnosticInspections">
+		select diag_inspection_id,
+		bundle_code, bundle_name, pres_code, pres_name, pres_unit,
+		pres_lower_limit, pres_upper_limit, pres_vessel, pres_specimen_name
+		from diagnostic_inspections
+		where bundle_code =
+		#{bundleCode}
+	</select>
 </mapper>
