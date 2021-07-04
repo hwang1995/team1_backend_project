@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper
-	namespace="com.team1.healthcare.dao.DiagnosticTestRecordsDAO">
+<mapper namespace="com.team1.healthcare.dao.DiagnosticTestRecordsDAO">
 	<insert id="addDiagnosticTestRecord"
 		parameterType="diagnosticTestRecords">
 		insert into diagnostic_test_records
@@ -26,7 +25,31 @@
 		parameterType="diagnosticTestResult">
 		update diagnostic_test_records set
 		diag_test_value = #{diagTestValue},
-		diag_test_status = 'DIAGNOSTIC_COMPLETED
+		diag_test_status = 'DIAGNOSTIC_COMPLETED'
+		where
+		diag_test_record_id = #{diagTestRecordId}
+	</update>
+
+	<update id="changeStatusToProcessing" parameterType="int">
+		update
+		diagnostic_test_records set
+		diag_test_status = 'DIAGNOSTIC_PROCESSING'
+		where
+		diag_test_record_id = #{diagTestRecordId}
+	</update>
+
+	<update id="changeStatusToPending" parameterType="int">
+		update
+		diagnostic_test_records set
+		diag_test_status = 'DIAGNOSTIC_PENDING'
+		where
+		diag_test_record_id = #{diagTestRecordId}
+	</update>
+
+	<update id="changeStatusToCompleted" parameterType="int">
+		update
+		diagnostic_test_records set
+		diag_test_status = 'DIAGNOSTIC_COMPLETED'
 		where
 		diag_test_record_id = #{diagTestRecordId}
 	</update>

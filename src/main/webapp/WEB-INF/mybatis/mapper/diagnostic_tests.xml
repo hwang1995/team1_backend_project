@@ -47,4 +47,20 @@
 		between #{startDate} and
 		#{endDate}
 	</select>
+
+	<update id="completeDiagnosticTest" parameterType="int">
+		update
+		diagnosis_tests set
+		inspection_status = 'DIAGNOSTIC_COMPLETED'
+		where
+		diag_test_id = #{diagTestId}
+	</update>
+
+	<update id="processingDiagnosticTest" parameterType="int">
+		update
+		diagnosis_tests set
+		inspection_status = 'DIAGNOSTIC_PROCESSING'
+		where
+		diag_test_id = #{diagTestId}
+	</update>
 </mapper>

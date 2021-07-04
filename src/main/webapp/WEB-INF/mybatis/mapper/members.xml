@@ -25,4 +25,12 @@
 		hospital_code from members
 		where member_email=#{memberEmail}
 	</select>
+
+	<select id="isExistedUser" parameterType="members"
+		resultType="members">
+		select member_id, member_email, member_authority,
+		hospital_code from members
+		where member_email=#{memberEmail} and
+		hospital_code = #{hospitalCode}
+	</select>
 </mapper>

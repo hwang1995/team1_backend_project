@@ -4,10 +4,12 @@ import java.time.LocalDateTime;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.PatientsDTO;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 
 @Getter
 @ToString
+@NonNull
 public class DiagnosisListVO {
   // Patients 엔티티
   private int patientId;

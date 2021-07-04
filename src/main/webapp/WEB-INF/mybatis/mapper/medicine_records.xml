@@ -2,9 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.MedicineRecordsDAO">
 	<insert id="addMedicineRecord" parameterType="medicineResult">
-		insert into medicine_records
+		insert into
+		medicine_records
 		(diag_id, medicine_id, medicine_dose, member_id)
 		values
 		(#{diagId}, #{medicineId}, #{medicineDose}, #{memberId})
 	</insert>
+
+	<select id="selectMedicineRecordsByDiagId" parameterType="int"
+		resultType="medicineRecords">
+		select medicine_record_id, diag_id, medicine_id,
+		medicine_dose, member_id
+		from medicine_records
+		where diag_id = #{diagId}
+	</select>
 </mapper>

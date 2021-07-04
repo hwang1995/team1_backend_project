@@ -7,13 +7,19 @@ import com.team1.healthcare.dto.DiagnosticTestRecordsDTO;
 import com.team1.healthcare.dto.MedicinesDTO;
 import com.team1.healthcare.dto.VitalRecordsDTO;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 
 @Getter
 @ToString
 public class DiagnosisHistoryVO {
+  @NonNull
   private LocalDateTime startDate;
+
+  @NonNull
   private String visitPurpose;
+
+  @NonNull
   private String drOpinion;
   private List<MedicinesDTO> medicines;
   private List<MedicinesDTO> injectors;

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import com.team1.healthcare.vo.response.ExceptionResponse;
 import com.team1.healthcare.vo.response.RestResponse;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * RestController에서 반환하는 값에 RestRespones를 Wrapping 하기 위한 Aspect
@@ -18,6 +19,7 @@ import com.team1.healthcare.vo.response.RestResponse;
  *
  */
 @RestControllerAdvice
+@Slf4j
 public class RestResponseAdvice implements ResponseBodyAdvice<Object> {
 
   /**
@@ -30,12 +32,12 @@ public class RestResponseAdvice implements ResponseBodyAdvice<Object> {
     return !converterType.equals(StringHttpMessageConverter.class);
   }
 
+
   @Override
   public Object beforeBodyWrite(Object body, MethodParameter returnType,
       MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType,
       ServerHttpRequest request, ServerHttpResponse response) {
     // Exception일 경우 그냥 내보내기 하자.
-
     if (body instanceof ExceptionResponse) {
       return body;
     }

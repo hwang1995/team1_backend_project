@@ -17,4 +17,8 @@ public interface DiagnosticTestsDAO {
 
   public List<DiagnosticTestsDTO> getWeeklyDiagnosticTestListByHospitalCode(
       DateWithHospitalCode hospitalInfo);
+
+  public int completeDiagnosticTest(int diagTestId);
+
+  public int processingDiagnosticTest(int diagTestId);
 }

@@ -33,10 +33,10 @@ public class DiagnosticInspectionsDTO {
   private String presUnit;
 
   // 진단 검사의 하한치
-  private String presLowerLimit;
+  private double presLowerLimit;
 
   // 진단 검사의 상한치
-  private String presUpperLimit;
+  private double presUpperLimit;
 
   // 진단 검사의 용기
   private String presVessel;

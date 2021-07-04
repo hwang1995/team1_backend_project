@@ -12,4 +12,10 @@ public interface DiagnosticTestRecordsDAO {
   public List<DiagnosticTestRecordsDTO> getDiagnosticTestRecordByDiagTestId(int diagTestId);
 
   public int addDiagnosticTestRecordResult(DiagnosticTestResultVO diagnosticResultInfo);
+
+  public int changeStatusToProcessing(int diagTestRecordId);
+
+  public int changeStatusToPending(int diagTestRecordId);
+
+  public int changeStatusToCompleted(int diagTestRecordId);
 }

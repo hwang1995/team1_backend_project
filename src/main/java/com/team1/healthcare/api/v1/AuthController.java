@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.team1.healthcare.commons.CommonUtils;
 import com.team1.healthcare.dto.HospitalsDTO;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.exception.UserNotFoundException;
@@ -18,6 +19,7 @@ import com.team1.healthcare.services.AuthServiceImpl;
 import com.team1.healthcare.services.MemberServiceImpl;
 import com.team1.healthcare.vo.auth.LoginVO;
 import com.team1.healthcare.vo.auth.UserInfoVO;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -36,7 +38,7 @@ public class AuthController {
 
 
   @GetMapping("")
-  public UserInfoVO getAuth(@RequestBody LoginVO loginInfo) {
+  public UserInfoVO getAuth(@Valid @RequestBody LoginVO loginInfo) {
     HospitalsDTO hospitalInfo = authService.isExistedHospital(loginInfo);
     String memberEmail = loginInfo.getMemberEmail();
     String memberPw = loginInfo.getMemberPw();
@@ -69,12 +71,18 @@ public class AuthController {
 
   @PostMapping("")
   public String addMembers(@RequestBody MembersDTO memberInfo) {
-    boolean result = memberService.addMembers(memberInfo);
+    boolean result = CommonUtils.isEmpty(memberInfo);
+    log.info("DTO의 값은 Null인가? " + result);
+    // memberService.addMembers(memberInfo);
+    return "success";
 
-    if (result) {
-      return "success";
-    }
-    return "failure";
+  }
+
+  @GetMapping("/test")
+  public void testMethod(@RequestBody() LoginVO loginInfo) throws Exception {
+    log.info(loginInfo.toString());
+    log.info("test Exception");
+    throw new Exception();
   }
 
 

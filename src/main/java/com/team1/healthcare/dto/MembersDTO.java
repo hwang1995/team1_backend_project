@@ -3,7 +3,7 @@ package com.team1.healthcare.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
-import com.team1.healthcare.commons.CommonAuth;
+import com.team1.healthcare.commons.CommonUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,18 +22,23 @@ public class MembersDTO {
   private int memberId;
 
   // 임직원의 이메일
+
   private String memberEmail;
 
   // 임직원의 비밀번호
+
   private String memberPw;
 
   // 임직원의 이름
+
   private String memberName;
 
   // 임직원의 전화번호
+
   private String memberTel;
 
   // 임직원의 상세 주소 1
+
   private String memberAddr1;
 
   // 임직원의 상세 주소 2
@@ -60,6 +65,7 @@ public class MembersDTO {
   // 임직원의 성별
   // - 남자 (MEN)
   // - 여자 (WOMEN)
+
   private String memberGender;
 
   // 임직원의 생년월일
@@ -82,8 +88,9 @@ public class MembersDTO {
   }
 
   public void encryptPassword() {
-    this.memberPw = CommonAuth.encryptPassword(memberPw);
+    this.memberPw = CommonUtils.encryptPassword(memberPw);
   }
+
 
 
 }

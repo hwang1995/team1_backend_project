@@ -8,8 +8,8 @@
 		bundle_code, bundle_name, pres_code, pres_name, pres_unit,
 		pres_lower_limit, pres_upper_limit, pres_vessel, pres_specimen_name
 		from diagnostic_inspections
-		where bundle_name=
-		#{bundleName}
+		where bundle_name like CONCAT('%',
+		#{bundleName}, '%')
 	</select>
 
 	<select id="selectInspectionListByBundleCode"
@@ -18,7 +18,7 @@
 		bundle_code, bundle_name, pres_code, pres_name, pres_unit,
 		pres_lower_limit, pres_upper_limit, pres_vessel, pres_specimen_name
 		from diagnostic_inspections
-		where bundle_code =
-		#{bundleCode}
+		where bundle_code like CONCAT('%',
+		#{bundleCode}, '%')
 	</select>
 </mapper>
