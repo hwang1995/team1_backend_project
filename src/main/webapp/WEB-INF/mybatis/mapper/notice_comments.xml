@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.NoticeCommentsDAO">
+
+   <insert id="insertComment" parameterType="string">
+      insert into notice_comments
+      (notice_comments_id, member_name, created_date, comment, member_id)
+      values 
+      (#{notice_comments_id}, #{member_name}, #{created_date}, #{comment}, #{member_id})
+   </insert>  
+   
+   <update id="updateComment" parameterType="noticeComments">
+      update notice_comments 
+      set comment=#{comment}
+   </update>
+   
+   <delete id="deleteComment" parameterType="int">
+      delete from notice_comments 
+      where notice_comments_id=#{notice_comments_id}
+   </delete>
+
 </mapper>
