@@ -25,10 +25,34 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
   }
 
   @Override
+<<<<<<< HEAD
   public boolean registDiagnosisInfo(RegistDiagnosisVO diagnosisInfo) {
     // TODO Auto-generated method stub
     return false;
   }
+=======
+  public List<DiagnosisVO> getDiagnosisList(UserInfoVO userInfo) {
+    // Diagnosis는 memberId로 식별하기도 하며, 오늘날짜를 가져와야 한다.
+    //
+    // List<DiagnosisDTO> diagnosisList =
+    // diagnosisDAO.selectDiagnosisListByMemberId(userInfo.getMemberId());
+    //
+    // 보내줄 List 객체 생성
+    // List<DiagnosisVO> sendDiagnosisList = new ArrayList<DiagnosisVO>();
+    // for (DiagnosisDTO diagnosis : diagnosisList) {
+    // // DiagnosisDTO에 있는 patientId로 patient를 조회한다.
+    // int patientId = diagnosis.getPatientId();
+    // PatientsDTO patientInfo = patientsDAO.selectPatientByPatientId(patientId);
+    // DiagnosisVO diagnosisVO = new DiagnosisVO(patientInfo, diagnosis);
+    // sendDiagnosisList.add(diagnosisVO);
+    // }
+    //
+    //
+    // // DiagnosisDTO에 있는 patientId로 patient를 조회한다.
+    //
+    //
+    // return sendDiagnosisList;
+>>>>>>> refs/remotes/origin/origin
 
   @Override
   public List<MedicineVO> searchMedicineList(String medicineName) {

@@ -25,6 +25,8 @@
 			alias="medicineRecords" />
 		<typeAlias type="com.team1.healthcare.dto.MedicinesDTO"
 			alias="medicines" />
+		<typeAlias type="com.team1.healthcare.dto.MembersDTO"
+			alias="members" />	
 		<typeAlias type="com.team1.healthcare.dto.NoticesDTO"
 			alias="notices" />
 		<typeAlias type="com.team1.healthcare.dto.PatientsDTO"
