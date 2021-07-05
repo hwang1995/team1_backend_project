@@ -8,4 +8,37 @@
 		hospital_address from hospitals where
 		hospital_code=#{hospitalCode}
 	</select>
+
+	<select id="getHospitalInfoList" resultType="hospitals">
+		select
+		hospital_code, hospital_name, hospital_tel, hospital_address from
+		hospitals
+		order by hospital_name desc
+	</select>
+
+
+	<select id="getCount" resultType="int">
+		select count(*) from hospitals
+	</select>
+
+	<insert id="addHospitalInfo" parameterType="hospitals">
+		insert into hospitals
+		(hospital_code, hospital_name, hospital_tel, hospital_address)
+		values
+		(#{hospitalCode}, #{hospitalName}, #{hospitalTel}, #{hospitalAddress})
+	</insert>
+
+	<update id="updateHospitalInfo" parameterType="hospitals">
+		update hospitals
+		set
+		hospital_name = #{hospitalName},
+		hospital_tel = #{hospitalTel},
+		hospital_address = #{hospitalAddress}
+		where hospital_code = #{hospitalCode}
+	</update>
+
+	<delete id="deleteHospitalInfo">
+		delete from hospitals where hospital_code =
+		#{hospitalCode}
+	</delete>
 </mapper>

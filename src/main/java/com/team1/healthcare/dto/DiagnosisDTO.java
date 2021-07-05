@@ -51,7 +51,7 @@ public class DiagnosisDTO {
   // 진료 예약 상태를 판별하기 위한 컬럼
   // RESERVATION_REGISTER (예약 접수)
   // RESERVATION_COMPLETED (진료 완료)
-  // RESERVATION_CANCELED (진료 취소)
+  // RESERVATION_CANCELED (예약 취소)
   private String reservationStatus;
 
   // members 엔티티의 FK (진료 예약을 한 의사를 식별하기 위해)
@@ -59,6 +59,8 @@ public class DiagnosisDTO {
 
   // patients 엔티티의 FK (진료 예약을 한 환자를 식별하기 위해)
   private int patientId;
+
+  private String hospitalCode;
 
 
 }

@@ -21,4 +21,65 @@
 		where
 		patient_name = #{patientName} and hospital_code = #{hospitalCode}
 	</select>
+
+	<insert id="addPatient" parameterType="patients">
+		insert into patients (
+		patient_name, patient_ssn, patient_gender, patient_tel, patient_addr1,
+		patient_addr2, patient_postal, patient_height, patient_weight,
+		recent_date, patient_birth, hospital_code)
+		values
+		(#{patientName},
+		#{patientSsn}, #{patientGender}, #{patientTel}, #{patientAddr1},
+		#{patientAddr2}, #{patientPostal}, #{patientHeight}, #{patientWeight},
+		#{recentDate}, #{patientBirth}, #{hospitalCode})
+	</insert>
+
+	<update id="updatePatient" parameterType="patients">
+		update patients set
+		patient_name = #{patientName},
+		patient_ssn = #{patientSsn},
+		patient_gender = #{patientGender},
+		patient_tel = #{patientTel},
+		patient_addr1 = #{patientAddr1},
+		patient_addr2 = #{patientAddr2},
+		patient_postal = #{patientPostal},
+		patient_height = #{patientHeight},
+		patient_weight = #{patientWeight},
+		recent_date = #{recentDate},
+		patient_birth = #{patientBirth},
+		hospital_code = #{hospitalCode}
+		where
+		patient_id = #{patientId}
+	</update>
+
+	<delete id="deletePatient" parameterType="int">
+		delete from patients
+		where patient_id = #{patientId}
+	</delete>
+
+	<select id="selectPatients" parameterType="string"
+		resultType="patients">
+		select patient_id, patient_name, patient_ssn,
+		patient_gender, patient_tel,
+		patient_addr1, patient_addr2,
+		patient_postal, patient_height,
+		patient_weight, recent_date,
+		patient_birth, hospital_code
+		from patients
+		where hospital_code =
+		#{hospitalCode}
+	</select>
+
+	<select id="selectPatientsByPatientName"
+		parameterType="patientSearch" resultType="patients">
+		select patient_id, patient_name, patient_ssn,
+		patient_gender, patient_tel,
+		patient_addr1, patient_addr2,
+		patient_postal, patient_height,
+		patient_weight, recent_date,
+		patient_birth, hospital_code
+		from patients
+		where hospital_code = #{hospitalCode} and patient_name =
+		#{patientName}
+	</select>
 </mapper>

@@ -1,10 +1,14 @@
 package com.team1.healthcare.services;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.team1.healthcare.dao.MembersDAO;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.exception.ConflictRequestException;
+import com.team1.healthcare.vo.common.MemberSearchVO;
+import com.team1.healthcare.vo.member.EmailCheckVO;
+import com.team1.healthcare.vo.notice.AddNoticeImageVO;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -37,6 +41,54 @@ public class MemberServiceImpl implements IMemberService {
     }
 
     throw new RuntimeException("알 수 없는 이유로 회원가입에 실패하였습니다.");
+  }
+
+  @Override
+  public boolean addMember(MembersDTO memberInfo) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public boolean modifyMemberInfo(MembersDTO memberInfo) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public boolean deleteMember(int memberId) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public List<MembersDTO> showMembersListByHospitalCode(String hospitalCode) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public List<MembersDTO> showMembersListByNameAndCode(MemberSearchVO memberSearchInfo) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean isExistedEmail(EmailCheckVO emailCheckInfo) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public boolean intializeMemberPw(int memberId) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public String memberImageUpload(AddNoticeImageVO imageInfo) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 

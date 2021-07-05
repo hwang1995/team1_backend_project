@@ -2,7 +2,10 @@ package com.team1.healthcare.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import com.team1.healthcare.dto.DiagnosisDTO;
+import com.team1.healthcare.vo.common.DateWithHospitalAndIdVO;
+import com.team1.healthcare.vo.common.WeekNoWithMemberVO;
 import com.team1.healthcare.vo.diagnosis.RegistDiagnosisResultVO;
 
 @Mapper
@@ -15,5 +18,18 @@ public interface DiagnosisDAO {
   public int addDiagnosisInfo(RegistDiagnosisResultVO diagnosisResult);
 
   public List<DiagnosisDTO> getCompletedDiagnosisListByPatientId(int patientId);
+
+  public List<DiagnosisDTO> selectDiagnosisListByMemberIdAndWeekNo(WeekNoWithMemberVO weekInfo);
+
+  public List<DiagnosisDTO> getReservationDiagnosisListByHospitalCode(String hospitalCode);
+
+  public int addDiagnosisReservation(DiagnosisDTO diagnosisInfo);
+
+  public int updateDiagnosisReservation(@Param("diagId") int diagId,
+      @Param("visitPurpose") String visitPurpose);
+
+  public int deleteDiagnosisReservation(int diagId);
+
+  public DiagnosisDTO getDuplicatedDiagnosisTime(DateWithHospitalAndIdVO dateInfo);
 
 }

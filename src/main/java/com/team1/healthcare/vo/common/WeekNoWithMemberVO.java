@@ -9,8 +9,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DateWithMemberVO {
-  private String startDate;
-  private String endDate;
+public class WeekNoWithMemberVO {
+  private int weekNo;
   private int memberId;
 }

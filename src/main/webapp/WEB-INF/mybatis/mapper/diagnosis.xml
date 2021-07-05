@@ -6,7 +6,7 @@
 		select diag_id, week_no, start_date, end_date,
 		visit_purpose, dr_opinion, is_pharmacy, is_injector,
 		is_diagnostic_test, is_vital, reservation_status, member_id,
-		patient_id
+		patient_id, hospital_code
 		from diagnosis
 		where member_id=#{memberId}
 	</select>
@@ -17,11 +17,13 @@
 		end_date,
 		visit_purpose, dr_opinion, is_pharmacy, is_injector,
 		is_diagnostic_test, is_vital, reservation_status, member_id,
-		patient_id
+		patient_id , hospital_code
 		from diagnosis
-		where patient_id = #{patientId} and
+		where patient_id =
+		#{patientId} and
 		reservation_status = 'RESERVATION_COMPLETED'
-		order by diag_id DESC
+		order by
+		diag_id DESC
 	</select>
 
 	<update id="addDiagnosisInfo"
@@ -35,4 +37,91 @@
 		where
 		diag_id = #{diagId}
 	</update>
+
+	<select id="selectDiagnosisListByMemberIdAndWeekNo"
+		parameterType="weekNoMember" resultType="diagnosis">
+		select diag_id, week_no,
+		start_date,
+		end_date,
+		visit_purpose, dr_opinion,
+		is_pharmacy,
+		is_injector,
+		is_diagnostic_test, is_vital,
+		reservation_status,
+		member_id,
+		patient_id , hospital_code
+		from diagnosis
+		where member_id =
+		#{memberId} and
+		reservation_status =
+		'RESERVATION_REGISTER'
+		and week_no =
+		#{weekNo}
+		order by
+		diag_id DESC
+	</select>
+
+	<select id="getReservationDiagnosisListByHospitalCode"
+		parameterType="string" resultType="diagnosis">
+		select diag_id, week_no,
+		start_date,
+		end_date,
+		visit_purpose, dr_opinion,
+		is_pharmacy,
+		is_injector,
+		is_diagnostic_test, is_vital,
+		reservation_status,
+		member_id,
+		patient_id ,
+		hospital_code
+		from diagnosis
+		where hospital_code =
+		#{hospitalCode} and
+		reservation_status =
+		'RESERVATION_REGISTER'
+		order by
+		diag_id DESC
+	</select>
+
+	<insert id="addDiagnosisReservation" parameterType="diagnosis">
+		insert into
+		diagnosis
+		(week_no, start_date, end_date, visit_purpose, is_pharmacy,
+		is_injector,
+		is_diagnostic_test, is_vital,
+		reservation_status,
+		member_id,
+		patient_id , hospital_code )
+		values
+		(#{weekNo}, #{startDate},
+		#{endDate}, #{visitPurpose}, #{isPharmacy}, #{isInjector},
+		#{is_diagnostic_test}, #{is_vital}, #{reservation_status},
+		#{member_id}, #{patient_id}, #{hospital_code})
+	</insert>
+
+	<update id="updateDiagnosisReservation" parameterType="map">
+		update
+		diagnosis
+		set
+		visit_purpose = #{visitPurpose}
+		where
+		diag_id = #{diagId}
+	</update>
+
+	<update id="deleteDiagnosisReservation" parameterType="int">
+		update
+		diagnosis
+		set
+		reservation_status = 'RESERVATION_CANCELED'
+		where
+		diag_id =
+		#{diagId}
+	</update>
+
+	<select id="getDuplicatedDiagnosisTime"
+		parameterType="dateWithHospitalAndId" resultType="diagnosis">
+		select diag_id from
+		diagnosis where start_date = #{startDate} and patient_id =
+		#{patientId} and hospital_code = #{hospitalCode}
+	</select>
 </mapper>

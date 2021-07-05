@@ -51,4 +51,13 @@ public class CommonUtils {
 
   }
 
+  public static String createHospitalCode() {
+    String PREFIX_HOSPITAL = "";
+    for (int i = 0; i < 4; i++) {
+      char uc = (char) ((int) (Math.random() * 26 + 65));
+      PREFIX_HOSPITAL += uc;
+    }
+    return PREFIX_HOSPITAL;
+  }
+
 }

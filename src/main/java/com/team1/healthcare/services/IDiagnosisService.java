@@ -1,16 +1,21 @@
 package com.team1.healthcare.services;
 
 import java.util.List;
+import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.DiagnosticInspectionsDTO;
 import com.team1.healthcare.dto.DiagnosticTestsDTO;
+import com.team1.healthcare.dto.MembersDTO;
+import com.team1.healthcare.dto.PatientsDTO;
 import com.team1.healthcare.vo.auth.UserInfoVO;
 import com.team1.healthcare.vo.common.DateWithHospitalCode;
 import com.team1.healthcare.vo.common.DateWithMemberVO;
 import com.team1.healthcare.vo.common.PatientSearchVO;
+import com.team1.healthcare.vo.common.WeekNoWithMemberVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisHistoryVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisListVO;
 import com.team1.healthcare.vo.diagnosis.MedicineVO;
 import com.team1.healthcare.vo.diagnosis.RegistDiagnosisVO;
+import com.team1.healthcare.vo.diagnosis.ReservationVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticVO;
 import com.team1.healthcare.vo.patient.PatientVO;
 
@@ -136,5 +141,60 @@ public interface IDiagnosisService {
    */
   public List<PatientVO> searchPatientInfoByName(PatientSearchVO patientInfo);
 
+  /**
+   * 진료를 예약하기 위한 서비스 인터페이스
+   * 
+   * @param DiagnosisDTO diagnosisInfo
+   * @return true or false (성공 여부)
+   */
+  public boolean addReservationInfo(DiagnosisDTO diagnosisInfo);
 
+  /**
+   * 진료 정보를 수정하기 위한 서비스 인터페이스
+   * 
+   * @param int diagId
+   * @param String visitPurpose
+   * @return true or false (성공 여부)
+   */
+  public boolean modifyReservationInfo(int diagId, String visitPurpose);
+
+  /**
+   * 진료 정보를 삭제(예약 상태만 수정) 하기 위한 서비스 인터페이스
+   * 
+   * @param int diagId
+   * @return true or false (성공 여부)
+   */
+  public boolean removeReservationInfo(int diagId);
+
+  /**
+   * 해당 주의 진료 예약 정보를 보여주기 위한 서비스 인터페이스
+   * 
+   * @param WeekNoWithMemberVO dateInfo
+   * @return List<ReservationVO>
+   */
+  public List<ReservationVO> showWeeklyReservationList(WeekNoWithMemberVO dateInfo);
+
+  /**
+   * 해당 병원의 진료 예약 환자를 보여주기 위한 서비스 인터페이스
+   * 
+   * @param String hospitalCode
+   * @return List<ReservationVO>
+   */
+  public List<ReservationVO> showReservationWaitingList(String hospitalCode);
+
+  /**
+   * 해당 병원의 의사 정보를 가져오기 위한 서비스 인터페이스
+   * 
+   * @param String hospitalCode
+   * @return List<MembersDTO>
+   */
+  public List<MembersDTO> getDoctorsInfo(String hospitalCode);
+
+  /**
+   * 해당 병원의 환자 정보를 가져오기 위한 서비스 인터페이스
+   * 
+   * @param PatientSearchVO patientInfo
+   * @return List<PatientsDTO>
+   */
+  public List<PatientsDTO> getPatientsInfo(PatientSearchVO patientInfo);
 }

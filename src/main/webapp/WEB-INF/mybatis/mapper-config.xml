@@ -26,7 +26,7 @@
 		<typeAlias type="com.team1.healthcare.dto.MedicinesDTO"
 			alias="medicines" />
 		<typeAlias type="com.team1.healthcare.dto.MembersDTO"
-			alias="members" />	
+			alias="members" />
 		<typeAlias type="com.team1.healthcare.dto.NoticesDTO"
 			alias="notices" />
 		<typeAlias type="com.team1.healthcare.dto.PatientsDTO"
@@ -42,6 +42,9 @@
 
 		<typeAlias type="com.team1.healthcare.dto.MembersDTO"
 			alias="members" />
+
+		<typeAlias type="com.team1.healthcare.dto.Pager"
+			alias="pager" />
 
 		<!-- VO를 적어줍시다. -->
 		<typeAlias type="com.team1.healthcare.vo.auth.LoginVO"
@@ -75,7 +78,23 @@
 			type="com.team1.healthcare.vo.notice.UpdateNoticeCommentVO"
 			alias="updateNoticeComment" />
 
+		<typeAlias
+			type="com.team1.healthcare.vo.common.MemberSearchVO"
+			alias="memberSearch" />
 
+		<typeAlias
+			type="com.team1.healthcare.vo.common.PatientSearchVO"
+			alias="patientSearch" />
+
+		<typeAlias
+			type="com.team1.healthcare.vo.common.WeekNoWithMemberVO"
+			alias="weekNoMember" />
+
+		<typeAlias
+			type="com.team1.healthcare.vo.member.EmailCheckVO" alias="emailCheck" />
+
+		<typeAlias
+			type="com.team1.healthcare.vo.common.DateWithHospitalAndIdVO" alias="dateWithHospitalAndId" />
 	</typeAliases>
 
 </configuration>

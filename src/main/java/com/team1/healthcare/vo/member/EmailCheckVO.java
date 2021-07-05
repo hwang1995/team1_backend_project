@@ -1,4 +1,4 @@
-package com.team1.healthcare.vo.common;
+package com.team1.healthcare.vo.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DateWithMemberVO {
-  private String startDate;
-  private String endDate;
-  private int memberId;
+public class EmailCheckVO {
+  private String hospitalCode;
+  private String memberEmail;
+
 }

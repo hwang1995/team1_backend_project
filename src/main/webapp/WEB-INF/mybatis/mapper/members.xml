@@ -23,14 +23,89 @@
 		resultType="members">
 		select member_id, member_email, member_authority,
 		hospital_code from members
-		where member_email=#{memberEmail}
+		where member_email = #{memberEmail}
 	</select>
 
 	<select id="isExistedUser" parameterType="members"
 		resultType="members">
 		select member_id, member_email, member_authority,
 		hospital_code from members
-		where member_email=#{memberEmail} and
+		where member_email = #{memberEmail} and
 		hospital_code = #{hospitalCode}
 	</select>
+
+	<select id="selectMembersListByHospitalCode"
+		parameterType="string" resultType="members">
+		select member_id, member_email,
+		member_name, member_tel, member_addr1, member_addr2, member_authority,
+		member_postal,
+		member_image, member_birth, member_color)
+		from members
+		where
+		hospital_code = #{hospitalCode}
+	</select>
+
+	<select id="selectMembersListByMemberName"
+		parameterType="memberSearch" resultType="members">
+		select member_id,
+		member_email,
+		member_name, member_tel, member_addr1,
+		member_addr2,
+		member_authority, member_postal,
+		member_image,
+		member_birth,
+		member_color)
+		from members
+		where
+		member_name like
+		CONCAT('%',
+		#{memberName}, '%') and hospital_code = #{hospitalCode}
+	</select>
+
+	<select id="isExistedEmail" parameterType="emailCheck"
+		resultType="members">
+		select member_email from members where
+		member_email =
+		#{memberEmail} and hospital_code = #{hospitalCode}
+	</select>
+
+	<select id="countMembersByNameAndCode"
+		parameterType="memberSearch" resultType="int">
+		select count(*) from members
+		where member_name = #{memberName} and hospital_code = #{hospitalCode}
+	</select>
+
+	<update id="updateMemberInfo" parameterType="members">
+		update members set
+		member_authority = #{memberAuthority},
+		member_name = #{memberName},
+		member_tel = #{memberTel},
+		member_postal = #{memberPostal},
+		member_addr1 = #{member_addr1},
+		member_addr2 = #{member_addr2}
+		where
+		member_id = #{memberId}
+	</update>
+
+	<update id="updateMemberPw" parameterType="map">
+		update members set
+		member_pw = #{memberPw}
+		where
+		member_id = #{memberId}
+	</update>
+
+	<delete id="deleteMember" parameterType="int">
+		delete from members
+		where member_id = #{memberId}
+	</delete>
+
+	<select id="selectDoctorInfoByHospitalCode"
+		parameterType="string" resultType="members">
+		select member_id, member_name,
+		doctor_room, hospital_code
+		from members
+		where hospital_code =
+		#{hospitalCode} and member_authority = 'ROLE_DOCTOR'
+	</select>
+
 </mapper>
