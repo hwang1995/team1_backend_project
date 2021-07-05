@@ -30,4 +30,7 @@ public class NoticeCommentsDTO {
   // 덧글 생성 일
   private LocalDateTime createDate;
 
+  // 게시물을 식별하기 위한 notice 엔티티 FK
+  private int noticeId;
+
 }

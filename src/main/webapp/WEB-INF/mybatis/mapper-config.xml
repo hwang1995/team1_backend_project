@@ -68,7 +68,12 @@
 		<typeAlias
 			type="com.team1.healthcare.vo.diagnostic.DiagnosticTestResultVO"
 			alias="diagnosticTestResult" />
-			
+
+		<typeAlias
+			type="com.team1.healthcare.vo.notice.UpdateNoticeCommentVO"
+			alias="updateNoticeComment" />
+
+
 	</typeAliases>
 
 </configuration>

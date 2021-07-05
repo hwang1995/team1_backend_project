@@ -21,4 +21,7 @@ public class TodosDTO {
   // 임직원의 FK
   private int memberId;
 
+  // 병원을 식별하기 위한 FK
+  private String hospitalCode;
+
 }

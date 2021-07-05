@@ -2,18 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.TodosDAO">
 
-   <insert id="insertTodo" parameterType="string">
-      insert into todos
-      (todo_id, todo_content, created_date, member_id) 
-      values
-      (#{todo_id}, #{todo_content}, #{created_date}, #{member_id})
-   </insert>  
+	<select id="selectTodosByHospitalCode" parameterType="string"
+		resultType="todos">
+		select todo_id, todo_content, created_date, member_id,
+		hospital_code
+		from todos
+		where
+		hospital_code = #{hospitalCode}
+
+	</select>
+
+	<select id="selectTodosByMemberId" parameterType="int"
+		resultType="todos">
+		select todo_id, todo_content, created_date, member_id, hospital_code
+		from
+		todos
+		where
+		member_id = #{memberId}
+
+	</select>
+
+	<insert id="insertTodo" parameterType="todos">
+		insert into todos
+		(todo_content, created_date, member_id, hospital_code)
+		values
+		(#{todoContent}, #{createdDate}, #{memberId}, #{hospitalCode})
+	</insert>
 
 
-   <delete id="deleteByTodoId" parameterType="string">
-      delete from todos
-      where todo_id=#{todo_id}
-   </delete>
+	<delete id="deleteByTodoId" parameterType="int">
+		delete from todos
+		where todo_id=#{todoId}
+	</delete>
 
 </mapper>
 
