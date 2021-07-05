@@ -1,4 +1,4 @@
-package com.team1.healthcare.api.v1;
+package com.team1.healthcare.test.jonghyun.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,17 +9,15 @@ public class MemberController {
   // 1. GET 해당 병원의 해당 임직원 목록 가져오기 (의사만)
   // @GetMapping("")
   // public List<MemberVO> getMemberList() {
-  // 서비스에 리스트를 보내고 getList로 데이터를 받아옴
-
-  // IMemberService memerService;
-  // memberService.getMembers();
-  //
+  // IMemberService memberService;
   // return null;
   // }
 
   // 2. GET 해당 병원의 해당 임직원 정보 가져오기
   // @GetMapping("")
-  // public List<>
+  // public List<> getMemberDetail(String keyword){
+  // IMemberService memberService;
+  // }
 
   // 3. GET 이메일 중복 체크하기
 

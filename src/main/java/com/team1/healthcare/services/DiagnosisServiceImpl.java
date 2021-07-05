@@ -21,7 +21,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     // List<DiagnosisDTO> diagnosisList =
     // diagnosisDAO.selectDiagnosisListByMemberId(userInfo.getMemberId());
     //
-    // // 보내줄 List 객체 생성
+    // 보내줄 List 객체 생성
     // List<DiagnosisVO> sendDiagnosisList = new ArrayList<DiagnosisVO>();
     // for (DiagnosisDTO diagnosis : diagnosisList) {
     // // DiagnosisDTO에 있는 patientId로 patient를 조회한다.
