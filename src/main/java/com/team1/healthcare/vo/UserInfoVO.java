@@ -12,4 +12,5 @@ public class UserInfoVO {
   private String memberEmail;
   private String memberAuthority;
   private String hospitalCode;
+
 }

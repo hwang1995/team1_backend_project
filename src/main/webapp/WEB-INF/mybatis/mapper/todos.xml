@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.TodosDAO">
+
+   <insert id="insertTodo" parameterType="string">
+      insert into todos
+      (todo_id, todo_content, created_date, member_id) 
+      values
+      (#{todo_id}, #{todo_content}, #{created_date}, #{member_id})
+   </insert>  
+
+
+   <delete id="deleteByTodoId" parameterType="string">
+      delete from todos
+      where todo_id=#{todo_id}
+   </delete>
+
 </mapper>
+

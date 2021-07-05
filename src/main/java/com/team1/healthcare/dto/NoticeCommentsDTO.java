@@ -22,7 +22,7 @@ public class NoticeCommentsDTO {
   private int memberId;
 
   // member 이름
-  private int memberName;
+  private String memberName;
 
   // 덧글 내용 (최대 100자)
   private String comment;
