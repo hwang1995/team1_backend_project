@@ -1,6 +1,9 @@
 package com.team1.healthcare.dto;
 
+import com.team1.healthcare.vo.diagnosis.MedicineVO;
+import com.team1.healthcare.vo.diagnosis.RegistDiagnosisVO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -13,6 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class MedicineRecordsDTO {
   // medicine_records 엔티티의 PK
   private int medicineRecordId;
@@ -28,4 +32,11 @@ public class MedicineRecordsDTO {
 
   // members 엔티티의 FK (어떤 임직원이 약 혹은 주사를 처방했는지 식별하기 위해)
   private int memberId;
+
+  public MedicineRecordsDTO(MedicineVO medicineInfo, RegistDiagnosisVO diagnosisInfo) {
+    this.medicineId = medicineInfo.getMedicineId();
+    this.medicineDose = medicineInfo.getMedicineDose();
+    this.diagId = diagnosisInfo.getDiagId();
+    this.memberId = diagnosisInfo.getMemberId();
+  }
 }

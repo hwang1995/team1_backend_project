@@ -1,6 +1,7 @@
 package com.team1.healthcare.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -13,6 +14,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
 public class DiagnosticTestRecordsDTO {
   // diagnostic_test_records 엔티티의 PK
@@ -35,5 +37,12 @@ public class DiagnosticTestRecordsDTO {
 
   // members 엔티티의 FK (검사자를 식별하기 위해)
   private int inspectorMemberId;
+
+  // 진단 검사를 추가할 떄에는 diagTestId, diagInspectionId 를 세팅한다.
+  public DiagnosticTestRecordsDTO(int diagTestId, int diagInspectionId) {
+    this.diagTestId = diagTestId;
+    this.diagInspectionId = diagInspectionId;
+    this.diagTestStatus = "DIAGNOSTIC_PENDING";
+  }
 
 }

@@ -6,6 +6,7 @@
 		<setting name="mapUnderscoreToCamelCase" value="true" />
 	</settings>
 	<typeAliases>
+		<!-- DTO를 적어줍시다. -->
 		<typeAlias type="com.team1.healthcare.dto.DiagnosisDTO"
 			alias="diagnosis" />
 		<typeAlias
@@ -40,8 +41,34 @@
 		<typeAlias type="com.team1.healthcare.dto.MembersDTO"
 			alias="members" />
 
+		<!-- VO를 적어줍시다. -->
 		<typeAlias type="com.team1.healthcare.vo.auth.LoginVO"
 			alias="loginInfo" />
+
+		<typeAlias
+			type="com.team1.healthcare.vo.diagnosis.RegistDiagnosisResultVO"
+			alias="registDiagnosisResult" />
+
+		<typeAlias
+			type="com.team1.healthcare.vo.diagnosis.MedicineResultVO"
+			alias="medicineResult" />
+
+		<typeAlias
+			type="com.team1.healthcare.vo.diagnosis.VitalResultVO"
+			alias="vitalResult" />
+
+		<typeAlias
+			type="com.team1.healthcare.vo.common.DateWithMemberVO"
+			alias="dateWithMember" />
+
+		<typeAlias
+			type="com.team1.healthcare.vo.common.DateWithHospitalCode"
+			alias="dateWithHospitalCode" />
+
+		<typeAlias
+			type="com.team1.healthcare.vo.diagnostic.DiagnosticTestResultVO"
+			alias="diagnosticTestResult" />
+			
 	</typeAliases>
 
 </configuration>

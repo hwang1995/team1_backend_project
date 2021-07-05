@@ -1,6 +1,7 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -46,9 +47,13 @@ public class PatientsDTO {
   private int patientWeight;
 
   // 환자의 마지막 진료일
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime recentDate;
 
   // 환자의 생일
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDateTime patientBirth;
+
+  private String hospitalCode;
 
 }

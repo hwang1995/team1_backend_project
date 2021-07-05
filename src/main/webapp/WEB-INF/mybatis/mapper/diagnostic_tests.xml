@@ -1,4 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.DiagnosticTestsDAO">
+	<insert id="addDiagnosticTest" parameterType="diagnosticTests">
+		insert into
+		diagnostic_tests
+		(member_id, patient_id, inspection_status,
+		created_date, diag_id, hospital_code)
+		values
+		(#{memberId}, #{patientId},
+		#{inspectionStatus}, #{createdDate}, #{diagId}, #{hospitalCode})
+	</insert>
+
+	<select id="getDiagnosticTestListByDiagId" parameterType="int"
+		resultType="diagnosticTests">
+		select diag_test_id, member_id, patient_id,
+		inspection_status, created_date, diag_id, hospital_code
+		from
+		diagnostic_tests
+		where
+		diag_id=#{diagId}
+	</select>
+
+	<select id="getWeeklyDiagnosticTestListByMemberId"
+		parameterType="dateWithMember" resultType="diagnosticTests">
+		select diag_test_id,
+		member_id, patient_id,
+		inspection_status, created_date, diag_id,
+		hospital_code
+		from
+		diagnostic_tests
+		where
+		member_id=#{memberId} and
+		DATE(created_date)
+		between #{startDate} and #{endDate}
+	</select>
+
+	<select id="getWeeklyDiagnosticTestListByHospitalCode"
+		parameterType="dateWithHospitalCode" resultType="diagnosticTests">
+		select diag_test_id,
+		member_id, patient_id, inspection_status, created_date, diag_id,
+		hospital_code
+		from diagnostic_tests
+		where hospital_code =
+		#{hospitalCode} and
+		DATE(created_date)
+		between #{startDate} and
+		#{endDate}
+	</select>
+
+	<update id="completeDiagnosticTest" parameterType="int">
+		update
+		diagnosis_tests set
+		inspection_status = 'DIAGNOSTIC_COMPLETED'
+		where
+		diag_test_id = #{diagTestId}
+	</update>
+
+	<update id="processingDiagnosticTest" parameterType="int">
+		update
+		diagnosis_tests set
+		inspection_status = 'DIAGNOSTIC_PROCESSING'
+		where
+		diag_test_id = #{diagTestId}
+	</update>
 </mapper>

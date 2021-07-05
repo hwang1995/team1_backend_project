@@ -1,6 +1,7 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,9 +23,11 @@ public class DiagnosisDTO {
   private int weekNo;
 
   // 진료 예약 시작 시간을 기록하기 위함.
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime startDate;
 
   // 진료 예약 종료 시간을 기록하기 위함.
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime endDate;
 
   // 진료 예약 시에 환자가 병원의 내방한 목적을 기록하기 위함.
@@ -56,5 +59,6 @@ public class DiagnosisDTO {
 
   // patients 엔티티의 FK (진료 예약을 한 환자를 식별하기 위해)
   private int patientId;
+
 
 }

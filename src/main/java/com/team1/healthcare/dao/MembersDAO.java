@@ -9,4 +9,6 @@ public interface MembersDAO {
   public int insertMember(MembersDTO memberInfo);
 
   public MembersDTO getLoginMemberInfo(LoginVO loginInfo);
+
+  public MembersDTO isExistedUser(MembersDTO memberInfo);
 }

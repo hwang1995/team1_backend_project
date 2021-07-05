@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.PatientsDTO;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 
 @Getter
 @ToString
-public class DiagnosisVO {
+@NonNull
+public class DiagnosisListVO {
   // Patients 엔티티
   private int patientId;
   private String patientName;
@@ -20,7 +22,7 @@ public class DiagnosisVO {
   private LocalDateTime startDate;
   private String visitPurpose;
 
-  public DiagnosisVO(PatientsDTO patientInfo, DiagnosisDTO diagnosisInfo) {
+  public DiagnosisListVO(PatientsDTO patientInfo, DiagnosisDTO diagnosisInfo) {
     // Patients 엔티티
     this.patientId = patientInfo.getPatientId();
     this.patientName = patientInfo.getPatientName();

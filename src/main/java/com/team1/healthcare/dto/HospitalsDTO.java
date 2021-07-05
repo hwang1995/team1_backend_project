@@ -25,4 +25,5 @@ public class HospitalsDTO {
 
   // 병원 주소
   private String hospitalAddress;
+
 }
