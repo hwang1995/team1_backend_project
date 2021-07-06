@@ -1,38 +1,91 @@
 package com.team1.healthcare.api.v1;
 
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.team1.healthcare.dto.MembersDTO;
+import com.team1.healthcare.services.IMemberService;
+import com.team1.healthcare.vo.common.MemberSearchVO;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/v1/member")
 public class MemberController {
-  // 1. GET 해당 병원의 해당 임직원 목록 가져오기 (의사만)
-  // @GetMapping("")
-  // public List<MemberVO> getMemberList() {
-  // 서비스에 리스트를 보내고 getList로 데이터를 받아옴
 
-  // IMemberService memerService;
-  // memberService.getMembers();
-  //
-  // return null;
-  // }
+  @Autowired
+  private IMemberService memberService;
 
-  // 2. GET 해당 병원의 해당 임직원 정보 가져오기
-  // @GetMapping("")
-  // public List<>
+  // 1. GET 해당 병원의 모든 임직원 or 검색된 키워드(이름)이 포함된 모든 임직원
+  // 임직원 관리 메인페이지 or 임직원 관리 검색후 submit했을때
+  @GetMapping("")
+  public List<MembersDTO> getMemberList(@RequestBody MemberSearchVO memberSearchInfo) {
+    log.info(memberSearchInfo.toString());
 
-  // 3. GET 이메일 중복 체크하기
+    // 1. @RequestBody를 통해 memberSearchVO를 JSON형태의 데이터를 인자로 받음
+    // 2. showMembersListByNameAndCode 서비스 호출
+    // 3. 결과값 리턴
 
-
-  // 4. GET 해당 병원의 모든 임직원의 목록 가져오기
+    return memberService.showMembersListByNameAndCode(memberSearchInfo);
+  }
 
 
-  // 5. GET 해당 병원의 임직원 검색하기
+  // 2. GET 임직원에 대한 검색목록을 초기화후 모든 임직원 데이터 받기
+  // 새로고침(이미지) 버튼 클릭시 클라이언트 요청
+  @GetMapping("/test2")
+  public List<MembersDTO> initialMemberSearch(String hospitalCode) {
+
+    // 1. String hospitalCode를 인자로 받음
+    // 2. selectMembersListByHospitalCode 서비스 호출
+    // 3. 결과값 리턴
+
+    return null;
+  }
 
 
-  // 6. POST 해당 병원의 해당 임직원을 추가하기
+  // 3. POST 해당 병원의 해당 임직원을 추가하기
+  // '추가'버튼 클릭후 나오는 drawer창에서 '임직원 추가'버튼 클릭시 클라이언트 요청
+  @PostMapping("/test3")
+  public void addMember(@RequestBody MembersDTO memberInfo) {
+
+    // 1. @RequestBody를 통해 MembersDTO를 JSON형태로 받음
+    // 2. addMembers 서비스 호출(true: 성공, false: 실패)
+
+  }
 
 
-  // 7. PUT 해당 병원의 해당 임직원을 수정하기
+  // 4. PUT 해당 병원의 해당 임직원을 수정하기
+  // '변경'버튼 클릭후 열리는 drawer창에서 '정보변경' 버튼 클릭시 클라이언트 요청
+  @PutMapping("/test3")
+  public void updateMember(@RequestBody MembersDTO memberInfo) {
 
+    // 1. @RequestBody를 통해 MembersDTO를 JSON형태로 받음
+    // 2. modifyMemberInfo 서비스 호출(true: 성공, false: 실패)
+  }
+
+
+  // 4. DELETE 해당 병원의 해당 임직원을 삭제하기
+  // '삭제'버튼 클릭후 나오는 모달창에서 '확인'버튼 클릭시 클라이언트 요청
+  @DeleteMapping("/test3")
+  public void deleteMember(int memberId) {
+
+    // 1. int값을 인자로 받음
+    // 2. deleteMember 서비스 호출(true: 성공, false: 실패)
+  }
+
+
+  // 5. PUT 해당 병원의 해당 임직원에 대한 비밀번호 초기화하기
+  // '비밀번호 초기화'버튼 클릭시 클라이언트 요청
+  @PutMapping("/test3")
+  public void initialMemberPw(int memberId) {
+
+    // 1. int값을 인자로 받음
+    // 2. intializeMemberPw 서비스 호출(true: 성공, false: 실패)
+  }
 }
