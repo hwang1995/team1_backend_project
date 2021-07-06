@@ -1,7 +1,17 @@
 package com.team1.healthcare.services;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.team1.healthcare.dao.DiagnosisDAO;
+import com.team1.healthcare.dao.DiagnosticInspectionsDAO;
+import com.team1.healthcare.dao.DiagnosticTestRecordsDAO;
+import com.team1.healthcare.dao.DiagnosticTestsDAO;
+import com.team1.healthcare.dao.MedicineRecordsDAO;
+import com.team1.healthcare.dao.MedicinesDAO;
+import com.team1.healthcare.dao.MembersDAO;
+import com.team1.healthcare.dao.PatientsDAO;
+import com.team1.healthcare.dao.VitalRecordsDAO;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.DiagnosticInspectionsDTO;
 import com.team1.healthcare.dto.DiagnosticTestsDTO;
@@ -22,6 +32,35 @@ import com.team1.healthcare.vo.patient.PatientVO;
 
 @Service
 public class DiagnosisServiceImpl implements IDiagnosisService {
+
+  @Autowired
+  private DiagnosisDAO diagnosisDAO;
+
+  @Autowired
+  private PatientsDAO patientsDAO;
+
+  @Autowired
+  private MembersDAO membersDAO;
+
+  @Autowired
+  private DiagnosticTestsDAO diagnosticTestsDAO;
+
+  @Autowired
+  private DiagnosticTestRecordsDAO diagnosticTestRecordsDAO;
+
+  @Autowired
+  private MedicinesDAO medicinesDAO;
+
+  @Autowired
+  private MedicineRecordsDAO medicinesRecordsDAO;
+
+  @Autowired
+  private VitalRecordsDAO vitalRecordsDAO;
+
+  @Autowired
+  private DiagnosticInspectionsDAO diagnosticInspectionsDAO;
+
+
 
   // ======================== SUNG WOOK HWANG
   @Override

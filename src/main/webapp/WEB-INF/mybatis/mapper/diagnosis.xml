@@ -79,6 +79,7 @@
 		#{hospitalCode} and
 		reservation_status =
 		'RESERVATION_REGISTER'
+		and start_date >= CURDATE()
 		order by
 		diag_id DESC
 	</select>

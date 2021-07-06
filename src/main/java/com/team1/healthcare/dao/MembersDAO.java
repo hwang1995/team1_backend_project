@@ -100,4 +100,5 @@ public interface MembersDAO {
   public List<MembersDTO> selectDoctorInfoByHospitalCode(String hospitalCode);
 
   public MembersDTO selectMemberInfoByMemberId(int memberId);
+
 }

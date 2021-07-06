@@ -75,4 +75,6 @@ public interface DiagnosisDAO {
    */
   public DiagnosisDTO getDuplicatedDiagnosisTime(DateWithHospitalAndIdVO dateInfo);
 
+
+
 }
