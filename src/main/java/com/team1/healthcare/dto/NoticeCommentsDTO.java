@@ -33,4 +33,17 @@ public class NoticeCommentsDTO {
   // 게시물을 식별하기 위한 notice 엔티티 FK
   private int noticeId;
 
+  public boolean isNull() {
+    Integer noticeIdWrapper = new Integer(noticeId);
+    Integer memberIdWrapper = new Integer(memberId);
+    Integer noticeCommentIdWrapper = new Integer(noticeCommentId);
+
+    if (noticeIdWrapper == null || memberIdWrapper == null || comment == null || memberName == null
+        || noticeCommentIdWrapper == null || createDate == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }

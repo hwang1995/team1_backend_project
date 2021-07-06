@@ -44,4 +44,18 @@ public class NoticesDTO {
 
   // 공지사항의 조회수
   private int noticeCount;
+
+  public boolean isNull() {
+    Integer noticeIdWrapper = new Integer(noticeId);
+    Integer memberIdWrapper = new Integer(memberId);
+
+    if (noticeIdWrapper == null || noticeTitle == null || noticeContent == null
+        || noticeAuthor == null || createDate == null || createDate == null || hospitalCode == null
+        || memberIdWrapper == null || noticeHeadText == null || noticeHeadImage == null
+        || noticeCount == -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

@@ -36,13 +36,13 @@
 		#{noticeHeadText}, #{noticeHeadImage}, #{noticeCount})
 	</insert>
 
-	<select id="searchByNoticeName" parameterType="string"
+	<select id="selectNoticeByHospitalAndTitle" parameterType="searchNoticeByHospitalAndTitle"
 		resultType="notices">
 		select notice_id, notice_title, notice_head_text,
 		notice_author, create_date
 		from notices
-		where notice_title LIKE
-		'%'+#{noticeTitle}+'%'
+		where notice_title like
+		CONCAT('%',#{noticeTitle}, '%') and hospital_code = #{hospitalCode}
 	</select>
 
 	<update id="updateNoticeCountByNoticeId" parameterType="int">

@@ -14,5 +14,12 @@ public class AddNoticeImageVO {
   private String imageName; // 'uuid.jpg / jpeg / png/ ...'
   private String base64Content;
 
+  public boolean isNull() {
+    if (hospitalCode == null || imageName == null || base64Content == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 }

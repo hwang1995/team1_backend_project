@@ -24,4 +24,16 @@ public class TodosDTO {
   // 병원을 식별하기 위한 FK
   private String hospitalCode;
 
+  public boolean isNull() {
+    Integer todoIdWrapper = new Integer(todoId);
+    Integer memberIdWrapper = new Integer(memberId);
+
+    if (todoIdWrapper == null || todoContent == null || createdDate == null
+        || memberIdWrapper == null || hospitalCode == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }
