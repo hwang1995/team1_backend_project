@@ -1,6 +1,9 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -45,9 +48,10 @@ public class NoticesDTO {
   // 공지사항의 조회수
   private int noticeCount;
 
+  @JsonIgnore
   public boolean isNull() {
     Integer memberIdWrapper = new Integer(memberId);
-
+    
     if (noticeTitle == null || noticeContent == null || noticeAuthor == null || hospitalCode == null
         || memberIdWrapper == null || noticeHeadText == null) {
       return true;

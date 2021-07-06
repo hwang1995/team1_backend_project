@@ -24,6 +24,7 @@
 
 	<insert id="insertTodo" parameterType="todos">
 		insert into todos
+		
 		(todo_content, created_date, member_id, hospital_code)
 		values
 		(#{todoContent}, #{createdDate}, #{memberId}, #{hospitalCode})

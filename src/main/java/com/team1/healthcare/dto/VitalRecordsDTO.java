@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * VitalRecords 엔티티는 의사가 진료시에 바이탈 체크의 정보를 저장할 떄에 사용됩니다.
+ * VitalRecords �뿏�떚�떚�뒗 �쓽�궗媛� 吏꾨즺�떆�뿉 諛붿씠�깉 泥댄겕�쓽 �젙蹂대�� ���옣�븷 �뻹�뿉 �궗�슜�맗�땲�떎.
  * 
  * @author sungwookhwang
  *
@@ -18,34 +18,34 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class VitalRecordsDTO {
-  // vital_records 엔티티의 PK
+  // vital_records �뿏�떚�떚�쓽 PK
   private int vrId;
 
-  // diagnosis 엔티티의 FK (어떤 진료에서 바이탈 체크를 받았는지 식별하기 위해)
+  // diagnosis �뿏�떚�떚�쓽 FK (�뼱�뼡 吏꾨즺�뿉�꽌 諛붿씠�깉 泥댄겕瑜� 諛쏆븯�뒗吏� �떇蹂꾪븯湲� �쐞�빐)
   private int diagId;
 
-  // 혈압
+  // �삁�븬
   private int bloodPressure;
 
-  // 맥박
+  // 留λ컯
   private int pulse;
 
-  // 호흡 수
+  // �샇�씉 �닔
   private int respirationRate;
 
-  // 온도
+  // �삩�룄
   private int temperature;
 
-  // member 엔티티의 FK (어떤 임직원이 바이탈 체크를 했는지 식별하기 위해)
+  // member �뿏�떚�떚�쓽 FK (�뼱�뼡 �엫吏곸썝�씠 諛붿씠�깉 泥댄겕瑜� �뻽�뒗吏� �떇蹂꾪븯湲� �쐞�빐)
   private int memberId;
 
   public VitalRecordsDTO(VitalVO vitalInfo, RegistDiagnosisVO diagnosisInfo) {
-    this.bloodPressure = vitalInfo.getBloodPressure();
-    this.pulse = vitalInfo.getPulse();
-    this.respirationRate = vitalInfo.getRespirationRate();
-    this.temperature = vitalInfo.getTemperature();
-    this.diagId = diagnosisInfo.getDiagId();
-    this.memberId = diagnosisInfo.getMemberId();
+//    this.bloodPressure = vitalInfo.getBloodPressure();
+//    this.pulse = vitalInfo.getPulse();
+//    this.respirationRate = vitalInfo.getRespirationRate();
+//    this.temperature = vitalInfo.getTemperature();
+//    this.diagId = diagnosisInfo.getDiagId();
+//    this.memberId = diagnosisInfo.getMemberId();
 
   }
 }

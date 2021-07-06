@@ -16,14 +16,7 @@ public interface NoticesDAO {
    */
   public int insertNotice(NoticesDTO noticeInfo);
 
-  /**
-   * 게시물 이름으로 공지사항 게시물을 검색하기 위한 쿼리
-   * 
-   * @param SearchNoticeByHospitalCodeAndTitleVO searchNoticeByHospitalCodeAndTitle
-   * @return List<NoticesDTO>
-   */
-  public List<NoticesDTO> selectNoticeByHospitalAndTitle(
-      SearchNoticeByHospitalCodeAndTitleVO searchNoticeByHospitalCodeAndTitle);
+  
 
   /**
    * 게시물의 식별자 (ID)로 조회수를 업데이트 하기 위한 쿼리
