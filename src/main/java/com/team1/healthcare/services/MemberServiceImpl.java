@@ -114,6 +114,7 @@ public class MemberServiceImpl implements IMemberService {
 
     // hospitalCode가 null 일경우 throw BadRequestException
     // DAO의 selectMembersListByHospitalCode 호출
+    // 만약 List<MembersDTO>의 크기가 0이라면? NoContentException을 터트린다.
     // 값 리턴
 
     return membersDAO.selectMembersListByHospitalCode(hospitalCode);
@@ -123,11 +124,10 @@ public class MemberServiceImpl implements IMemberService {
   @Override
   public List<MembersDTO> showMembersListByNameAndCode(MemberSearchVO memberSearchInfo) {
 
-    // memberSearchInfo.getHospitalCode()가 null일 경우 throw BadRequestException
-    // memberSearchInfo.getMemberName() 가 null일 경우
-    // DAO의 selectMembersListByHospitalCode 호출
-    // null이 아닐경우
-    // DAO의 selectMembersListByMemberName 호출
+    // 1. MemberSearchVO가 null이면? throw BadRequestException
+    // 2. List<MembersDTO> memberInfo = membersDAO.selectMembersListByMemberName()
+    // 3. 만약 memberInfo의 크기가 0이라면 throw new NoContentException
+
     // 값 리턴
 
     return membersDAO.selectMembersListByMemberName(memberSearchInfo);
@@ -137,6 +137,10 @@ public class MemberServiceImpl implements IMemberService {
   @Override
   public boolean isExistedEmail(EmailCheckVO emailCheckInfo) {
 
+    // 1. EmailCheckVO가 null이면? throw new BadRequestException
+    // 2. MembersDAO의 isExistedEmail를 호출
+    // 3. 만약 MembersDTO가 null이 아니면, throw new ConflictRequestException
+    // 4. return true;
 
     return false;
   }
@@ -144,6 +148,13 @@ public class MemberServiceImpl implements IMemberService {
   // 비밀번호 초기화
   @Override
   public boolean intializeMemberPw(int memberId) {
+
+    // 1. memberId가 0이면? throw new BadRequestException
+    // 2. 비밀번호 초기화를 위해 !@#douzone1234으로 초기화 할 예정
+    // 3. String saltedPassword = CommonUtils.encryptPassword("!@#douzone1234");
+    // 4. MembersDAO의 updateMemberPw(memberId, saltedPassword)
+    // 5. 만약 1이 아니면, ConflictRequestException을 터트린다.
+
 
     // DAO의 updateMemberPw 호출, 전달 @params (memberId,memberPw)
     // 1이면 true
@@ -155,6 +166,12 @@ public class MemberServiceImpl implements IMemberService {
   @Override
   public String memberImageUpload(AddNoticeImageVO imageInfo) {
 
+    // 1. imageInfo가 null이면? throw new BadRequestException
+    // 2. base64의 순수 binary 데이터를 가져오기 위해서 접두에 붙어있는 내용을 제거한다.
+    // 3. base64로 encoding된 데이터를 decoding 해서 byte[]로 임시 저장
+    // 4. defaultPath, filePath를 지정
+    // 5, FileUtils.writeByteArrayToFile(new File(defaultPath + filePath), decodedBytes)
+    // 6. 이미지 경로 보내줘
 
     return null;
   }

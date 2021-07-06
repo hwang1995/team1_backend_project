@@ -52,8 +52,10 @@ public class MemberController {
   // 3. POST 해당 병원의 해당 임직원을 추가하기
   // '추가'버튼 클릭후 나오는 drawer창에서 '임직원 추가'버튼 클릭시 클라이언트 요청
   @PostMapping("/test3")
-  public void addMember(@RequestBody MembersDTO memberInfo) {
-
+  public boolean addMember(@RequestBody MembersDTO memberInfo) {
+    return true;
+    // throw new ConflictRequestException("에러가 났어요", new Throwable("fatal_error"));
+    //
     // 1. @RequestBody를 통해 MembersDTO를 JSON형태로 받음
     // 2. addMembers 서비스 호출(true: 성공, false: 실패)
 
@@ -63,8 +65,8 @@ public class MemberController {
   // 4. PUT 해당 병원의 해당 임직원을 수정하기
   // '변경'버튼 클릭후 열리는 drawer창에서 '정보변경' 버튼 클릭시 클라이언트 요청
   @PutMapping("/test3")
-  public void updateMember(@RequestBody MembersDTO memberInfo) {
-
+  public boolean updateMember(@RequestBody MembersDTO memberInfo) {
+    return true;
     // 1. @RequestBody를 통해 MembersDTO를 JSON형태로 받음
     // 2. modifyMemberInfo 서비스 호출(true: 성공, false: 실패)
   }
@@ -73,8 +75,8 @@ public class MemberController {
   // 4. DELETE 해당 병원의 해당 임직원을 삭제하기
   // '삭제'버튼 클릭후 나오는 모달창에서 '확인'버튼 클릭시 클라이언트 요청
   @DeleteMapping("/test3")
-  public void deleteMember(int memberId) {
-
+  public boolean deleteMember(int memberId) {
+    return true;
     // 1. int값을 인자로 받음
     // 2. deleteMember 서비스 호출(true: 성공, false: 실패)
   }
@@ -82,9 +84,9 @@ public class MemberController {
 
   // 5. PUT 해당 병원의 해당 임직원에 대한 비밀번호 초기화하기
   // '비밀번호 초기화'버튼 클릭시 클라이언트 요청
-  @PutMapping("/test3")
-  public void initialMemberPw(int memberId) {
-
+  @PutMapping("/test4")
+  public boolean initialMemberPw(int memberId) {
+    return true;
     // 1. int값을 인자로 받음
     // 2. intializeMemberPw 서비스 호출(true: 성공, false: 실패)
   }
