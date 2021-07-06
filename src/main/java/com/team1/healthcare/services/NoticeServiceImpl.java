@@ -165,9 +165,8 @@ public class NoticeServiceImpl implements INoticeService {
    * 게시물의 식별자 (ID)로 댓글 리스트를 조회하기 위한 서비스 메서드 시나리오 : 1-1. 요청받은 noticeId의 값이 null인 경우
    * BadRequestException을 처리해준다. 2-1. 올바른 요청이 들어왔을 경우,
    * noticeCommentsDAO.selectCommentsByNoticeId(noticeId) 값이 값이 없어서 불러올 수 없는 경우 NoContentException을
-   * 처리해준다. 2-2. 올바른 요청이 들어왔고, noticeCommentsDAO.selectCommentsByNoticeId(noticeId)의 값이 있지만 불러올 수 없는
-   * 경우 NotFoundException을 처리해준다. 2-3. 올바른 요청이 들어왔고,
-   * noticeCommentsDAO.selectCommentsByNoticeId(noticeId)의 값이 제대로인 경우 noticeComments를 리턴해준다.
+   * 처리해준다. 2-3. 올바른 요청이 들어왔고, noticeCommentsDAO.selectCommentsByNoticeId(noticeId)의 값이 제대로인 경우
+   * noticeComments를 리턴해준다.
    * 
    * @param : int noticeId
    * @return : List<NoticeCommentsDTO> noticeComments
@@ -264,6 +263,7 @@ public class NoticeServiceImpl implements INoticeService {
       // 지정된 경로에 byte 배열로 받은 이미지를 만들어준다.
       FileUtils.writeByteArrayToFile(new File(defaultPath + filePath), decodedBytes);
     } catch (Exception e) {
+
       e.printStackTrace();
     }
 

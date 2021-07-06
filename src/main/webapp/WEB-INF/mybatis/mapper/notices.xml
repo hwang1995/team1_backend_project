@@ -4,8 +4,8 @@
 
 	<select id="selectNoticesByHospitalCode" parameterType="string"
 		resultType="notices">
-		select notice_id, notice_title, notice_head_text,
-		notice_head_image, notice_author, create_date, notice_count
+		select notice_id, notice_title, notice_content, notice_head_text, hospital_code,
+		notice_head_image, notice_author, create_date, notice_count, member_id
 		from
 		notices
 		where hospital_code = #{hospitalCode}
@@ -16,7 +16,7 @@
 		select notice_id, notice_title, notice_content,
 		notice_head_text,
 		notice_head_image, notice_author, create_date,
-		notice_count, member_id
+		notice_count, member_id, hospital_code
 		from
 		notices
 		where notice_id = #{noticeId}
