@@ -1,6 +1,9 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,6 +27,7 @@ public class TodosDTO {
   // 병원을 식별하기 위한 FK
   private String hospitalCode;
 
+  @JsonIgnore
   public boolean isNull() {
     Integer todoIdWrapper = new Integer(todoId);
     Integer memberIdWrapper = new Integer(memberId);
