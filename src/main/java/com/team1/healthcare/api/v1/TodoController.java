@@ -37,8 +37,7 @@ public class TodoController {
   @PostMapping("")
   public boolean createTodo(@RequestBody TodosDTO todoInfo) {
 	boolean result = todoService.addTodo(todoInfo);
-    log.info(todoInfo.toString());
-
+//    log.info(todoInfo.toString());
 	return result;
    }
   // 5. POST 게시물을 추가 및 수정시에 이미지를 서버에 올리고 클라이언트에 URL을 전달한다.
