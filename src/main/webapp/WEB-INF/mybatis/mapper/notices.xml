@@ -31,7 +31,7 @@
 		notice_count)
 		values
 		(#{noticeId}, #{noticeTitle}, #{noticeContent},
-		#{noticeAuthor}, #{createDate},
+		#{noticeAuthor}, CURDATE(),
 		#{hospitalCode}, #{memberCode},
 		#{noticeHeadText}, #{noticeHeadImage}, #{noticeCount})
 	</insert>

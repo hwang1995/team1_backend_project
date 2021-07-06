@@ -15,11 +15,11 @@ public class TodoServiceImpl implements ITodoService {
   private TodosDAO todosDAO;
 
   /**
-   * Todo를 추가하기 위한 서비스 메서드 시나리오 : 
-   * 1-1. 요청받은 todoInfo.isNull이 true인 경우 BadRequestException을 처리해준다. 
-   * 1-2. 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다. 
-   * 2-1. 올바른 요청이 들어왔을 경우, todosDAO.insertTodo의 값이 1이 아닐 경우 result = false를 리턴해준다. 
-   * 2-2. 올바른 요청이 들어왔을 경우, todosDAO.insertTodo의 값이 1일 경우 result = true를 리턴해준다.
+   * Todo를 추가하기 위한 서비스 메서드 시나리오 : 1-1. 요청받은 todoInfo.isNull이 true인 경우 BadRequestException을 처리해준다.
+   * 1-2. 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다. 2-1. 올바른 요청이 들어왔을 경우,
+   * todosDAO.insertTodo의 값이 1이 아닐 경우 result = false를 리턴해준다. 2-2. 올바른 요청이 들어왔을 경우,
+   * todosDAO.insertTodo의 값이 1일 경우 result = true를 리턴해준다.
+   * 
    * @param : TodosDTO todoInfo
    * @return :
    * @협력 객체 : TodosDAO
@@ -36,11 +36,10 @@ public class TodoServiceImpl implements ITodoService {
   }
 
   /**
-   * Todo를 제거하기 위한 서비스 메서드 시나리오 : 
-   * 1-1. 요청받은 int todoId이 null 값인 경우 BadRequestException을 처리해준다. 
-   * 1-3. 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다.
-   * 2-1. 올바른 요청이 들어왔지만 , todosDAO.deleteByTodoId의 값이 1이 아닐 경우 result = false를 리턴해주고 NotFoundException을 처리해준다.
-   * 2-2. 올바른 요청이 들어왔을 경우, todosDAO.deleteByTodoId의 값이 1일 경우 result = true를 리턴해준다.
+   * Todo를 제거하기 위한 서비스 메서드 시나리오 : 1-1. 요청받은 int todoId이 0 값인 경우 BadRequestException을 처리해준다. 1-3.
+   * 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다. 2-1. 올바른 요청이 들어왔지만 ,
+   * todosDAO.deleteByTodoId의 값이 1이 아닐 경우 result = false를 리턴해주고 NotFoundException을 처리해준다. 2-2. 올바른
+   * 요청이 들어왔을 경우, todosDAO.deleteByTodoId의 값이 1일 경우 result = true를 리턴해준다.
    * 
    * @param : int todoId
    * @return : number (영향받은 행 수)
@@ -57,14 +56,15 @@ public class TodoServiceImpl implements ITodoService {
     return result;
   }
 
-//  비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다.
+  // 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다.
   /**
-   * 병원코드 (식별자)로 Todo 리스트를 조회하기 위한 서비스 메서드 시나리오 :
-   1-1. 요청받은 String hospitalCode이 null 값인 경우 BadRequestException을 처리해준다. 
-   1-3. 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다.
-   2-1. 올바른 요청이 들어왔지만 , todosDAO.selectTodosByHospitalCode의 값이 없어서 불러올 수 없는 경우 NoContentException을 처리해준다.
-   2-2. 올바른 요청이 들어왔고, todosDAO.selectTodosByHospitalCode의 값이 있지만 불러올 수 없는 경우 NotFoundException을 처리해준다.
-   2-2. 올바른 요청이 들어왔고, todosDAO.selectTodosByHospitalCode의 값이 제대로인 경우 todos를 리턴해준다.
+   * 병원코드 (식별자)로 Todo 리스트를 조회하기 위한 서비스 메서드 시나리오 : 1-1. 요청받은 String hospitalCode이 null 값인 경우
+   * BadRequestException을 처리해준다. 1-3. 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다.
+   * 2-1. 올바른 요청이 들어왔지만 , todosDAO.selectTodosByHospitalCode의 값이 없어서 불러올 수 없는 경우 NoContentException을
+   * 처리해준다. 2-2. 올바른 요청이 들어왔고, todosDAO.selectTodosByHospitalCode의 값이 있지만 불러올 수 없는 경우
+   * NotFoundException을 처리해준다. 2-2. 올바른 요청이 들어왔고, todosDAO.selectTodosByHospitalCode의 값이 제대로인 경우
+   * todos를 리턴해준다.
+   * 
    * @param : String hospitalCode
    * @return : List<TodosDTO>
    * @협력 객체 : TodosDAO
@@ -77,12 +77,12 @@ public class TodoServiceImpl implements ITodoService {
   }
 
   /**
-   * 임직원 ID (식별자)로 Todo 리스트를 조회하기 위한 서비스 메서드 시나리오 :
-   1-1. 요청받은 int memberId이 null 값인 경우 BadRequestException을 처리해준다. 
-   1-3. 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다.
-   2-1. 올바른 요청이 들어왔지만 , todosDAO.selectTodosByMemberId의 값이 없어서 불러올 수 없는 경우 NoContentException를 처리해준다.
-   2-1. 올바른 요청이 들어왔지만 , todosDAO.selectTodosByMemberId의 값이 있지만 불러올 수 없는 경우 NotFoundException를 처리해준다.
-   2-3. 올바른 요청이 들어왔고, todosDAO.selectTodosByMemberId의 값이 제대로인 경우 todos를 리턴해준다.
+   * 임직원 ID (식별자)로 Todo 리스트를 조회하기 위한 서비스 메서드 시나리오 : 1-1. 요청받은 int memberId이 null 값인 경우
+   * BadRequestException을 처리해준다. 1-3. 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다.
+   * 2-1. 올바른 요청이 들어왔지만 , todosDAO.selectTodosByMemberId의 값이 없어서 불러올 수 없는 경우 NoContentException를
+   * 처리해준다. 2-1. 올바른 요청이 들어왔지만 , todosDAO.selectTodosByMemberId의 값이 있지만 불러올 수 없는 경우
+   * NotFoundException를 처리해준다. 2-3. 올바른 요청이 들어왔고, todosDAO.selectTodosByMemberId의 값이 제대로인 경우 todos를
+   * 리턴해준다.
    * 
    * @param : int memberId
    * @return : List<TodosDTO>

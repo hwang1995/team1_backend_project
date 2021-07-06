@@ -104,7 +104,7 @@ public interface INoticeService {
    * @param AddNoticeImageVO noticeImageInfo
    * @return imageSrc (이미지 경로가 리턴됩니다)
    */
-  public AddNoticeImageVO addNoticeImage(AddNoticeImageVO noticeImageInfo);
+  public String addNoticeImage(AddNoticeImageVO noticeImageInfo);
 
   /**
    * 해당 병원의 공지사항 게시물 리스트를 가져오기 위한 서비스 클래스
