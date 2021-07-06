@@ -33,4 +33,15 @@
 		and medicine_type =
 		'주사약'
 	</select>
+
+	<select id="getMedicineInfoByMedicineId" parameterType="int"
+		resultType="medicines">
+		select medicine_id, medicine_code,
+		medicine_name, medicine_type,
+		medicine_unit, medicine_explain
+		from
+		medicines
+		where medicine_id =
+		#{medicineId}
+	</select>
 </mapper>

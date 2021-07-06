@@ -10,10 +10,12 @@ public class MedicineResultVO {
   private int medicineDose;
   private int diagId;
   private int memberId;
+  private String medicineType;
 
   public MedicineResultVO(MedicineVO medicineInfo, RegistDiagnosisVO diagnosisInfo) {
     this.medicineId = medicineInfo.getMedicineId();
     this.medicineDose = medicineInfo.getMedicineDose();
+    this.medicineType = medicineInfo.getMedicineType();
     this.diagId = diagnosisInfo.getDiagId();
     this.memberId = diagnosisInfo.getMemberId();
   }

@@ -13,7 +13,7 @@ import com.team1.healthcare.vo.response.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * RestController에서 반환하는 값에 RestRespones를 Wrapping 하기 위한 Aspect
+ * RestController에서 반환하는 값에 RestResponse를 Wrapping 하기 위한 Aspect
  * 
  * @author sungwookhwang
  *
@@ -32,7 +32,9 @@ public class RestResponseAdvice implements ResponseBodyAdvice<Object> {
     return !converterType.equals(StringHttpMessageConverter.class);
   }
 
-
+  /**
+   * RestController에서 Response를 보내기 이전에 바디를 작성하기 위한 메서드
+   */
   @Override
   public Object beforeBodyWrite(Object body, MethodParameter returnType,
       MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType,

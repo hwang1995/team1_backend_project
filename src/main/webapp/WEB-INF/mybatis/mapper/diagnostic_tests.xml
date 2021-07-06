@@ -63,4 +63,22 @@
 		where
 		diag_test_id = #{diagTestId}
 	</update>
+
+	<update id="pendingDiagnosticTest" parameterType="int">
+		update
+		diagnosis_tests set
+		inspection_status = 'DIAGNOSTIC_PENDING'
+		where
+		diag_test_id = #{diagTestId}
+	</update>
+
+	<select id="getDiagnosticTestByDiagTestId" parameterType="int"
+		resultType="diagnosticTests">
+		select diag_test_id, member_id, patient_id,
+		inspection_status, created_date, diag_id, hospital_code
+		from
+		diagnostic_tests
+		where
+		diag_test_id = #{diagTestId}
+	</select>
 </mapper>

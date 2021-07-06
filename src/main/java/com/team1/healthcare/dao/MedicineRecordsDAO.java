@@ -10,4 +10,10 @@ public interface MedicineRecordsDAO {
   public int addMedicineRecord(MedicineResultVO medicineInfo);
 
   public List<MedicineRecordsDTO> selectMedicineRecordsByDiagId(int diagId);
+
+  public List<MedicineRecordsDTO> selectPharmaciesByDiagId(int diagId);
+
+  public List<MedicineRecordsDTO> selectInjectorsByDiagId(int diagId);
+
+
 }

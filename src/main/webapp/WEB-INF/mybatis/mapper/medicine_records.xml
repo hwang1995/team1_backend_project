@@ -4,16 +4,41 @@
 	<insert id="addMedicineRecord" parameterType="medicineResult">
 		insert into
 		medicine_records
-		(diag_id, medicine_id, medicine_dose, member_id)
+		(diag_id, medicine_id, medicine_dose, member_id,
+		medicine_type)
 		values
-		(#{diagId}, #{medicineId}, #{medicineDose}, #{memberId})
+		(#{diagId}, #{medicineId}, #{medicineDose},
+		#{memberId}, #{medicineType})
 	</insert>
 
 	<select id="selectMedicineRecordsByDiagId" parameterType="int"
 		resultType="medicineRecords">
 		select medicine_record_id, diag_id, medicine_id,
-		medicine_dose, member_id
+		medicine_dose, member_id, medicine_type
 		from medicine_records
-		where diag_id = #{diagId}
+		where
+		diag_id = #{diagId}
 	</select>
+
+	<select id="selectPharmaciesByDiagId" parameterType="int"
+		resultType="medicineRecords">
+		select medicine_record_id, diag_id, medicine_id,
+		medicine_dose, member_id, medicine_type
+		from medicine_records
+		where
+		diag_id = #{diagId}
+		and (medicine_type = '내복약' or medicine_type =
+		'외용약')
+	</select>
+
+	<select id="selectInjectorsByDiagId" parameterType="int"
+		resultType="medicineRecords">
+		select medicine_record_id, diag_id, medicine_id,
+		medicine_dose, member_id, medicine_type
+		from medicine_records
+		where
+		diag_id = #{diagId}
+		and medicine_type = '주사약'
+	</select>
+
 </mapper>

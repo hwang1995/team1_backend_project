@@ -89,6 +89,14 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<Object>(exceptionResponse, HttpStatus.CONFLICT);
   }
 
+  /**
+   * 존재해야하는 데이터를 요청했음에도 불구하고, 데이터가 없는 경우 Throw
+   * 
+   * @param e
+   * @param t
+   * @param request
+   * @return ResponseEntity
+   */
   @ExceptionHandler(NotFoundException.class)
   public final ResponseEntity<Object> notFoundException(Exception e, Throwable t,
       WebRequest request) {
@@ -97,6 +105,14 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<Object>(exceptionResponse, HttpStatus.NOT_FOUND);
   }
 
+  /**
+   * 정상적으로 요청하였지만, 해당 데이터가 존재하지 않은 경우 Throw
+   * 
+   * @param e
+   * @param t
+   * @param request
+   * @return ResponseEntity
+   */
   @ExceptionHandler(NoContentException.class)
   public final ResponseEntity<Object> noContentException(Exception e, Throwable t,
       WebRequest request) {
