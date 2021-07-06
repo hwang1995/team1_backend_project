@@ -98,4 +98,7 @@ public interface MembersDAO {
    * @return List<MembersDTO>
    */
   public List<MembersDTO> selectDoctorInfoByHospitalCode(String hospitalCode);
+
+  public MembersDTO selectMemberInfoByMemberId(int memberId);
+
 }

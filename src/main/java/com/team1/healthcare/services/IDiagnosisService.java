@@ -4,6 +4,7 @@ import java.util.List;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.DiagnosticInspectionsDTO;
 import com.team1.healthcare.dto.DiagnosticTestsDTO;
+import com.team1.healthcare.dto.MedicinesDTO;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.dto.PatientsDTO;
 import com.team1.healthcare.vo.auth.UserInfoVO;
@@ -13,7 +14,6 @@ import com.team1.healthcare.vo.common.PatientSearchVO;
 import com.team1.healthcare.vo.common.WeekNoWithMemberVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisHistoryVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisListVO;
-import com.team1.healthcare.vo.diagnosis.MedicineVO;
 import com.team1.healthcare.vo.diagnosis.RegistDiagnosisVO;
 import com.team1.healthcare.vo.diagnosis.ReservationVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticVO;
@@ -40,17 +40,17 @@ public interface IDiagnosisService {
    * 약품의 이름을 검색하면 약품의 대한 리스트를 출력하기 위한 인터페이스
    * 
    * @param medicineName
-   * @return List<MedicineVO>
+   * @return List<MedicinesDTO>
    */
-  public List<MedicineVO> searchMedicineList(String medicineName);
+  public List<MedicinesDTO> searchMedicineList(String medicineName);
 
   /**
    * 주사의 이름을 검색하면 주사의 대한 리스트를 출력하기 위한 인터페이스
    * 
    * @param medicineName
-   * @return List<MedicineVO>
+   * @return List<MedicinesDTO>
    */
-  public List<MedicineVO> searchInjectorList(String medicineName);
+  public List<MedicinesDTO> searchInjectorList(String medicineName);
 
   /**
    * 진단 검사의 그룹 명 (bundleName)을 검색하면 진단 검사에 대한 리스트를 출력하기 위한 인터페이스

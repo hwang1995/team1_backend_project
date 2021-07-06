@@ -72,6 +72,23 @@
 
 	<select id="selectPatientsByPatientName"
 		parameterType="patientSearch" resultType="patients">
+		select patient_id,
+		patient_name, patient_ssn,
+		patient_gender, patient_tel,
+		patient_addr1,
+		patient_addr2,
+		patient_postal, patient_height,
+		patient_weight,
+		recent_date,
+		patient_birth, hospital_code
+		from patients
+		where
+		hospital_code = #{hospitalCode} and patient_name =
+		#{patientName}
+	</select>
+
+	<select id="getPatientInfoByName" parameterType="patientSearch"
+		resultType="patientVO">
 		select patient_id, patient_name, patient_ssn,
 		patient_gender, patient_tel,
 		patient_addr1, patient_addr2,
@@ -79,7 +96,8 @@
 		patient_weight, recent_date,
 		patient_birth, hospital_code
 		from patients
-		where hospital_code = #{hospitalCode} and patient_name =
+		where hospital_code =
+		#{hospitalCode} and patient_name =
 		#{patientName}
 	</select>
 </mapper>

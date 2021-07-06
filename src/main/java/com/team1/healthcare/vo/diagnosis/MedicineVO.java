@@ -15,4 +15,7 @@ public class MedicineVO {
 
   // 약품 수량
   private int medicineDose;
+
+  // 약품 타입
+  private String medicineType;
 }

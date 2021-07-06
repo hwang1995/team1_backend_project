@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import com.team1.healthcare.dto.PatientsDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 public class PatientVO {
