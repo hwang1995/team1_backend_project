@@ -3,6 +3,7 @@ package com.team1.healthcare.services;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.team1.healthcare.dao.DiagnosisDAO;
@@ -235,6 +236,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
   }
 
   @Override
+  @Cacheable(value = "bundleName", cacheManager = "userCacheManager")
   public List<DiagnosticInspectionsDTO> searchDiagnosticListByBundleName(String bundleName) {
 
     log.info(bundleName);
@@ -570,13 +572,20 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
           new Throwable("no_patient_search_info"));
     }
 
-    List<PatientVO> patientInfos = patientsDAO.getPatientInfoByName(patientInfo);
+    List<PatientsDTO> patientInfos = patientsDAO.getPatientInfoByName(patientInfo);
 
     if (patientInfos.size() == 0 || patientInfos == null) {
       throw new NoContentException("검색 결과 존재하지 않습니다.", new Throwable("no_result"));
     }
 
-    return patientInfos;
+    List<PatientVO> returnResults = new ArrayList<PatientVO>();
+
+    patientInfos.forEach(info -> {
+      PatientVO newData = new PatientVO(info);
+      returnResults.add(newData);
+    });
+
+    return returnResults;
   }
 
   // ======================== SI HYUN PARK

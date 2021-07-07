@@ -1,6 +1,7 @@
 package com.team1.healthcare.api.v1;
 
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,8 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.team1.healthcare.dto.DiagnosticInspectionsDTO;
-import com.team1.healthcare.dto.MedicinesDTO;
+import com.team1.healthcare.exception.BadRequestException;
 import com.team1.healthcare.services.DiagnosisServiceImpl;
 import com.team1.healthcare.vo.auth.UserInfoVO;
 import com.team1.healthcare.vo.common.DateWithHospitalCode;
@@ -29,7 +29,6 @@ public class DiagnosisController {
   @Autowired
   private DiagnosisServiceImpl diagnosisService;
 
-  // 1. GET 해당 병원의 환자 진료 기록 목록 가져오기
   @GetMapping("")
   public List<DiagnosisListVO> getDiagnosisList(@RequestBody UserInfoVO userInfo) {
     List<DiagnosisListVO> result = diagnosisService.showTodayDiagnosisList(userInfo);
@@ -42,8 +41,7 @@ public class DiagnosisController {
     log.info(registInfo.toString());
     return "hello";
   }
-  // 2. GET 해당 환자의 진료 기록 목록 가져오기
-  // 3. PUT 진료 내용 수정하기 (의사가 예약된 진료를 보고 내용을 추가하려고)
+
 
   @PutMapping("")
   public boolean registDiagnosisInfo(@RequestBody RegistDiagnosisVO diagnosisInfo) {
@@ -52,32 +50,7 @@ public class DiagnosisController {
     return result;
   }
 
-  @GetMapping("/search/medicine")
-  public List<MedicinesDTO> searchMedicineList(String medicineName) {
-    List<MedicinesDTO> result = diagnosisService.searchMedicineList(medicineName);
 
-    return result;
-  }
-
-  @GetMapping("/search/injector")
-  public List<MedicinesDTO> searchInjectorList(String medicineName) {
-    List<MedicinesDTO> result = diagnosisService.searchInjectorList(medicineName);
-    return result;
-  }
-
-  @GetMapping("/search/diagnostic")
-  public List<DiagnosticInspectionsDTO> searchDiagnosticList(String bundleName) {
-    List<DiagnosticInspectionsDTO> result =
-        diagnosisService.searchDiagnosticListByBundleName(bundleName);
-    return result;
-  }
-
-  @GetMapping("/search/diagnostic-code")
-  public List<DiagnosticInspectionsDTO> searchDiagnosticListByCode(String bundleCode) {
-    List<DiagnosticInspectionsDTO> result =
-        diagnosisService.searchDiagnosticListByBundleCode(bundleCode);
-    return result;
-  }
 
   @GetMapping("/history")
   public List<DiagnosisHistoryVO> showDiagnosisHistoryByPatientId(int patientId) {
@@ -100,4 +73,31 @@ public class DiagnosisController {
         diagnosisService.showWeeklyDiagnosticTestListByHospitalCode(hospitalInfo);
     return result;
   }
+
+  @PutMapping("/diagnostic/status")
+  public boolean changeStatus(@RequestBody Map<String, Object> statusInfo) {
+    String status = statusInfo.get("status").toString();
+
+    int diagTestId = Integer.parseInt(statusInfo.get("diagTestId").toString());
+
+    if (status.equals("completed")) {
+
+      boolean result = diagnosisService.changeStatusCompleted(diagTestId);
+      return result;
+    }
+
+    if (status.equals("processing")) {
+      boolean result = diagnosisService.changeStatusProcessing(diagTestId);
+      return result;
+    }
+
+    if (status.equals("pending")) {
+      boolean result = diagnosisService.changeStatusPending(diagTestId);
+      return result;
+    }
+    // boolean result = diagnosisService.changeStatusCompleted(diagTestId);
+    throw new BadRequestException("정확한 매개변수를 입력해주세요", new Throwable("incorrect_parameters"));
+  }
+
+
 }

@@ -1,5 +1,6 @@
 package com.team1.healthcare.api.v1;
 
+import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthController {
   // 1. GET 로그인 하기
-  @Autowired
+
+  @Resource(name = "daoAuthenticationManager")
   private AuthenticationManager authenticationManager;
 
   @Autowired
