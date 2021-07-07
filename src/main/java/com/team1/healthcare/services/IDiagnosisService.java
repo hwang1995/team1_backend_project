@@ -16,6 +16,7 @@ import com.team1.healthcare.vo.diagnosis.DiagnosisHistoryVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisListVO;
 import com.team1.healthcare.vo.diagnosis.RegistDiagnosisVO;
 import com.team1.healthcare.vo.diagnosis.ReservationVO;
+import com.team1.healthcare.vo.diagnostic.DiagnosticTestRecordsVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticVO;
 import com.team1.healthcare.vo.patient.PatientVO;
 
@@ -88,9 +89,9 @@ public interface IDiagnosisService {
    * 진료의 식별자 (diagId)를 통해 진단 검사의 상세 리스트를 출력하기 위한 인터페이스
    * 
    * @param diagId
-   * @return List<DiagnosticVO>
+   * @return List<DiagnosticTestRecordsVO>
    */
-  public List<DiagnosticVO> showDiagnosticTestListByDiagId(int diagId);
+  public List<DiagnosticTestRecordsVO> showDiagnosticTestListByDiagTestId(int diagTestId);
 
   /**
    * 날짜(startDate, endDate)와 임직원의 식별자(memberId)를 통해 해당 주의 진단 검사 리스트를 출력하기 위한 인터페이스

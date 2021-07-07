@@ -73,17 +73,13 @@ public class AuthController {
   public String addMembers(@RequestBody MembersDTO memberInfo) {
     boolean result = CommonUtils.isEmpty(memberInfo);
     log.info("DTO의 값은 Null인가? " + result);
-    // memberService.addMembers(memberInfo);
+    memberService.addMembers(memberInfo);
     return "success";
 
   }
 
   @GetMapping("/test")
-  public void testMethod(@RequestBody() LoginVO loginInfo) throws Exception {
-    log.info(loginInfo.toString());
-    log.info("test Exception");
-    throw new Exception();
-  }
+  public void testMethod() {}
 
 
 }

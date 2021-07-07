@@ -1,6 +1,7 @@
 package com.team1.healthcare.vo.diagnosis;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import com.team1.healthcare.commons.CommonUtils;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.PatientsDTO;
 import lombok.Getter;
@@ -15,11 +16,11 @@ public class DiagnosisListVO {
   private int patientId;
   private String patientName;
   private String patientGender;
-  private LocalDateTime patientBirth;
+  private String patientBirth;
 
   // Diagnosis 엔티티
   private int diagId;
-  private LocalDateTime startDate;
+  private String startDate;
   private String visitPurpose;
 
   public DiagnosisListVO(PatientsDTO patientInfo, DiagnosisDTO diagnosisInfo) {
@@ -27,11 +28,12 @@ public class DiagnosisListVO {
     this.patientId = patientInfo.getPatientId();
     this.patientName = patientInfo.getPatientName();
     this.patientGender = patientInfo.getPatientGender();
-    this.patientBirth = patientInfo.getPatientBirth();
+    LocalDate originalBirth = patientInfo.getPatientBirth().toLocalDate();
+    this.patientBirth = CommonUtils.dateToString(originalBirth);
 
     // Diagnosis 엔티티
     this.diagId = diagnosisInfo.getDiagId();
-    this.startDate = diagnosisInfo.getStartDate();
+    this.startDate = CommonUtils.dateTimeToString(diagnosisInfo.getStartDate());
     this.visitPurpose = diagnosisInfo.getVisitPurpose();
   }
 

@@ -5,9 +5,11 @@ import com.team1.healthcare.dto.DiagnosticTestRecordsDTO;
 import com.team1.healthcare.dto.MembersDTO;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @ToString
+@Slf4j
 public class DiagnosticTestRecordsVO {
   // DiagnosticInspections
   private String bundleCode;
@@ -32,6 +34,34 @@ public class DiagnosticTestRecordsVO {
   private String inspectorName;
 
   public DiagnosticTestRecordsVO(DiagnosticInspectionsDTO diagnosticInfo,
+      DiagnosticTestRecordsDTO diagnosticRecordInfo, MembersDTO doctorInfo) {
+    // DiagnosticInspectionsDTO
+    this.bundleCode = diagnosticInfo.getBundleCode();
+    this.bundleName = diagnosticInfo.getBundleName();
+    this.presCode = diagnosticInfo.getPresCode();
+    this.presName = diagnosticInfo.getPresName();
+    this.presVessel = diagnosticInfo.getPresVessel();
+    this.presSpecimenName = diagnosticInfo.getPresSpecimenName();
+
+    // DiagnosticTestRecordsDTO
+    this.diagTestRecordId = diagnosticRecordInfo.getDiagTestRecordId();
+    this.diagTestValue = diagnosticRecordInfo.getDiagTestValue();
+    this.diagTestStatus = diagnosticRecordInfo.getDiagTestStatus();
+    this.doctorName = doctorInfo.getMemberName();
+    this.inspectorName = null;
+
+    double presLowerLimit = diagnosticInfo.getPresLowerLimit();
+    double presUpperLimit = diagnosticInfo.getPresUpperLimit();
+    String presUnit = diagnosticInfo.getPresUnit();
+
+    double presAvgValue = (presLowerLimit + presUpperLimit) / 2;
+
+
+    this.diagTestAvgValue = String.format("%.2f", presAvgValue) + " " + presUnit;
+  }
+
+  // 모든 정보가 있는 경우
+  public DiagnosticTestRecordsVO(DiagnosticInspectionsDTO diagnosticInfo,
       DiagnosticTestRecordsDTO diagnosticRecordInfo, MembersDTO doctorInfo,
       MembersDTO inspectorInfo) {
     // DiagnosticInspectionsDTO
@@ -46,7 +76,6 @@ public class DiagnosticTestRecordsVO {
     this.diagTestRecordId = diagnosticRecordInfo.getDiagTestRecordId();
     this.diagTestValue = diagnosticRecordInfo.getDiagTestValue();
     this.diagTestStatus = diagnosticRecordInfo.getDiagTestStatus();
-
     this.doctorName = doctorInfo.getMemberName();
     this.inspectorName = inspectorInfo.getMemberName();
 
@@ -55,6 +84,8 @@ public class DiagnosticTestRecordsVO {
     String presUnit = diagnosticInfo.getPresUnit();
 
     double presAvgValue = (presLowerLimit + presUpperLimit) / 2;
+
+
     this.diagTestAvgValue = String.format("%.2f", presAvgValue) + " " + presUnit;
 
   }

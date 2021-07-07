@@ -1,6 +1,11 @@
 package com.team1.healthcare.commons;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,5 +64,21 @@ public class CommonUtils {
     }
     return PREFIX_HOSPITAL;
   }
+
+  public static long dateTimeToTimestamp(LocalDateTime ldt) {
+    long epochSec = ldt.atZone(ZoneId.of("Asia/Seoul")).toEpochSecond();
+    return epochSec;
+  }
+
+  public static String dateToString(LocalDate ld) {
+    return ld.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")).toString();
+  }
+
+  public static String dateTimeToString(LocalDateTime ldt) {
+    return ldt.format(
+        DateTimeFormatter.ofPattern("yyyy-MM-dd a hh시 mm분").withLocale(Locale.forLanguageTag("ko")))
+        .toString();
+  }
+
 
 }

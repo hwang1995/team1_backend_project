@@ -33,6 +33,8 @@ public class MedicineRecordsDTO {
   // members 엔티티의 FK (어떤 임직원이 약 혹은 주사를 처방했는지 식별하기 위해)
   private int memberId;
 
+  private String medicineType;
+
   public MedicineRecordsDTO(MedicineVO medicineInfo, RegistDiagnosisVO diagnosisInfo) {
     this.medicineId = medicineInfo.getMedicineId();
     this.medicineDose = medicineInfo.getMedicineDose();

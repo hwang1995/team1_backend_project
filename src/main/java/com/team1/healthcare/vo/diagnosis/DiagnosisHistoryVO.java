@@ -1,7 +1,8 @@
 package com.team1.healthcare.vo.diagnosis;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
+import com.team1.healthcare.commons.CommonUtils;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.VitalRecordsDTO;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class DiagnosisHistoryVO {
   @NonNull
-  private LocalDateTime startDate;
+  private String startDate;
 
   @NonNull
   private String visitPurpose;
@@ -27,7 +28,8 @@ public class DiagnosisHistoryVO {
   public DiagnosisHistoryVO(DiagnosisDTO diagnosisInfo, List<MedicineRecordVO> medicines,
       List<MedicineRecordVO> injectors, List<DiagnosticTestRecordVO> diagnostics,
       VitalRecordsDTO vital) {
-    this.startDate = diagnosisInfo.getStartDate();
+    LocalDate originalDate = diagnosisInfo.getStartDate().toLocalDate();
+    this.startDate = CommonUtils.dateToString(originalDate);
     this.visitPurpose = diagnosisInfo.getVisitPurpose();
     this.drOpinion = diagnosisInfo.getDrOpinion();
     this.medicines = medicines;

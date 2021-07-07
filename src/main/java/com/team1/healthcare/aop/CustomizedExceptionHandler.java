@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import com.team1.healthcare.exception.BadRequestException;
 import com.team1.healthcare.exception.ConflictRequestException;
@@ -14,6 +15,7 @@ import com.team1.healthcare.exception.NoContentException;
 import com.team1.healthcare.exception.NotFoundException;
 import com.team1.healthcare.exception.UserNotFoundException;
 import com.team1.healthcare.vo.response.ExceptionResponse;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Exception Handling을 위한 Aspect
@@ -22,8 +24,9 @@ import com.team1.healthcare.vo.response.ExceptionResponse;
  *
  */
 @RestController
+@EnableWebMvc
 @ControllerAdvice
-
+@Slf4j
 public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
 
 
@@ -65,7 +68,8 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
    * @param request
    * @return ResponseEntity
    */
-  @ExceptionHandler(BadRequestException.class)
+  @ExceptionHandler({BadRequestException.class})
+
   public final ResponseEntity<Object> badRequestException(Exception e, Throwable t,
       WebRequest request) {
     ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now().toString(),
@@ -97,7 +101,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
    * @param request
    * @return ResponseEntity
    */
-  @ExceptionHandler(NotFoundException.class)
+  @ExceptionHandler({NotFoundException.class})
   public final ResponseEntity<Object> notFoundException(Exception e, Throwable t,
       WebRequest request) {
     ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now().toString(),
@@ -116,9 +120,10 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(NoContentException.class)
   public final ResponseEntity<Object> noContentException(Exception e, Throwable t,
       WebRequest request) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now().toString(),
-        t.getCause().getMessage(), e.getMessage(), request.getDescription(false));
-    return new ResponseEntity<Object>(exceptionResponse, HttpStatus.NO_CONTENT);
+    log.info("API URL  = " + request.getDescription(false));
+    log.info("Error Message " + e.getMessage());
+    return ResponseEntity.noContent().header("Content-Length", "0").build();
+
   }
 
 

@@ -23,4 +23,7 @@ public interface DiagnosticInspectionsDAO {
    * @return List<DiagnosticInspectionsDTO>
    */
   public List<DiagnosticInspectionsDTO> selectInspectionListByBundleCode(String bundleCode);
+
+
+  public DiagnosticInspectionsDTO selectInspectionByDiagInspectionId(int diagInspectionId);
 }

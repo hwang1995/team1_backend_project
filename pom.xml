@@ -214,6 +214,16 @@
 			<version>7.0.1.Final</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/p6spy/p6spy -->
+		<dependency>
+			<groupId>p6spy</groupId>
+			<artifactId>p6spy</artifactId>
+			<version>3.9.1</version>
+		</dependency>
+
+
+
+
 
 
 

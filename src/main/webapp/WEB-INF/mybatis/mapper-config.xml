@@ -4,6 +4,7 @@
 <configuration>
 	<settings>
 		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="logImpl" value="LOG4J" />
 	</settings>
 	<typeAliases>
 		<!-- DTO를 적어줍시다. -->
