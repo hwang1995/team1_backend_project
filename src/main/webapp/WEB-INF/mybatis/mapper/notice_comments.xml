@@ -21,16 +21,13 @@
 		update notice_comments set
 		comment=#{comment}
 		where
-		notice_comments_id = #{noticeCommentsId}
+		notice_comment_id = #{noticeCommentId}
 	</update>
-	
-	
-	
-	
+
 
 	<delete id="deleteComment" parameterType="int">
 		delete from notice_comments
-		where notice_comments_id=#{noticeCommentsId}
+		where notice_comment_id=#{noticeCommentId}
 	</delete>
 
 </mapper>

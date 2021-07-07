@@ -37,6 +37,6 @@ public interface NoticeCommentsDAO {
    * @param int noticeCommentsId
    * @return number (영향 받은 행 수)
    */
-  public int deleteComment(int noticeCommentsId);
+  public int deleteComment(int noticeCommentId);
 
 }

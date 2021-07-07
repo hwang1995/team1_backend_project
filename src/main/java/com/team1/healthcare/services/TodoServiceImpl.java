@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.team1.healthcare.dao.TodosDAO;
 import com.team1.healthcare.dto.TodosDTO;
+import com.team1.healthcare.exception.BadRequestException;
+import com.team1.healthcare.exception.ConflictRequestException;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -27,12 +29,14 @@ public class TodoServiceImpl implements ITodoService {
   @Override
   public boolean addTodo(TodosDTO todoInfo) {
     // TODO Auto-generated method stub
-    boolean result = true;
     int row = todosDAO.insertTodo(todoInfo);
-    if (row != 1) {
-      result = false;
+    if (todoInfo.isNull()) {
+      throw new BadRequestException("잘못된 todoInfo값을 받았습니다.", new Throwable("Request-Error"));
+    } else if (row != 1) {
+      throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
+          new Throwable("ConflictRequest"));
     }
-    return result;
+    return true;
   }
 
   /**
@@ -48,12 +52,16 @@ public class TodoServiceImpl implements ITodoService {
   @Override
   public boolean removeTodo(int todoId) {
     // TODO Auto-generated method stub
-    boolean result = true;
     int row = todosDAO.deleteByTodoId(todoId);
     if (row != 1) {
-      result = false;
+      if (todoId == 0) {
+        throw new BadRequestException("잘못된 todoId값을 받았습니다.", new Throwable("Request-Error"));
+      } else if (row != 1) {
+        throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
+            new Throwable("Conflict-Request"));
+      }
     }
-    return result;
+    return true;
   }
 
   // 비즈니스 로직 중 불가능하거나 모순이 생긴 경우 ConflictRequestException을 처리해준다.
@@ -72,7 +80,14 @@ public class TodoServiceImpl implements ITodoService {
   @Override
   public List<TodosDTO> showTodosListByHospitalCode(String hospitalCode) {
     // TODO Auto-generated method stub
+    if (hospitalCode == null) {
+      throw new BadRequestException("잘못된 hospitalCode 값을 받았습니다.", new Throwable("Request-Error"));
+    }
     List<TodosDTO> todos = todosDAO.selectTodosByHospitalCode(hospitalCode);
+    if (todos == null) {
+      throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
+          new Throwable("Conflict-Request"));
+    }
     return todos;
   }
 
@@ -91,7 +106,14 @@ public class TodoServiceImpl implements ITodoService {
   @Override
   public List<TodosDTO> showTodosListByMemberId(int memberId) {
     // TODO Auto-generated method stub
+    if (memberId == 0) {
+      throw new BadRequestException("잘못된 memberId 값을 받았습니다.", new Throwable("Request-Error"));
+    }
     List<TodosDTO> todos = todosDAO.selectTodosByMemberId(memberId);
+    if (todos == null) {
+      throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
+          new Throwable("Conflict-Request"));
+    }
     return todos;
   }
 

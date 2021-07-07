@@ -85,10 +85,10 @@ public interface INoticeService {
   /**
    * 해당 게시물의 덧글을 삭제하기 위한 서비스 인터페이스
    * 
-   * @param int noticeCommentsId
+   * @param int noticeCommentId
    * @return true or false (덧글을 성공적으로 삭제된 여부를 알기 위해)
    */
-  public boolean removeComment(int noticeCommentsId);
+  public boolean removeComment(int noticeCommentId);
 
   /**
    * 해당 게시물의 덧글을 수정하기 위한 서비스 인터페이스
