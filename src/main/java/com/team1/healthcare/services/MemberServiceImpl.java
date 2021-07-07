@@ -1,11 +1,19 @@
 package com.team1.healthcare.services;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
+import java.util.regex.Pattern;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.team1.healthcare.commons.CommonUtils;
 import com.team1.healthcare.dao.MembersDAO;
 import com.team1.healthcare.dto.MembersDTO;
+import com.team1.healthcare.exception.BadRequestException;
 import com.team1.healthcare.exception.ConflictRequestException;
+import com.team1.healthcare.exception.NoContentException;
 import com.team1.healthcare.vo.common.MemberSearchVO;
 import com.team1.healthcare.vo.member.EmailCheckVO;
 import com.team1.healthcare.vo.notice.AddNoticeImageVO;
@@ -16,54 +24,57 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MemberServiceImpl implements IMemberService {
 
+  // 이메일 정규식
+  private boolean isEmail(String memberEmail) {
+    return Pattern.matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$",
+        memberEmail);
+  }
+
+  private boolean isPhone(String memberTel) {
+    return Pattern.matches("^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$",
+        memberTel);
+  }
+
+  private boolean isPassword(String memberPw) {
+    return Pattern.matches(
+        "(?=.*\\d{1,50})(?=.*[~`!@#$%\\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$", memberPw);
+  }
+
+
   @Autowired
   private MembersDAO membersDAO;
 
+
   @Override
-  public boolean addMembers(MembersDTO memberInfo) {
+  public boolean addMember(MembersDTO memberInfo) {
 
-    // 1. Dao의 isExistedUser를 통해 이메일이 존재하는지 체크
-    // 1-1 존재하면 throw ConflictRequestException
-    // 1-2 유효성검사
-    // 1-3. null : throw NoContentException
-    // 1-4. 잘못된 값 : throw ConflictRequestException
+    if (memberInfo.isNull()) {
+      log.info("isNull이다");
+      throw new BadRequestException("필수 값이 누락되어있습니다.", new Throwable("null-info"));
+    }
 
-    // 2. 비밀번호 유효성 검사(비밀번호를 숫자, 특수문자 각 1회 이상, 영문은 2글자 이상 입력하고 총 8자 이상)
-    // 2-1. null : throw NoContentException
-    // 2-2. 잘못된 값 : throw ConflictRequestException
+    if (!isEmail(memberInfo.getMemberEmail())) {
+      log.info("이메일 유효성 안맞음");
+      throw new BadRequestException("이메일 값이 잘못되었습니다.", new Throwable("invalid-email"));
+    }
 
-    // 3. 성별을 선택
-    // 3-1. null : throw NoContentException
+    if (!isPhone(memberInfo.getMemberTel())) {
+      log.info("전화번호 유효성 안맞음");
+      throw new BadRequestException("전화번호 값이 잘못되었습니다.", new Throwable("invalid-tel"));
+    }
 
-    // 4. 이름을 입력
-    // 4-1. null : throw NoContentException
+    if (!isPassword(memberInfo.getMemberPw())) {
+      log.info("비번 유효성 안맞");
+      throw new BadRequestException("비밀번호 값이 잘못되었습니다.", new Throwable("invalid-pw"));
+    }
 
-    // 5. 전화번호 유효성 검사(000-0000-0000)
-    // 5-1. null : throw NoContentException
-    // 5-2. 잘못된 값: throw ConflictRequestException
-
-    // 6. 생년월일 입력
-    // 6-1. null : throw NoContentException
-
-    // 7. 주소 입력 memberPostal, memberAddr1, memberAddr2
-    // 7-1. null : throw NoContentException
-
-    // 8. 이미지 업로드 버튼 클릭
-    // 8-1. AddNoticeImageVO와 base64 저장
-
-    // 9. 자기소개란 입력
-    // 10. 임직원의 입사일과 암호화 실시
-    // 11. DAO의 insertMember 호출
-    // 12. 결과값이 1이면 true 리턴
-    // 12-1. 그 외 throw RuntimeException
-
-    // 우선 이미 병원에 해당 이메일이 존재 하는지 점검한다.
+    // 해딩 이메일이 존재하는지 체크
     MembersDTO existedMemberInfo = membersDAO.isExistedUser(memberInfo);
-
     if (existedMemberInfo != null) {
-      throw new ConflictRequestException("이미 존재하는 이메일 주소입니다. 다른 이메일 주소를 입력해주세요",
+      throw new BadRequestException("이미 존재하는 이메일 주소입니다. 다른 이메일 주소를 입력해주세요",
           new Throwable("existed-email"));
     }
+
     // 임직원의 입사일과 암호화를 실시
     memberInfo.setCurrentTime();
     memberInfo.encryptPassword();
@@ -71,109 +82,156 @@ public class MemberServiceImpl implements IMemberService {
     int result = membersDAO.insertMember(memberInfo);
 
     if (result == 1) {
+      log.info("성공@@@@@@@@@@@@");
       return true;
     }
 
-    throw new RuntimeException("알 수 없는 이유로 회원가입에 실패하였습니다.");
+    throw new RuntimeException("알 수 없는 이유로 임직원 추가가 실패하였습니다.");
   }
 
-  // 임직원 추가
-  @Override
-  public boolean addMember(MembersDTO memberInfo) {
-    // TODO Auto-generated method stub
-    return false;
-  }
 
   // 임직원 정보 수정
   @Override
   public boolean modifyMemberInfo(MembersDTO memberInfo) {
-    // DAO를 통한 정보 수정
-    // return 수정된 행의 개수
-    int modifyRows = membersDAO.updateMemberInfo(memberInfo);
-    if (modifyRows == 1) { // 한행만 수정
-      return true;
-    } else {
-      return false;
+
+    log.info(memberInfo.toString());
+
+    if (memberInfo.isModifyDataNull()) {
+      throw new BadRequestException("필수 값이 누락되어 있습니다.", new Throwable("null-info"));
     }
+
+    int modifyRows = membersDAO.updateMemberInfo(memberInfo);
+
+    // 변경이 안되면
+    if (modifyRows == 0) {
+      throw new BadRequestException("임직원 정보가 변경되지 않았습니다.", new Throwable("failed-info"));
+    }
+    // 하나의 직원정보 변경 성공
+    else if (modifyRows == 1) {
+      return true;
+    }
+
+    throw new RuntimeException("알 수 없는 이유로 임직원 정보수정이 실패하였습니다.");
   }
+
 
   // 임직원 삭제
   @Override
   public boolean deleteMember(int memberId) {
+    if (memberId <= 0) {
+      throw new BadRequestException("memberId값이 제대로 입력되지 않았습니다.", new Throwable("wrong-info"));
+    }
+
     int deleteRows = membersDAO.deleteMember(memberId);
     if (deleteRows == 1) {
       return true;
-    } else {
-      return false;
     }
+
+    throw new RuntimeException("알 수 없는 이유로 임직원 삭제가 실패하였습니다.");
   }
+
 
   // 해당 병원의 임직원 목록
   @Override
   public List<MembersDTO> showMembersListByHospitalCode(String hospitalCode) {
 
-    // hospitalCode가 null 일경우 throw BadRequestException
-    // DAO의 selectMembersListByHospitalCode 호출
-    // 만약 List<MembersDTO>의 크기가 0이라면? NoContentException을 터트린다.
-    // 값 리턴
+    if (hospitalCode == null) {
+      throw new BadRequestException("hospitalCode값이 존재하지 않습니다.", new Throwable("null-info"));
+    }
 
-    return membersDAO.selectMembersListByHospitalCode(hospitalCode);
+    List<MembersDTO> memberInfo = membersDAO.selectMembersListByHospitalCode(hospitalCode);
+    if (memberInfo == null || memberInfo.size() == 0) {
+      log.info("@@@@@@@@@@@@@@@@@");
+      throw new NoContentException("결과값이 없습니다.", new Throwable("no-content"));
+    }
+
+    return memberInfo;
   }
+
 
   // 해당 병원의 임직원들에 대한 이름검색
   @Override
   public List<MembersDTO> showMembersListByNameAndCode(MemberSearchVO memberSearchInfo) {
 
-    // 1. MemberSearchVO가 null이면? throw BadRequestException
-    // 2. List<MembersDTO> memberInfo = membersDAO.selectMembersListByMemberName()
-    // 3. 만약 memberInfo의 크기가 0이라면 throw new NoContentException
+    if (memberSearchInfo.isNull() == true) {
+      throw new BadRequestException("MemberSearchVO값이 존재하지 않습니다.", new Throwable("null-info"));
+    }
 
-    // 값 리턴
+    List<MembersDTO> memberInfo = membersDAO.selectMembersListByMemberName(memberSearchInfo);
+    if (memberInfo == null || memberInfo.size() == 0) {
+      throw new NoContentException("결과값이 없습니다.", new Throwable("no-content"));
+    }
 
-    return membersDAO.selectMembersListByMemberName(memberSearchInfo);
+    return memberInfo;
   }
+
 
   // 해당 병원에서 임직원 이메일이 중복되었는지 체크
   @Override
   public boolean isExistedEmail(EmailCheckVO emailCheckInfo) {
 
-    // 1. EmailCheckVO가 null이면? throw new BadRequestException
-    // 2. MembersDAO의 isExistedEmail를 호출
-    // 3. 만약 MembersDTO가 null이 아니면, throw new ConflictRequestException
-    // 4. return true;
+    if (emailCheckInfo.isNull()) {
+      throw new BadRequestException("EmailCheckVO값이 존재하지 않습니다.", new Throwable("null-info"));
+    }
 
-    return false;
+    // 3. 만약 MembersDTO가 null이 아니면, throw new ConflictRequestException
+    MembersDTO isExistMemberEmail = membersDAO.isExistedEmail(emailCheckInfo);
+
+    if (isExistMemberEmail != null) {
+      throw new ConflictRequestException("이미 존재하는 이메일 주소입니다. 다른 이메일 주소를 입력해주세요",
+          new Throwable("existed-email"));
+    }
+
+    return true;
   }
+
 
   // 비밀번호 초기화
   @Override
   public boolean intializeMemberPw(int memberId) {
 
-    // 1. memberId가 0이면? throw new BadRequestException
-    // 2. 비밀번호 초기화를 위해 !@#douzone1234으로 초기화 할 예정
-    // 3. String saltedPassword = CommonUtils.encryptPassword("!@#douzone1234");
-    // 4. MembersDAO의 updateMemberPw(memberId, saltedPassword)
-    // 5. 만약 1이 아니면, ConflictRequestException을 터트린다.
+    if (memberId == 0) {
+      throw new BadRequestException("memberId값이 존재하지 않습니다.", new Throwable("null-info"));
+    }
 
+    String saltedPassword = CommonUtils.encryptPassword("!@#douzone1234");
+    int updateRows = membersDAO.updateMemberPw(memberId, saltedPassword);
+    if (updateRows != 1) {
+      throw new ConflictRequestException("초기화 중 오류가 생겼습니다.", new Throwable("initialPW-error"));
+    }
 
-    // DAO의 updateMemberPw 호출, 전달 @params (memberId,memberPw)
-    // 1이면 true
-    // 그외 런타임에러
-    return false;
+    return true;
   }
+
 
   // 이미지 업로드
   @Override
   public String memberImageUpload(AddNoticeImageVO imageInfo) {
 
-    // 1. imageInfo가 null이면? throw new BadRequestException
-    // 2. base64의 순수 binary 데이터를 가져오기 위해서 접두에 붙어있는 내용을 제거한다.
-    // 3. base64로 encoding된 데이터를 decoding 해서 byte[]로 임시 저장
-    // 4. defaultPath, filePath를 지정
-    // 5, FileUtils.writeByteArrayToFile(new File(defaultPath + filePath), decodedBytes)
-    // 6. 이미지 경로 보내줘
+    if (imageInfo.isNull()) {
+      throw new BadRequestException("AddNoticeImageVO값이 존재하지 않습니다.", new Throwable("null-info"));
+    }
 
-    return null;
+    // base64의 순수 binary 데이터를 가져오기 위해서 접두에 붙어있는 내용을 제거한다.
+    String[] base64Str = imageInfo.getBase64Content().split(",");
+
+    // base64로 encoding된 데이터를 decoding 해서 byte[]로 임시 저장
+    byte[] decodedBytes = Base64.getDecoder().decode(base64Str[1]);
+
+    // defaultPath, filePath를 지정
+    String defaultPath = System.getProperty("user.home") + "/images";
+    String filePath = "/" + imageInfo.getHospitalCode() + "/" + imageInfo.getImageName();
+    log.info("default: " + defaultPath);
+    log.info("filePath: " + filePath);
+
+    try {
+      FileUtils.writeByteArrayToFile(new File(defaultPath + filePath), decodedBytes);
+      // 상품 이미지의 정보를 보내기 위해 DTO와 정보를 넣어줌
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return filePath;
   }
 
 }

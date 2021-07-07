@@ -78,8 +78,8 @@
 		member_name = #{memberName},
 		member_tel = #{memberTel},
 		member_postal = #{memberPostal},
-		member_addr1 = #{member_addr1},
-		member_addr2 = #{member_addr2}
+		member_addr1 = #{memberAddr1},
+		member_addr2 = #{memberAddr2}
 		where
 		member_id = #{memberId}
 	</update>
@@ -101,8 +101,8 @@
 		select member_id, member_name,
 		doctor_room, hospital_code
 		from members
-		where hospital_code =
-		#{hospitalCode} and member_authority = 'ROLE_DOCTOR'
+		where hospital_code = #{hospitalCode}
+		and member_authority = 'ROLE_DOCTOR'
 	</select>
 
 </mapper>
