@@ -30,19 +30,20 @@
 		where notice_id = #{noticeId}
 	</select>
 
-	<insert id="insertNotice" parameterType="notices">
-		insert into notices
-		(notice_id, notice_title, notice_content,
-		notice_author, create_date,
-		hospital_code, member_code, notice_head_text,
-		notice_head_image,
-		notice_count)
-		values
-		(#{noticeId}, #{noticeTitle}, #{noticeContent},
-		#{noticeAuthor}, CURDATE(),
-		#{hospitalCode}, #{memberCode},
-		#{noticeHeadText}, #{noticeHeadImage}, #{noticeCount})
-	</insert>
+
+   <insert id="insertNotice" parameterType="notices">
+      insert into notices
+      (notice_id, notice_title, notice_content,
+      notice_author, create_date,
+      hospital_code, member_id, notice_head_text,
+      notice_head_image,
+      notice_count)
+      values
+      (#{noticeId}, #{noticeTitle}, #{noticeContent},
+      #{noticeAuthor}, #{createDate},
+      #{hospitalCode}, #{memberId},
+      #{noticeHeadText}, #{noticeHeadImage}, #{noticeCount})
+   </insert>
 
 	<select id="selectNoticeByHospitalAndTitle" parameterType="searchNoticeByHospitalAndTitle"
 		resultType="notices">

@@ -12,9 +12,9 @@
 
 	<insert id="insertComment" parameterType="noticeComments">
 		insert into notice_comments
-		(notice_comments_id, member_name, created_date, comment, member_id, notice_id)
+		(notice_comment_id, member_name, created_date, comment, member_id, notice_id)
 		values
-		(#{noticeCommentsId}, #{memberName}, #{createdDate}, #{comment}, #{memberId}, #{noticeId})
+		(#{noticeCommentId}, #{memberName}, #{createdDate}, #{comment}, #{memberId}, #{noticeId})
 	</insert>
 
 	<update id="updateComment" parameterType="updateNoticeComment">
