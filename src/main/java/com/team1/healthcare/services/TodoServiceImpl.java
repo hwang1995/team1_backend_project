@@ -28,14 +28,17 @@ public class TodoServiceImpl implements ITodoService {
    */
   @Override
   public boolean addTodo(TodosDTO todoInfo) {
-    // TODO Auto-generated method stub
-    int row = todosDAO.insertTodo(todoInfo);
     if (todoInfo.isNull()) {
       throw new BadRequestException("잘못된 todoInfo값을 받았습니다.", new Throwable("Request-Error"));
-    } else if (row != 1) {
+    }
+
+    int row = todosDAO.insertTodo(todoInfo);
+
+    if (row != 1) {
       throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
           new Throwable("ConflictRequest"));
     }
+
     return true;
   }
 
@@ -84,7 +87,7 @@ public class TodoServiceImpl implements ITodoService {
       throw new BadRequestException("잘못된 hospitalCode 값을 받았습니다.", new Throwable("Request-Error"));
     }
     List<TodosDTO> todos = todosDAO.selectTodosByHospitalCode(hospitalCode);
-    if (todos == null) {
+    if (todos == null || todos.size() == 0) {
       throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
           new Throwable("Conflict-Request"));
     }
@@ -110,7 +113,7 @@ public class TodoServiceImpl implements ITodoService {
       throw new BadRequestException("잘못된 memberId 값을 받았습니다.", new Throwable("Request-Error"));
     }
     List<TodosDTO> todos = todosDAO.selectTodosByMemberId(memberId);
-    if (todos == null) {
+    if (todos == null || todos.size() == 0) {
       throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
           new Throwable("Conflict-Request"));
     }

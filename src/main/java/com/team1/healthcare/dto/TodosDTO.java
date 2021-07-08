@@ -1,9 +1,7 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,11 +27,9 @@ public class TodosDTO {
 
   @JsonIgnore
   public boolean isNull() {
-    Integer todoIdWrapper = new Integer(todoId);
     Integer memberIdWrapper = new Integer(memberId);
 
-    if (todoIdWrapper == null || todoContent == null || createdDate == null
-        || memberIdWrapper == null || hospitalCode == null) {
+    if (todoContent.trim().isEmpty() || memberIdWrapper == null || hospitalCode.trim().isEmpty()) {
       return true;
     } else {
       return false;

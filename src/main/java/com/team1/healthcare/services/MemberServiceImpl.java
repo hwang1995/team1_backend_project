@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.google.common.io.Files;
 import com.team1.healthcare.commons.CommonUtils;
 import com.team1.healthcare.dao.MembersDAO;
 import com.team1.healthcare.dto.MembersDTO;
@@ -153,7 +154,7 @@ public class MemberServiceImpl implements IMemberService {
   @Override
   public List<MembersDTO> showMembersListByNameAndCode(MemberSearchVO memberSearchInfo) {
 
-    if (memberSearchInfo.isNull() == true) {
+    if (memberSearchInfo.isNull() || memberSearchInfo.getMemberName().trim().isEmpty()) {
       throw new BadRequestException("MemberSearchVO값이 존재하지 않습니다.", new Throwable("null-info"));
     }
 
@@ -181,7 +182,6 @@ public class MemberServiceImpl implements IMemberService {
       throw new ConflictRequestException("이미 존재하는 이메일 주소입니다. 다른 이메일 주소를 입력해주세요",
           new Throwable("existed-email"));
     }
-
     return true;
   }
 
@@ -211,6 +211,16 @@ public class MemberServiceImpl implements IMemberService {
     if (imageInfo.isNull()) {
       throw new BadRequestException("AddNoticeImageVO값이 존재하지 않습니다.", new Throwable("null-info"));
     }
+
+    String extension = Files.getFileExtension(imageInfo.getImageName());
+    if (extension.trim().isEmpty()) {
+      throw new BadRequestException("파일 이름이 올바르지 않습니다.", new Throwable("bad-filename"));
+    }
+
+    if (!(extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png"))) {
+      throw new BadRequestException("허용되지 않는 확장자입니다.", new Throwable("bad-file-extension"));
+    }
+
 
     // base64의 순수 binary 데이터를 가져오기 위해서 접두에 붙어있는 내용을 제거한다.
     String[] base64Str = imageInfo.getBase64Content().split(",");

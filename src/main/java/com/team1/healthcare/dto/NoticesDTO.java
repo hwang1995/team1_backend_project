@@ -1,9 +1,7 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -51,12 +49,27 @@ public class NoticesDTO {
   @JsonIgnore
   public boolean isNull() {
     Integer memberIdWrapper = new Integer(memberId);
-    
-    if (noticeTitle == null || noticeContent == null || noticeAuthor == null || hospitalCode == null
-        || memberIdWrapper == null || noticeHeadText == null) {
+    boolean isTitle = this.noticeTitle.trim().isEmpty();
+    boolean isContent = this.noticeContent.trim().isEmpty();
+    boolean isAuthor = this.noticeAuthor.trim().isEmpty();
+    boolean isCode = this.hospitalCode.trim().isEmpty();
+    boolean isHeadText = this.noticeHeadText.trim().isEmpty();
+    if (memberIdWrapper == null || isTitle || isContent || isAuthor || isCode || isHeadText) {
       return true;
-    } else {
-      return false;
     }
+    return false;
+
+  }
+
+  @JsonIgnore
+  public boolean isUpdateNull() {
+    boolean isTitle = this.noticeTitle.trim().isEmpty();
+    boolean isContent = this.noticeContent.trim().isEmpty();
+    boolean isHeadText = this.noticeHeadText.trim().isEmpty();
+    if (isTitle || isContent || isHeadText) {
+      return true;
+    }
+    return false;
+
   }
 }

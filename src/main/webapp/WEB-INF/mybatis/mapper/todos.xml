@@ -14,7 +14,8 @@
 
 	<select id="selectTodosByMemberId" parameterType="int"
 		resultType="todos">
-		select todo_id, todo_content, created_date, member_id, hospital_code
+		select todo_id, todo_content, created_date, member_id,
+		hospital_code
 		from
 		todos
 		where
@@ -26,7 +27,7 @@
 		insert into todos
 		(todo_content, created_date, member_id, hospital_code)
 		values
-		(#{todoContent}, #{createdDate}, #{memberId}, #{hospitalCode})
+		(#{todoContent}, CURDATE(), #{memberId}, #{hospitalCode})
 	</insert>
 
 

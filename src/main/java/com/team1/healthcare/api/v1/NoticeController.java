@@ -40,7 +40,7 @@ public class NoticeController {
   }
 
   // 2.5. GET AND PUT 해당 병원의 공지사항의 상세정보 보여주기 + 조회수 업데이트
-  @GetMapping("/notice")
+  @GetMapping("/detail")
   public NoticesDTO getNoticesList(int noticeId) {
     noticeService.updateNoticeCountByNoticeId(noticeId);
     NoticesDTO notice = noticeService.showNoticeDetailByNoticeId(noticeId);
