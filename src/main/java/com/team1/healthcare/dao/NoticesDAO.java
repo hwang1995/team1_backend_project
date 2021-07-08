@@ -3,6 +3,8 @@ package com.team1.healthcare.dao;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.team1.healthcare.dto.NoticesDTO;
+import com.team1.healthcare.vo.notice.AddNoticeImageVO;
+import com.team1.healthcare.vo.notice.SearchNoticeByHospitalCodeAndTitleVO;
 
 @Mapper
 public interface NoticesDAO {
@@ -14,13 +16,7 @@ public interface NoticesDAO {
    */
   public int insertNotice(NoticesDTO noticeInfo);
 
-  /**
-   * 게시물 이름으로 공지사항 게시물을 검색하기 위한 쿼리
-   * 
-   * @param String noticeTitle
-   * @return List<NoticesDTO>
-   */
-  public List<NoticesDTO> searchByNoticeName(String noticeTitle);
+  
 
   /**
    * 게시물의 식별자 (ID)로 조회수를 업데이트 하기 위한 쿼리
@@ -54,6 +50,17 @@ public interface NoticesDAO {
    */
   public List<NoticesDTO> selectNoticesByHospitalCode(String hospitalCode);
 
+
+
+  /**
+   * 병원 코드 (식별자), 공지사항 제목으로 게시물의 리스트를 조회하기 위한 쿼리
+   * 
+   * @param SearchNoticeByHospitalCodeAndTitleVO searchNoticeByHospitalAndTitle
+   * @return List<NoticesDTO>
+   */
+  public List<NoticesDTO> selectNoticesByHospitalCodeAndTitle(
+      SearchNoticeByHospitalCodeAndTitleVO searchNoticeByHospitalAndTitle);
+
   /**
    * 게시물의 식별자(ID)로 게시물의 상세 정보를 조회하기 위한 쿼리
    * 
@@ -61,5 +68,15 @@ public interface NoticesDAO {
    * @return NoticesDTO
    */
   public NoticesDTO selectNoticeDetailByNoticeId(int noticeId);
+
+  /**
+   * 게시물에 사진을 첨부하기 위한 쿼리
+   * 
+   * @param noticeId
+   * @return
+   */
+  public String UploadNoticeImage(AddNoticeImageVO noticeImageInfo);
+
+
 
 }

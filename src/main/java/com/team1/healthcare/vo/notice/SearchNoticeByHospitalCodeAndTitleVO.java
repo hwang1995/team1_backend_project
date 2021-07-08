@@ -11,14 +11,13 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateNoticeCommentVO {
-  private int noticeCommentId;
-  private String comment;
+public class SearchNoticeByHospitalCodeAndTitleVO {
+  private String noticeTitle;
+  private String hospitalCode;
 
   @JsonIgnore
   public boolean isNull() {
-    Integer noticeCommentIdWrapper = new Integer(noticeCommentId);
-    if (noticeCommentIdWrapper == null || comment == null) {
+    if (hospitalCode == null || noticeTitle == null) {
       return true;
     } else {
       return false;

@@ -78,6 +78,13 @@
 		<typeAlias
 			type="com.team1.healthcare.vo.notice.UpdateNoticeCommentVO"
 			alias="updateNoticeComment" />
+			
+		<typeAlias
+			type="com.team1.healthcare.vo.notice.AddNoticeImageVO"
+			alias="addNoticeImage" />
+		<typeAlias
+			type="com.team1.healthcare.vo.notice.SearchNoticeByHospitalCodeAndTitleVO"
+			alias="searchNoticeByHospitalAndTitle" />
 
 		<typeAlias
 			type="com.team1.healthcare.vo.common.MemberSearchVO"

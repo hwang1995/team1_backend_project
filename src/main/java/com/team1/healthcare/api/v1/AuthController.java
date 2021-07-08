@@ -75,7 +75,7 @@ public class AuthController {
   public String addMembers(@RequestBody MembersDTO memberInfo) {
     boolean result = CommonUtils.isEmpty(memberInfo);
     log.info("DTO의 값은 Null인가? " + result);
-    memberService.addMembers(memberInfo);
+    memberService.addMember(memberInfo);
     return "success";
 
   }

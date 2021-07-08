@@ -2,53 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.NoticesDAO">
 
-	<select id="selectNoticesByHospitalCode" parameterType="string"
-		resultType="notices">
-		select notice_id, notice_title, notice_head_text,
-		notice_head_image, notice_author, create_date, notice_count
-		from
-		notices
-		where hospital_code = #{hospitalCode}
-	</select>
+	
+   <select id="selectNoticesByHospitalCode" parameterType="string"
+      resultType="notices">
+      select notice_id, notice_title, notice_content, notice_head_text, hospital_code,
+      notice_head_image, notice_author, create_date, notice_count, member_id
+      from
+      notices
+      where hospital_code = #{hospitalCode}
+   </select>
 
 	<select id="selectNoticeDetailByNoticeId" parameterType="int"
 		resultType="notices">
 		select notice_id, notice_title, notice_content,
 		notice_head_text,
 		notice_head_image, notice_author, create_date,
-		notice_count, member_id
+		notice_count, member_id, hospital_code
 		from
 		notices
 		where notice_id = #{noticeId}
 	</select>
 
-	<insert id="insertNotice" parameterType="notices">
-		insert into notices
-		(notice_id, notice_title, notice_content,
-		notice_author, create_date,
-		hospital_code, member_code, notice_head_text,
-		notice_head_image,
-		notice_count)
-		values
-		(#{noticeId}, #{noticeTitle}, #{noticeContent},
-		#{noticeAuthor}, #{createDate},
-		#{hospitalCode}, #{memberCode},
-		#{noticeHeadText}, #{noticeHeadImage}, #{noticeCount})
-	</insert>
 
-	<select id="searchByNoticeName" parameterType="string"
+   <insert id="insertNotice" parameterType="notices">
+      insert into notices
+      (notice_id, notice_title, notice_content,
+      notice_author, create_date,
+      hospital_code, member_id, notice_head_text,
+      notice_head_image,
+      notice_count)
+      values
+      (#{noticeId}, #{noticeTitle}, #{noticeContent},
+      #{noticeAuthor}, #{createDate},
+      #{hospitalCode}, #{memberId},
+      #{noticeHeadText}, #{noticeHeadImage}, #{noticeCount})
+   </insert>
+
+	<select id="selectNoticeByHospitalAndTitle" parameterType="searchNoticeByHospitalAndTitle"
 		resultType="notices">
 		select notice_id, notice_title, notice_head_text,
 		notice_author, create_date
 		from notices
-		where notice_title LIKE
-		'%'+#{noticeTitle}+'%'
+		where notice_title like
+		CONCAT('%',#{noticeTitle}, '%') and hospital_code = #{hospitalCode}
 	</select>
 
 	<update id="updateNoticeCountByNoticeId" parameterType="int">
 		update
-		notices
-		set notice_count = notice_count + 1
+		notices 
+		set notice_count = IFNULL(notice_count, 0) + 1
 		where notice_id=#{noticeId}
 	</update>
 
