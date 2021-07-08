@@ -3,6 +3,7 @@ package com.team1.healthcare.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team1.healthcare.commons.CommonUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,23 +23,18 @@ public class MembersDTO {
   private int memberId;
 
   // 임직원의 이메일
-
   private String memberEmail;
 
   // 임직원의 비밀번호
-
   private String memberPw;
 
   // 임직원의 이름
-
   private String memberName;
 
   // 임직원의 전화번호
-
   private String memberTel;
 
   // 임직원의 상세 주소 1
-
   private String memberAddr1;
 
   // 임직원의 상세 주소 2
@@ -65,7 +61,6 @@ public class MembersDTO {
   // 임직원의 성별
   // - 남자 (MEN)
   // - 여자 (WOMEN)
-
   private String memberGender;
 
   // 임직원의 생년월일
@@ -84,13 +79,38 @@ public class MembersDTO {
 
   // 임직원의 입사일자를 세팅하기 위해 필요한 메서드
   public void setCurrentTime() {
-    joinedDate = LocalDateTime.now();
+    this.joinedDate = LocalDateTime.now();
   }
 
+  // 임직원의 비밀번호를 암호화하기 위한 메소드
   public void encryptPassword() {
     this.memberPw = CommonUtils.encryptPassword(memberPw);
   }
 
+  // 임직원에 필수적으로 존재해야하는 데이터가 있는지 없는지 확인하기 위한 메소드
+  @JsonIgnore
+  public boolean isNull() {
+    if (this.memberEmail == null || this.memberPw == null || this.memberName == null
+        || this.memberTel == null || this.memberAddr1 == null || this.memberAddr2 == null
+        || this.memberPostal == null || this.memberAuthority == null || this.memberEnabled == false
+        || this.hospitalCode == null || this.memberGender == null || this.memberBirth == null
+        || this.memberColor == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-
+  // 수정할때 필수적으로 존재해야하는 데이터가 있는지 없는지 확인하기 위한 메소드
+  @JsonIgnore
+  public boolean isModifyDataNull() {
+    if (this.memberId == 0 || this.memberName == null || this.memberTel == null
+        || this.memberAddr1 == null || this.memberAddr2 == null || this.memberPostal == null
+        || this.memberAuthority == null || this.memberIntroduction == null
+        || this.memberColor == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

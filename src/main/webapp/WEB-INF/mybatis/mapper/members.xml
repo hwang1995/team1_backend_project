@@ -38,11 +38,9 @@
 		parameterType="string" resultType="members">
 		select member_id, member_email,
 		member_name, member_tel, member_addr1, member_addr2, member_authority,
-		member_postal,
-		member_image, member_birth, member_color)
+		member_postal, member_image, member_birth, member_color
 		from members
-		where
-		hospital_code = #{hospitalCode}
+		where hospital_code = #{hospitalCode}
 	</select>
 
 	<select id="selectMembersListByMemberName"
@@ -54,7 +52,7 @@
 		member_authority, member_postal,
 		member_image,
 		member_birth,
-		member_color)
+		member_color
 		from members
 		where
 		member_name like
@@ -65,8 +63,7 @@
 	<select id="isExistedEmail" parameterType="emailCheck"
 		resultType="members">
 		select member_email from members where
-		member_email =
-		#{memberEmail} and hospital_code = #{hospitalCode}
+		member_email = #{memberEmail} and hospital_code = #{hospitalCode}
 	</select>
 
 	<select id="countMembersByNameAndCode"
@@ -81,8 +78,8 @@
 		member_name = #{memberName},
 		member_tel = #{memberTel},
 		member_postal = #{memberPostal},
-		member_addr1 = #{member_addr1},
-		member_addr2 = #{member_addr2}
+		member_addr1 = #{memberAddr1},
+		member_addr2 = #{memberAddr2}
 		where
 		member_id = #{memberId}
 	</update>
@@ -104,8 +101,8 @@
 		select member_id, member_name,
 		doctor_room, hospital_code
 		from members
-		where hospital_code =
-		#{hospitalCode} and member_authority = 'ROLE_DOCTOR'
+		where hospital_code = #{hospitalCode}
+		and member_authority = 'ROLE_DOCTOR'
 	</select>
 
 	<select id="selectMemberInfoByMemberId" parameterType="int"

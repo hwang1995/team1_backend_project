@@ -8,8 +8,6 @@ import com.team1.healthcare.vo.notice.AddNoticeImageVO;
 
 public interface IMemberService {
 
-  public boolean addMembers(MembersDTO memberInfo);
-
   /**
    * 임직원을 추가하기 위한 서비스 인터페이스
    * 
