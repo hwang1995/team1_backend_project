@@ -62,8 +62,17 @@
 
 	<select id="isExistedEmail" parameterType="emailCheck"
 		resultType="members">
-		select member_email from members where
-		member_email =
+		select member_id,
+		member_email,
+		member_name, member_tel,
+		member_addr1,
+		member_addr2,
+		member_authority, member_postal,
+		member_image,
+		member_birth,
+		member_color from members where
+		member_email
+		=
 		#{memberEmail} and hospital_code = #{hospitalCode}
 	</select>
 

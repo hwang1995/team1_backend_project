@@ -22,14 +22,14 @@ public class TodoController {
   private TodoServiceImpl todoService;
 
   // 1. GET Todos By hospitalCode 가져오기
-  @GetMapping("/hospitalCode")
+  @GetMapping("/search/code")
   public List<TodosDTO> getTodosListByHospitalCode(String hospitalCode) {
     List<TodosDTO> list = todoService.showTodosListByHospitalCode(hospitalCode);
     return list;
   }
 
   // 1.5. GET Todos By memberId 가져오기
-  @GetMapping("/memberId")
+  @GetMapping("/search/id")
   public List<TodosDTO> getTodosListByMemberId(int memberId) {
     List<TodosDTO> list = todoService.showTodosListByMemberId(memberId);
     return list;

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.google.common.io.Files;
 import com.team1.healthcare.dao.NoticeCommentsDAO;
 import com.team1.healthcare.dao.NoticesDAO;
 import com.team1.healthcare.dto.NoticeCommentsDTO;
@@ -37,7 +38,6 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public boolean addNotice(NoticesDTO noticeInfo) {
-    // TODO Auto-generated method stub
     if (noticeInfo.isNull()) {
       throw new BadRequestException("잘못된 noticeInfo값을 받았습니다.", new Throwable("Request-Error"));
     }
@@ -60,7 +60,6 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public boolean removeNotice(int noticeId) {
-    // TODO Auto-generated method stub
     if (noticeId == 0) {
       throw new BadRequestException("잘못된 noticeId값을 받았습니다.", new Throwable("Request-Error"));
     }
@@ -83,8 +82,7 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public boolean updateNotice(NoticesDTO noticeInfo) {
-    // TODO Auto-generated method stub
-    if (noticeInfo.isNull()) {
+    if (noticeInfo.isUpdateNull()) {
       throw new BadRequestException("잘못된 noticeInfo값을 받았습니다.", new Throwable("Request-Error"));
     }
     int row = noticesDAO.updateNotice(noticeInfo);
@@ -107,12 +105,11 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public List<NoticesDTO> showNoticesByHospitalCode(String hospitalCode) {
-    // TODO Auto-generated method stub
-    if (hospitalCode == null) {
+    if (hospitalCode == null || hospitalCode.trim().isEmpty()) {
       throw new BadRequestException("잘못된 hospitalCode값을 받았습니다.", new Throwable("Request-Error"));
     }
     List<NoticesDTO> notices = noticesDAO.selectNoticesByHospitalCode(hospitalCode);
-    if (notices == null) {
+    if (notices == null || notices.size() == 0) {
       throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
           new Throwable("Conflict-Request"));
     }
@@ -134,7 +131,6 @@ public class NoticeServiceImpl implements INoticeService {
   @Override
   public List<NoticesDTO> showNoticesByHospitalCodeAndTitle(
       SearchNoticeByHospitalCodeAndTitleVO searchNoticeByHospitalAndTitle) {
-    // TODO Auto-generated method stub
     if (searchNoticeByHospitalAndTitle.isNull()) {
       throw new BadRequestException("잘못된 searchNoticeByHospitalAndTitle값을 받았습니다.",
           new Throwable("Request-Error"));
@@ -160,7 +156,6 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public NoticesDTO showNoticeDetailByNoticeId(int noticeId) {
-    // TODO Auto-generated method stub
     if (noticeId == 0) {
       throw new BadRequestException("잘못된 noticeId값을 받았습니다.", new Throwable("Request-Error"));
     }
@@ -184,7 +179,6 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public boolean updateNoticeCountByNoticeId(int noticeId) {
-    // TODO Auto-generated method stub
     if (noticeId == 0) {
       throw new BadRequestException("잘못된 noticeId값을 받았습니다.", new Throwable("Request-Error"));
     }
@@ -210,12 +204,11 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public List<NoticeCommentsDTO> showNoticeCommentsByNoticeId(int noticeId) {
-    // TODO Auto-generated method stub
     if (noticeId == 0) {
       throw new BadRequestException("잘못된 noticeId값을 받았습니다.", new Throwable("Request-Error"));
     }
     List<NoticeCommentsDTO> noticeComments = noticeCommentsDAO.selectCommentsByNoticeId(noticeId);
-    if (noticeComments == null) {
+    if (noticeComments == null || noticeComments.size() == 0) {
       throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
           new Throwable("ConflictRequest"));
     }
@@ -233,7 +226,6 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public boolean addComment(NoticeCommentsDTO noticeCommentInfo) {
-    // TODO Auto-generated method stub
     if (noticeCommentInfo.isNull()) {
       throw new BadRequestException("잘못된 noticeCommentInfo값을 받았습니다.",
           new Throwable("Request-Error"));
@@ -257,7 +249,6 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public boolean removeComment(int noticeCommentId) {
-    // TODO Auto-generated method stub
     if (noticeCommentId == 0) {
       throw new BadRequestException("잘못된 todoInfo값을 받았습니다.", new Throwable("Request-Error"));
     }
@@ -280,7 +271,6 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public boolean modifyComment(UpdateNoticeCommentVO updateCommentInfo) {
-    // TODO Auto-generated method stub
     if (updateCommentInfo.isNull()) {
       throw new BadRequestException("잘못된 updateCommentInfo값을 받았습니다.",
           new Throwable("Request-Error"));
@@ -303,7 +293,19 @@ public class NoticeServiceImpl implements INoticeService {
    */
   @Override
   public String addNoticeImage(AddNoticeImageVO noticeImageInfo) {
-    // TODO Auto-generated method stub
+    if (noticeImageInfo.isNull()) {
+      throw new BadRequestException("AddNoticeImageVO값이 존재하지 않습니다.", new Throwable("null-info"));
+    }
+
+    String extension = Files.getFileExtension(noticeImageInfo.getImageName());
+    if (extension.trim().isEmpty()) {
+      throw new BadRequestException("파일 이름이 올바르지 않습니다.", new Throwable("bad-filename"));
+    }
+
+    if (!(extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png"))) {
+      throw new BadRequestException("허용되지 않는 확장자입니다.", new Throwable("bad-file-extension"));
+    }
+
     String[] base64Str = noticeImageInfo.getBase64Content().split(",");
     // base64로 인코딩되어 있는 데이터를 디코딩하여 byte[]로 받음
     byte[] decodedBytes = Base64.getDecoder().decode(base64Str[1]);

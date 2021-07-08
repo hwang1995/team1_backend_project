@@ -266,6 +266,37 @@
 			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="DELETE" />
 
+		<security:intercept-url pattern="/api/v1/todo"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="GET" />
+		<security:intercept-url pattern="/api/v1/todo"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="POST" />
+
+		<security:intercept-url pattern="/api/v1/todo"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="PUT" />
+		<security:intercept-url pattern="/api/v1/todo"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="DELETE" />
+
+		<security:intercept-url
+			pattern="/api/v1/todo/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="GET" />
+		<security:intercept-url
+			pattern="/api/v1/todo/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="POST" />
+		<security:intercept-url
+			pattern="/api/v1/todo/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="PUT" />
+		<security:intercept-url
+			pattern="/api/v1/todo/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="DELETE" />
+
 		<security:intercept-url pattern="/**"
 			access="denyAll" />
 	</security:http>

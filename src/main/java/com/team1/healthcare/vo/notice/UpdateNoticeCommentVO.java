@@ -1,7 +1,6 @@
 package com.team1.healthcare.vo.notice;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ public class UpdateNoticeCommentVO {
   @JsonIgnore
   public boolean isNull() {
     Integer noticeCommentIdWrapper = new Integer(noticeCommentId);
-    if (noticeCommentIdWrapper == null || comment == null) {
+    if (noticeCommentIdWrapper == null || comment.trim().isEmpty()) {
       return true;
     } else {
       return false;

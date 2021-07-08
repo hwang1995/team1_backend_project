@@ -1,9 +1,7 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -42,8 +40,8 @@ public class NoticeCommentsDTO {
     Integer memberIdWrapper = new Integer(memberId);
     Integer noticeCommentIdWrapper = new Integer(noticeCommentId);
 
-    if (noticeIdWrapper == null || memberIdWrapper == null || comment == null || memberName == null
-        || noticeCommentIdWrapper == null || createdDate == null) {
+    if (noticeIdWrapper == null || memberIdWrapper == null || comment.trim().isEmpty()
+        || memberName.trim().isEmpty() || noticeCommentIdWrapper == null || createdDate == null) {
       return true;
     } else {
       return false;

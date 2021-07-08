@@ -90,24 +90,39 @@ public class MembersDTO {
   // 임직원에 필수적으로 존재해야하는 데이터가 있는지 없는지 확인하기 위한 메소드
   @JsonIgnore
   public boolean isNull() {
-    if (this.memberEmail == null || this.memberPw == null || this.memberName == null
-        || this.memberTel == null || this.memberAddr1 == null || this.memberAddr2 == null
-        || this.memberPostal == null || this.memberAuthority == null || this.memberEnabled == false
-        || this.hospitalCode == null || this.memberGender == null || this.memberBirth == null
-        || this.memberColor == null) {
+    boolean isEmail = this.memberEmail.trim().isEmpty();
+    boolean isPw = this.memberPw.trim().isEmpty();
+    boolean isName = this.memberName.trim().isEmpty();
+    boolean isTel = this.memberTel.trim().isEmpty();
+    boolean isMemAddr1 = this.memberAddr1.trim().isEmpty();
+    boolean isMemAddr2 = this.memberAddr2.trim().isEmpty();
+    boolean isPostal = this.memberPostal.trim().isEmpty();
+    boolean isAuthority = this.memberAuthority.trim().isEmpty();
+    boolean isCode = this.hospitalCode.trim().isEmpty();
+    boolean isGender = this.memberGender.trim().isEmpty();
+    boolean isColor = this.memberColor.trim().isEmpty();
+
+    if (isEmail || isPw || isName || isTel || isMemAddr1 || isMemAddr2 || isPostal || isAuthority
+        || isCode || isGender || isColor) {
       return true;
-    } else {
-      return false;
     }
+    return false;
+
   }
 
   // 수정할때 필수적으로 존재해야하는 데이터가 있는지 없는지 확인하기 위한 메소드
   @JsonIgnore
   public boolean isModifyDataNull() {
-    if (this.memberId == 0 || this.memberName == null || this.memberTel == null
-        || this.memberAddr1 == null || this.memberAddr2 == null || this.memberPostal == null
-        || this.memberAuthority == null || this.memberIntroduction == null
-        || this.memberColor == null) {
+
+    boolean isName = this.memberName.trim().isEmpty();
+    boolean isTel = this.memberTel.trim().isEmpty();
+    boolean isMemAddr1 = this.memberAddr1.trim().isEmpty();
+    boolean isMemAddr2 = this.memberAddr2.trim().isEmpty();
+    boolean isPostal = this.memberPostal.trim().isEmpty();
+    boolean isAuthority = this.memberAuthority.trim().isEmpty();
+    boolean isColor = this.memberColor.trim().isEmpty();
+    if (this.memberId == 0 || isName || isTel || isMemAddr1 || isMemAddr2 || isPostal || isAuthority
+        || isColor) {
       return true;
     } else {
       return false;
