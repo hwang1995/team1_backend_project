@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.team1.healthcare.dto.MembersDTO;
-import com.team1.healthcare.services.IMemberService;
+import com.team1.healthcare.services.MemberServiceImpl;
 import com.team1.healthcare.vo.common.MemberSearchVO;
 import com.team1.healthcare.vo.member.EmailCheckVO;
 import com.team1.healthcare.vo.notice.AddNoticeImageVO;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
   @Autowired
-  private IMemberService memberService;
+  private MemberServiceImpl memberService;
 
 
   // 1. GET 해당 병원의 모든 임직원 목록 가져오기
@@ -44,7 +44,7 @@ public class MemberController {
 
   // 3. POST 해당 병원의 해당 임직원을 추가하기
   // '추가'버튼 클릭후 나오는 drawer창에서 '임직원 추가'버튼 클릭시 클라이언트 요청
-  @PostMapping("/create")
+  @PostMapping("")
   public boolean addMember(@RequestBody MembersDTO memberInfo) {
     log.info(memberInfo.toString());
     memberService.addMember(memberInfo);
@@ -54,7 +54,7 @@ public class MemberController {
 
   // 4. PUT 해당 병원의 해당 임직원을 수정하기
   // '변경'버튼 클릭후 열리는 drawer창에서 '정보변경' 버튼 클릭시 클라이언트 요청
-  @PutMapping("/update")
+  @PutMapping("")
   public boolean updateMember(@RequestBody MembersDTO memberInfo) {
     memberService.modifyMemberInfo(memberInfo);
     return true;
@@ -63,7 +63,7 @@ public class MemberController {
 
   // 4. DELETE 해당 병원의 해당 임직원을 삭제하기
   // '삭제'버튼 클릭후 나오는 모달창에서 '확인'버튼 클릭시 클라이언트 요청
-  @DeleteMapping("/delete")
+  @DeleteMapping("")
   public boolean deleteMember(int memberId) {
     memberService.deleteMember(memberId);
     return true;
@@ -80,7 +80,7 @@ public class MemberController {
 
   // 6. POST 해당 환자의 이미지 업로드 버튼을 눌렀을때 이미지를 base64로 전송해서 저장
   // '이미지를 선택해주세요' 버튼을 클릭 후 이미지를 선택할때 클라이언트 요청
-  @PostMapping("/upload-image")
+  @PostMapping("/image")
   public String memberUploadImage(@RequestBody AddNoticeImageVO imageInfo) {
     String filePath = memberService.memberImageUpload(imageInfo);
     if (filePath == null) {

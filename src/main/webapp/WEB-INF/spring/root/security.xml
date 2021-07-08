@@ -9,7 +9,7 @@
 
 	<!-- 보안을 체크할 필요가 없는 경로 설정 -->
 	<security:http pattern="/resources/**" security="none" />
-	
+
 
 	<!-- 보안 필터 체인(프로세싱) 설정 -->
 	<security:http create-session="stateless">
@@ -31,191 +31,239 @@
 			ref="jwtAuthenticationFilter" before="BASIC_AUTH_FILTER" />
 
 		<!-- 요청 경로 권한 설정 -->
-		
+
+		<security:intercept-url pattern="/api/v1/auth"
+			access="permitAll" method="GET" />
+
 		<security:intercept-url
-			pattern="/api/v1/auth" access="permitAll"
+			pattern="/api/v1/diagnosis"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="GET" />
-			
 		<security:intercept-url
-			pattern="/api/v1/diagnosis" access="hasRole('ROLE_NURSE')"
-			method="GET" />
-		<security:intercept-url
-			pattern="/api/v1/diagnosis" access="hasRole('ROLE_NURSE')"
+			pattern="/api/v1/diagnosis"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis" access="hasRole('ROLE_NURSE')"
+			pattern="/api/v1/diagnosis"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis" access="hasRole('ROLE_NURSE')"
+			pattern="/api/v1/diagnosis"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_NURSE')"
+			pattern="/api/v1/diagnosis/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_NURSE')"
+			pattern="/api/v1/diagnosis/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_NURSE')"
+			pattern="/api/v1/diagnosis/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_NURSE')"
+			pattern="/api/v1/diagnosis/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/hospital" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/hospital"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/hospital" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/hospital" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/hospital" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/hospital" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/hospital" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/hospital" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/hospital/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/hospital/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/hospital/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/hospital/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR')" method="POST" />
+		<security:intercept-url
+			pattern="/api/v1/hospital/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR')" method="PUT" />
+		<security:intercept-url
+			pattern="/api/v1/hospital/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR')" method="DELETE" />
+
+		<security:intercept-url
+			pattern="/api/v1/member"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="GET" />
+		<security:intercept-url
+			pattern="/api/v1/member" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/hospital/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/member" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/hospital/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/member" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/member" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/member/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/member" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/member/*" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/member" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/member/*" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/member" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/member/*" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/member/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/notice"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/member/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/notice"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/member/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/notice"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/member/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/notice"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/notice" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/notice/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/notice" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/notice/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/notice" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/notice/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/notice" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/notice/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/notice/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/patient"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/notice/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/patient"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/notice/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/patient"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/notice/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/patient"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/patient" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/patient/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/patient" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/patient/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/patient" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/patient/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/patient" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/patient/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="DELETE" />
+		<security:intercept-url
+			pattern="/api/v1/patient/search/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="GET" />
+
+		<security:intercept-url
+			pattern="/api/v1/reservation"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
+			method="GET" />
+		<security:intercept-url
+			pattern="/api/v1/reservation"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
+			method="POST" />
+		<security:intercept-url
+			pattern="/api/v1/reservation"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
+			method="PUT" />
+		<security:intercept-url
+			pattern="/api/v1/reservation"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/patient/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/reservation/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="GET" />
+
 		<security:intercept-url
-			pattern="/api/v1/patient/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/reservation/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/patient/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/reservation/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/patient/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/reservation/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/reservation" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/search"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/reservation" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/search"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/reservation" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/search"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/reservation" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/search"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/reservation/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/search/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/reservation/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/search/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/reservation/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/search/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/reservation/*" access="hasRole('ROLE_INSPECTOR')"
-			method="DELETE" />
-
-		<security:intercept-url
-			pattern="/api/v1/search" access="hasRole('ROLE_INSPECTOR')"
-			method="GET" />
-		<security:intercept-url
-			pattern="/api/v1/search" access="hasRole('ROLE_INSPECTOR')"
-			method="POST" />
-		<security:intercept-url
-			pattern="/api/v1/search" access="hasRole('ROLE_INSPECTOR')"
-			method="PUT" />
-		<security:intercept-url
-			pattern="/api/v1/search" access="hasRole('ROLE_INSPECTOR')"
-			method="DELETE" />
-
-		<security:intercept-url
-			pattern="/api/v1/search/*" access="isAuthenticated()"
-			method="GET" />
-		<security:intercept-url
-			pattern="/api/v1/search/*" access="isAuthenticated()"
-			method="POST" />
-		<security:intercept-url
-			pattern="/api/v1/search/*" access="isAuthenticated()"
-			method="PUT" />
-		<security:intercept-url
-			pattern="/api/v1/search/*" access="isAuthenticated()"
+			pattern="/api/v1/search/*"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url pattern="/**"

@@ -687,6 +687,8 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
       Integer memberId = new Integer(diagnosis.getMemberId());
       Integer patientId = new Integer(diagnosis.getPatientId());
+      log.info("memberId " + memberId);
+      log.info("patientId " + patientId);
       if (memberId == null || patientId == null) {
         throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
             new Throwable("Wrong data"));
@@ -723,7 +725,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
       Integer memberId = new Integer(diagnosis.getMemberId());
       Integer patientId = new Integer(diagnosis.getPatientId());
       if (memberId == null || patientId == null) {
-        throw new BadRequestException("잘못된 데이터 정보입니다1. 올바른 정보인지 확인해주세요",
+        throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
             new Throwable("Wrong data"));
       }
 
@@ -756,7 +758,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
     // 3) 의사에 대한 리스트 결과가 없다면, 에러를 발생시킨다
     if (getMembers.size() == 0) {
-      throw new NotFoundException("데이터가 검색이되지 않았습니다.", new Throwable("No Data"));
+      throw new NotFoundException("데이터가 검색되지 않았습니다.", new Throwable("No Data"));
     }
 
     return getMembers;
@@ -774,7 +776,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
     // 3) list 크기가 0일떄, 에러를 발생시킨다
     if (getPatientList.size() == 0) {
-      throw new NoContentException("데이터가 검색이되지 않았습니다.", new Throwable("No Data"));
+      throw new NoContentException("데이터가 검색되지 않았습니다.", new Throwable("No Data"));
     }
     return getPatientList;
   }

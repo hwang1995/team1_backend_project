@@ -23,59 +23,60 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/v1/reservation")
 public class ReservationController {
   @Autowired
-  DiagnosisServiceImpl diagnosis;
+  private DiagnosisServiceImpl diagnosisService;
 
 
   // 2. POST 진료 접수(예약) 하기
   @PostMapping("")
-  public String addReservationInfo(@RequestBody DiagnosisDTO diagnosisInfo) {
-    boolean result = diagnosis.addReservationInfo(diagnosisInfo);
-    return "성공적으로 추가되었습니다";
+  public boolean addReservationInfo(@RequestBody DiagnosisDTO diagnosisInfo) {
+    boolean result = diagnosisService.addReservationInfo(diagnosisInfo);
+    return result;
   }
 
   // 3. PUT 진료 접수(예약) 수정하기
-  @PutMapping("/{diagId}/{visitPurpose}")
-  public String modifyReservationInfo(@PathVariable int diagId, @PathVariable String visitPurpose) {
-    diagnosis.modifyReservationInfo(diagId, visitPurpose);
+  @PutMapping("")
+  public boolean modifyReservationInfo(int diagId, String visitPurpose) {
+    boolean result = diagnosisService.modifyReservationInfo(diagId, visitPurpose);
 
-    return "성공적으로 수정되었습니다";
+    return result;
   }
 
   // 4. DELETE 진료 접수(예약) 삭제하기
   @PutMapping("/{diagId}")
-  public String removeReservationInfo(@PathVariable int diagId) {
-    log.info("dta" + diagId);
-    diagnosis.removeReservationInfo(diagId);
+  public boolean removeReservationInfo(@PathVariable int diagId) {
+    boolean result = diagnosisService.removeReservationInfo(diagId);
 
-    return "성공적으로 삭제되었습니다";
+    return result;
   }
 
   // 환자 검색
-  @GetMapping("")
+  @GetMapping("/patient")
   public List<PatientsDTO> getPatientInfo(@RequestBody PatientSearchVO patientVo) {
-    List<PatientsDTO> patients = diagnosis.getPatientsInfo(patientVo);
+    List<PatientsDTO> patients = diagnosisService.getPatientsInfo(patientVo);
     return patients;
   }
 
-  @GetMapping("/{hospitalCode}")
+  @GetMapping("/doctor/{hospitalCode}")
   public List<MembersDTO> getDoctorInfo(@PathVariable String hospitalCode) {
-    List<MembersDTO> doctors = diagnosis.getDoctorsInfo(hospitalCode);
+    List<MembersDTO> doctors = diagnosisService.getDoctorsInfo(hospitalCode);
     return doctors;
   }
 
   // 1. GET 진료 접수(예약) 목록 보기
-  @GetMapping("/getReservation")
+  @GetMapping("")
   public List<ReservationVO> getReservationInfo(
       @RequestBody WeekNoWithMemberVO weekNoWithMemberVO) {
-    List<ReservationVO> diagnosisInfo = diagnosis.showWeeklyReservationList(weekNoWithMemberVO);
+    List<ReservationVO> diagnosisInfo =
+        diagnosisService.showWeeklyReservationList(weekNoWithMemberVO);
     return diagnosisInfo;
   }
 
-  @GetMapping("/getSearchReservationPatient")
+  @GetMapping("/waitingPatient")
   public List<ReservationVO> getSearchReservationPatient(
       @RequestBody PatientSearchVO patientSearchVO) {
 
-    List<ReservationVO> diagnosisInfo = diagnosis.showReservationWaitingList(patientSearchVO);
+    List<ReservationVO> diagnosisInfo =
+        diagnosisService.showReservationWaitingList(patientSearchVO);
 
     return diagnosisInfo;
   }

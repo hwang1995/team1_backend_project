@@ -18,34 +18,34 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class VitalRecordsDTO {
-  // vital_records �뿏�떚�떚�쓽 PK
+  // vital_records 엔티티의 PK
   private int vrId;
 
-  // diagnosis �뿏�떚�떚�쓽 FK (�뼱�뼡 吏꾨즺�뿉�꽌 諛붿씠�깉 泥댄겕瑜� 諛쏆븯�뒗吏� �떇蹂꾪븯湲� �쐞�빐)
+  // diagnosis 엔티티의 FK
   private int diagId;
 
-  // �삁�븬
+  // 혈압
   private int bloodPressure;
 
-  // 留λ컯
+  // 맥박
   private int pulse;
 
-  // �샇�씉 �닔
+  // 호흡 수
   private int respirationRate;
 
-  // �삩�룄
+  // 온도
   private int temperature;
 
-  // member �뿏�떚�떚�쓽 FK (�뼱�뼡 �엫吏곸썝�씠 諛붿씠�깉 泥댄겕瑜� �뻽�뒗吏� �떇蹂꾪븯湲� �쐞�빐)
+  // member
   private int memberId;
 
   public VitalRecordsDTO(VitalVO vitalInfo, RegistDiagnosisVO diagnosisInfo) {
-//    this.bloodPressure = vitalInfo.getBloodPressure();
-//    this.pulse = vitalInfo.getPulse();
-//    this.respirationRate = vitalInfo.getRespirationRate();
-//    this.temperature = vitalInfo.getTemperature();
-//    this.diagId = diagnosisInfo.getDiagId();
-//    this.memberId = diagnosisInfo.getMemberId();
+    this.bloodPressure = vitalInfo.getBloodPressure();
+    this.pulse = vitalInfo.getPulse();
+    this.respirationRate = vitalInfo.getRespirationRate();
+    this.temperature = vitalInfo.getTemperature();
+    this.diagId = diagnosisInfo.getDiagId();
+    this.memberId = diagnosisInfo.getMemberId();
 
   }
 }

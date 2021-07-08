@@ -18,7 +18,7 @@ import com.team1.healthcare.services.HospitalServiceImpl;
 public class HospitalController {
 
   @Autowired
-  HospitalServiceImpl hospitalService;
+  private HospitalServiceImpl hospitalService;
 
   // 1. GET 병원의 목록 보여주기
   @GetMapping("")
@@ -34,22 +34,22 @@ public class HospitalController {
 
   // 3. POST 병원 정보를 추가하기
   @PostMapping("")
-  public String addHospitalInfo(@RequestBody HospitalsDTO hospitalInfo) {
-    hospitalService.addHospital(hospitalInfo);
-    return "추가되었습니다.";
+  public boolean addHospitalInfo(@RequestBody HospitalsDTO hospitalInfo) {
+    boolean result = hospitalService.addHospital(hospitalInfo);
+    return result;
   }
 
   // 4. PUT 병원 정보를 수정하기
   @PutMapping("")
-  public String modifyHospitalsInfo(@RequestBody HospitalsDTO hospitalInfo) {
-    hospitalService.modifyHospital(hospitalInfo);
-    return "수정되었습니다";
+  public boolean modifyHospitalsInfo(@RequestBody HospitalsDTO hospitalInfo) {
+    boolean result = hospitalService.modifyHospital(hospitalInfo);
+    return result;
   }
 
   // 5. DELETE 병원 정보를 삭제하기
   @DeleteMapping("/{hospitalCode}")
-  public String removeHospitalInfo(@PathVariable String hospitalCode) {
-    hospitalService.deleteHospital(hospitalCode);
-    return "삭제되었습니다.";
+  public boolean removeHospitalInfo(@PathVariable String hospitalCode) {
+    boolean result = hospitalService.deleteHospital(hospitalCode);
+    return result;
   }
 }

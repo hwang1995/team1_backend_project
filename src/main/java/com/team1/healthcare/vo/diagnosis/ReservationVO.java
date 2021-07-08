@@ -2,6 +2,7 @@ package com.team1.healthcare.vo.diagnosis;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.dto.PatientsDTO;
@@ -53,6 +54,7 @@ public class ReservationVO {
 
   }
 
+  @JsonIgnore
   public boolean isNull() {
     Integer id = new Integer(this.id);
     Integer calendarId = new Integer(this.calendarId);

@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team1.healthcare.dto.PatientsDTO;
 import com.team1.healthcare.services.PatientServiceImpl;
 import com.team1.healthcare.vo.common.PatientSearchVO;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/v1/patient")
 public class PatientController {
 
   @Autowired
-  PatientServiceImpl patientServiceImpl;
+  private PatientServiceImpl patientServiceImpl;
 
   // 1. GET 해당 병원의 해당 환자의 목록 가져오기
   @GetMapping("/search/{hospitalCode}")
@@ -29,28 +31,29 @@ public class PatientController {
 
   // 2. GET 해당 병원의 해당 환자 검색하기
   @GetMapping("")
-  public List<PatientsDTO> getPatientsList(PatientSearchVO patientSearchVO) {
+  public List<PatientsDTO> getPatientsList(@RequestBody PatientSearchVO patientSearchVO) {
     return patientServiceImpl.getPatientsListInfo(patientSearchVO);
   }
 
   // 3. POST 해당 병원의 해당 환자를 추가하기
   @PostMapping("")
-  public String addPatient(@RequestBody PatientsDTO patientInfo) {
-    patientServiceImpl.addPatientInfo(patientInfo);
-    return "추가가 되었습니다.";
+  public boolean addPatient(@RequestBody PatientsDTO patientInfo) {
+    log.info(patientInfo.toString());
+    boolean result = patientServiceImpl.addPatientInfo(patientInfo);
+    return result;
   }
 
   // 4. PUT 해당 병원의 해당 환자의 정보를 수정하기
   @PutMapping("")
-  public String modifyPatient(@RequestBody PatientsDTO patientInfo) {
-    patientServiceImpl.modifyPatientInfo(patientInfo);
-    return "수정 되었습니다.";
+  public boolean modifyPatient(@RequestBody PatientsDTO patientInfo) {
+    boolean result = patientServiceImpl.modifyPatientInfo(patientInfo);
+    return result;
   }
 
   // 5. DELETE 해당 병원에서 해당 환자의 정보를 삭제하기
   @DeleteMapping("/{patientId}")
-  public String deletePatient(@PathVariable int patientId) {
-    patientServiceImpl.removePatientInfo(patientId);
-    return "삭제 되었습니다.";
+  public boolean deletePatient(@PathVariable int patientId) {
+    boolean result = patientServiceImpl.removePatientInfo(patientId);
+    return result;
   }
 }
