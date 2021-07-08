@@ -1,5 +1,6 @@
 package com.team1.healthcare.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
@@ -47,13 +48,38 @@ public class PatientsDTO {
   private int patientWeight;
 
   // 환자의 마지막 진료일
-  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime recentDate;
 
   // 환자의 생일
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDateTime patientBirth;
+  private LocalDate patientBirth;
 
   private String hospitalCode;
+
+  public boolean isNull() {
+    Integer height = new Integer(patientHeight);
+    Integer weight = new Integer(patientWeight);
+
+    if (height == null || weight == null || patientName == null || patientSsn == null
+        || patientGender == null || patientTel == null || patientAddr1 == null
+        || patientPostal == null || recentDate == null || patientBirth == null
+        || hospitalCode == null) {
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isUpdateNull() {
+    Integer height = new Integer(patientHeight);
+    Integer weight = new Integer(patientWeight);
+
+    if (height == null && weight == null && patientName == null && patientSsn == null
+        && patientGender == null && patientTel == null && patientAddr1 == null
+        && patientAddr2 == null && patientPostal == null) {
+      return true;
+    }
+    return false;
+  }
 
 }

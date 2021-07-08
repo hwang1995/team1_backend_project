@@ -1,5 +1,6 @@
 package com.team1.healthcare.vo.diagnosis;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.MembersDTO;
@@ -18,13 +19,14 @@ public class ReservationVO {
   private LocalDateTime end;
   private String bgColor; // member -> color
   private String color; // textColor -> white
-  private String drOpinion;
+  private String visitPurpose;
   private String doctorRoom;
   private String doctorName;
 
+
   private int patientId;
   private String patientName;
-  private LocalDateTime patientBirth;
+  private LocalDate patientBirth;
 
   public ReservationVO(DiagnosisDTO diagnosisInfo, PatientsDTO patientInfo, MembersDTO memberInfo) {
     // DiagnosisDTO
@@ -32,7 +34,7 @@ public class ReservationVO {
     this.calendarId = diagnosisInfo.getWeekNo();
     this.start = diagnosisInfo.getStartDate();
     this.end = diagnosisInfo.getEndDate();
-    this.drOpinion = diagnosisInfo.getDrOpinion();
+    this.visitPurpose = diagnosisInfo.getVisitPurpose();
 
     // PatientsDTO
     this.title = patientInfo.getPatientName();
@@ -51,6 +53,17 @@ public class ReservationVO {
 
   }
 
+  public boolean isNull() {
+    Integer id = new Integer(this.id);
+    Integer calendarId = new Integer(this.calendarId);
+    Integer patientId = new Integer(this.patientId);
+    if (id == null || calendarId == null || title == null || category == null || start == null
+        || end == null || bgColor == null || color == null || visitPurpose == null
+        || doctorRoom == null || patientId == null || patientName == null || patientBirth == null) {
+      return true;
+    }
+    return false;
+  }
 
 
 }

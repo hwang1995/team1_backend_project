@@ -99,6 +99,6 @@ public interface MembersDAO {
    */
   public List<MembersDTO> selectDoctorInfoByHospitalCode(String hospitalCode);
 
-  public MembersDTO selectMemberInfoByMemberId(int memberId);
+  public MembersDTO selectMemberInfoByMemberId(@Param("memberId") int memberId);
 
 }

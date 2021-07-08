@@ -11,6 +11,8 @@ public interface PatientsDAO {
 
   public PatientsDTO selectPatientByPatientId(int patientId);
 
+  public PatientsDTO selectPatientByPostalCode(@Param("postal") String postal);
+
   public List<PatientsDTO> selectHospitalPatientByPatientName(
       @Param("patientName") String patientName, @Param("hospitalCode") String hospitalCode);
 

@@ -16,6 +16,7 @@ public class DiagnosisListVO {
   private int patientId;
   private String patientName;
   private String patientGender;
+
   private String patientBirth;
 
   // Diagnosis 엔티티
@@ -28,7 +29,7 @@ public class DiagnosisListVO {
     this.patientId = patientInfo.getPatientId();
     this.patientName = patientInfo.getPatientName();
     this.patientGender = patientInfo.getPatientGender();
-    LocalDate originalBirth = patientInfo.getPatientBirth().toLocalDate();
+    LocalDate originalBirth = patientInfo.getPatientBirth();
     this.patientBirth = CommonUtils.dateToString(originalBirth);
 
     // Diagnosis 엔티티

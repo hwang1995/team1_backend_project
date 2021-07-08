@@ -63,7 +63,8 @@
 	<select id="isExistedEmail" parameterType="emailCheck"
 		resultType="members">
 		select member_email from members where
-		member_email = #{memberEmail} and hospital_code = #{hospitalCode}
+		member_email =
+		#{memberEmail} and hospital_code = #{hospitalCode}
 	</select>
 
 	<select id="countMembersByNameAndCode"
@@ -101,7 +102,8 @@
 		select member_id, member_name,
 		doctor_room, hospital_code
 		from members
-		where hospital_code = #{hospitalCode}
+		where hospital_code =
+		#{hospitalCode}
 		and member_authority = 'ROLE_DOCTOR'
 	</select>
 
@@ -110,9 +112,11 @@
 		select member_id, member_email,
 		member_name, member_tel,
 		member_addr1, member_addr2, member_authority,
+
 		member_postal,
 		member_image, member_birth, member_color,
 		doctor_room
+
 		from members
 		where
 		member_id =

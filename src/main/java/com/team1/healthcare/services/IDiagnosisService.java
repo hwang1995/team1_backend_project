@@ -178,10 +178,10 @@ public interface IDiagnosisService {
   /**
    * 해당 병원의 진료 예약 환자를 보여주기 위한 서비스 인터페이스
    * 
-   * @param String hospitalCode
+   * @param PatientSearchVO patientSearchVO
    * @return List<ReservationVO>
    */
-  public List<ReservationVO> showReservationWaitingList(String hospitalCode);
+  public List<ReservationVO> showReservationWaitingList(PatientSearchVO patientSearchVO);
 
   /**
    * 해당 병원의 의사 정보를 가져오기 위한 서비스 인터페이스

@@ -23,11 +23,11 @@ public class DiagnosisDTO {
   private int weekNo;
 
   // 진료 예약 시작 시간을 기록하기 위함.
-  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime startDate;
 
   // 진료 예약 종료 시간을 기록하기 위함.
-  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime endDate;
 
   // 진료 예약 시에 환자가 병원의 내방한 목적을 기록하기 위함.

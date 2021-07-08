@@ -15,7 +15,9 @@ public class DiagnosticVO {
   private String createdDate;
   private String inspectionStatus;
   private String patientName;
+
   private String patientBirth;
+
   private String patientGender;
 
   private String doctorRoom;
@@ -28,7 +30,7 @@ public class DiagnosticVO {
     this.inspectionStatus = diagnosticInfo.getInspectionStatus();
     this.patientName = patientInfo.getPatientName();
 
-    LocalDate originalBirth = patientInfo.getPatientBirth().toLocalDate();
+    LocalDate originalBirth = patientInfo.getPatientBirth();
     this.patientBirth = CommonUtils.dateToString(originalBirth);
     this.patientGender = patientInfo.getPatientGender();
     this.doctorRoom = memberInfo.getDoctorRoom();
