@@ -1,5 +1,6 @@
 package com.team1.healthcare.vo.diagnosis;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.PatientsDTO;
@@ -15,7 +16,7 @@ public class DiagnosisListVO {
   private int patientId;
   private String patientName;
   private String patientGender;
-  private LocalDateTime patientBirth;
+  private LocalDate patientBirth;
 
   // Diagnosis 엔티티
   private int diagId;

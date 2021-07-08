@@ -113,8 +113,8 @@
 		select member_id, member_email,
 		member_name, member_tel,
 		member_addr1, member_addr2, member_authority,
-		member_postal,
-		member_image, member_birth, member_color)
+		member_postal, doctor_room,
+		member_image, member_birth, member_color
 		from members
 		where
 		member_id =

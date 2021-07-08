@@ -96,8 +96,8 @@
 		values
 		(#{weekNo}, #{startDate},
 		#{endDate}, #{visitPurpose}, #{isPharmacy}, #{isInjector},
-		#{is_diagnostic_test}, #{is_vital}, #{reservation_status},
-		#{member_id}, #{patient_id}, #{hospital_code})
+		#{isDiagnosticTest}, #{isVital}, #{reservationStatus},
+		#{memberId}, #{patientId}, #{hospitalCode})
 	</insert>
 
 	<update id="updateDiagnosisReservation" parameterType="map">
@@ -123,6 +123,6 @@
 		parameterType="dateWithHospitalAndId" resultType="diagnosis">
 		select diag_id from
 		diagnosis where start_date = #{startDate} and patient_id =
-		#{patientId} and hospital_code = #{hospitalCode}
+		#{peopleId} and hospital_code = #{hospitalCode}
 	</select>
 </mapper>

@@ -1,6 +1,6 @@
 package com.team1.healthcare.vo.patient;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import com.team1.healthcare.dto.PatientsDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ public class PatientVO {
   private int patientId;
   private String patientName;
   private String patientGender;
-  private LocalDateTime patientBirth;
+  private LocalDate patientBirth;
   private String hospitalCode;
 
   public PatientVO(PatientsDTO patientInfo) {
