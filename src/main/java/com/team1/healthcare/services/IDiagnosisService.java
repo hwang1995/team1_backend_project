@@ -14,6 +14,7 @@ import com.team1.healthcare.vo.common.PatientSearchVO;
 import com.team1.healthcare.vo.common.WeekNoWithMemberVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisHistoryVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisListVO;
+import com.team1.healthcare.vo.diagnosis.DiagnosisUpdateVO;
 import com.team1.healthcare.vo.diagnosis.RegistDiagnosisVO;
 import com.team1.healthcare.vo.diagnosis.ReservationVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticTestRecordsVO;
@@ -157,7 +158,7 @@ public interface IDiagnosisService {
    * @param String visitPurpose
    * @return true or false (성공 여부)
    */
-  public boolean modifyReservationInfo(int diagId, String visitPurpose);
+  public boolean modifyReservationInfo(DiagnosisUpdateVO diagnosisUpdateVO);
 
   /**
    * 진료 정보를 삭제(예약 상태만 수정) 하기 위한 서비스 인터페이스

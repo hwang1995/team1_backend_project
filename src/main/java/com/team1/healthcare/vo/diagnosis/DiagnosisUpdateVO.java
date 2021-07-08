@@ -1,4 +1,4 @@
-package com.team1.healthcare.vo.common;
+package com.team1.healthcare.vo.diagnosis;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -10,18 +10,21 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class WeekNoWithMemberVO {
-  private int weekNo;
+public class DiagnosisUpdateVO {
+
+  private int diagId;
+  private int patientId;
   private int memberId;
   private String hospitalCode;
-
+  private String visitPurpose;
 
   @JsonIgnore
   public boolean isNull() {
-    Integer weekNo = new Integer(this.weekNo);
+    Integer diagId = new Integer(this.diagId);
+    Integer patientId = new Integer(this.patientId);
     Integer memberId = new Integer(this.memberId);
-
-    if (weekNo == null || memberId == null || hospitalCode == null) {
+    if (diagId == null || hospitalCode == null || visitPurpose == null || patientId == null
+        || memberId == null) {
       return true;
     }
 
