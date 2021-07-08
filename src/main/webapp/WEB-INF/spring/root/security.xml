@@ -37,29 +37,29 @@
 			method="GET" />
 			
 		<security:intercept-url
-			pattern="/api/v1/diagnosis" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/diagnosis" access="hasRole('ROLE_NURSE')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/diagnosis" access="hasRole('ROLE_NURSE')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/diagnosis" access="hasRole('ROLE_NURSE')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/diagnosis" access="hasRole('ROLE_NURSE')"
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_NURSE')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_NURSE')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_NURSE')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_INSPECTOR')"
+			pattern="/api/v1/diagnosis/*" access="hasRole('ROLE_NURSE')"
 			method="DELETE" />
 
 		<security:intercept-url
