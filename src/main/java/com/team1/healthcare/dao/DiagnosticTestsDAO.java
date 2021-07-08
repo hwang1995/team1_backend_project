@@ -20,9 +20,9 @@ public interface DiagnosticTestsDAO {
    * 진료의 ID (식별자)로 진단 검사의 목록을 가져오기 위한 쿼리
    * 
    * @param int diagId
-   * @return List<DiagnosticTestsDTO>
+   * @return DiagnosticTestsDTO
    */
-  public List<DiagnosticTestsDTO> getDiagnosticTestListByDiagId(int diagId);
+  public DiagnosticTestsDTO getDiagnosticTestListByDiagId(int diagId);
 
   /**
    * 임직원의 ID (식별자)로 주별 진단 검사 리스트를 가져오기 위한 쿼리

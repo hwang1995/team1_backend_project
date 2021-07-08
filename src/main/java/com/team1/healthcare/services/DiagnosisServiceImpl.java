@@ -1,8 +1,11 @@
 package com.team1.healthcare.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.team1.healthcare.dao.DiagnosisDAO;
 import com.team1.healthcare.dao.DiagnosticInspectionsDAO;
 import com.team1.healthcare.dao.DiagnosticTestRecordsDAO;
@@ -14,10 +17,17 @@ import com.team1.healthcare.dao.PatientsDAO;
 import com.team1.healthcare.dao.VitalRecordsDAO;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.DiagnosticInspectionsDTO;
+import com.team1.healthcare.dto.DiagnosticTestRecordsDTO;
 import com.team1.healthcare.dto.DiagnosticTestsDTO;
+import com.team1.healthcare.dto.MedicineRecordsDTO;
 import com.team1.healthcare.dto.MedicinesDTO;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.dto.PatientsDTO;
+import com.team1.healthcare.dto.VitalRecordsDTO;
+import com.team1.healthcare.exception.BadRequestException;
+import com.team1.healthcare.exception.ConflictRequestException;
+import com.team1.healthcare.exception.NoContentException;
+import com.team1.healthcare.exception.NotFoundException;
 import com.team1.healthcare.vo.auth.UserInfoVO;
 import com.team1.healthcare.vo.common.DateWithHospitalCode;
 import com.team1.healthcare.vo.common.DateWithMemberVO;
@@ -25,12 +35,23 @@ import com.team1.healthcare.vo.common.PatientSearchVO;
 import com.team1.healthcare.vo.common.WeekNoWithMemberVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisHistoryVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisListVO;
+import com.team1.healthcare.vo.diagnosis.DiagnosticTestRecordVO;
+import com.team1.healthcare.vo.diagnosis.MedicineRecordVO;
+import com.team1.healthcare.vo.diagnosis.MedicineResultVO;
+import com.team1.healthcare.vo.diagnosis.MedicineVO;
+import com.team1.healthcare.vo.diagnosis.RegistDiagnosisResultVO;
 import com.team1.healthcare.vo.diagnosis.RegistDiagnosisVO;
 import com.team1.healthcare.vo.diagnosis.ReservationVO;
+import com.team1.healthcare.vo.diagnosis.VitalResultVO;
+import com.team1.healthcare.vo.diagnosis.VitalVO;
+import com.team1.healthcare.vo.diagnostic.DiagnosticTestRecordsVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticVO;
 import com.team1.healthcare.vo.patient.PatientVO;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
+@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
 public class DiagnosisServiceImpl implements IDiagnosisService {
 
   @Autowired
@@ -65,112 +86,191 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
   // ======================== SUNG WOOK HWANG
   @Override
   public List<DiagnosisListVO> showTodayDiagnosisList(UserInfoVO userInfo) {
-    // TODO 검색 시점 (오늘) 해당 병원의 해당 의사가 진료를 봐야하는 환자의 리스트를 리턴하는 것이 목표
-    // 협력 객체 : DiagnosisDAO, PatientsDAO
 
-    // 1. UserInfoVO가 올바르게 들어왔는지 검증한다. (객체가 null인지 아닌지)
-    // 1.1 만약 UserInfoVO 객체 중 null인 필드가 존재한다면 BadRequestException을 터트린다.
-    // 2. 우선 DiagnosisDAO의 selectDiagnosisListByMemberId(int memberId)를 통해 진료 리스트를 받아온다.
-    // 2.1 만약 List<DiagnosisDTO>의 값이 존재하지 않는다면? NoContentExcption을 터트린다.
-    // 3. List<DiagnosisDTO>의 값을 loop 하면서 DiagnosisDTO에 있는 patientId로 PatientsDTO를 받아온다.
-    // 3.1 만약 PatientsDTO의 값이 존재하지 않는다면? ConflictRequestException을 터트린다.
-    // 3.2 존재한다면? DiagnosisListVO 객체를 생성하여 DiagnosisDTO와 PatientsDTO를 생성자의 인자로 넣어준다.
-    // 3.3 정상적으로 객체가 생성되었다면 List에 add 해준다.
-    // 4. 모든 작업이 끝났다면? List<DiagnosisListVO>를 리턴한다.
+    // 사용자 정보가 없는 경우
+    if (userInfo.isNull()) {
+      throw new BadRequestException("UserInfoVO의 값이 정상적으로 들어오지 않았습니다.",
+          new Throwable("no_user_info"));
+    }
 
-    return null;
+    List<DiagnosisDTO> diagnosisList =
+        diagnosisDAO.selectDiagnosisListByMemberId(userInfo.getMemberId());
+
+    // 검색 결과가 없는 경우
+    if (diagnosisList.size() == 0) {
+      throw new NoContentException("검색 시점에 해당 병원의 진료 목록이 존재하지 않습니다.",
+          new Throwable("no_diagnosis_list"));
+    }
+
+    List<DiagnosisListVO> result = new ArrayList<DiagnosisListVO>();
+
+    // 순회를 통해 List를 만들어 준다.
+    diagnosisList.forEach(data -> {
+      int patientId = data.getPatientId();
+      PatientsDTO patientInfo = patientsDAO.selectPatientByPatientId(patientId);
+
+      if (patientInfo == null) {
+        throw new ConflictRequestException("환자의 정보가 존재하지 않습니다", new Throwable("no_patient_info"));
+      }
+      DiagnosisListVO diagnosisInfo = new DiagnosisListVO(patientInfo, data);
+      result.add(diagnosisInfo);
+
+    });
+
+    return result;
   }
 
   @Override
+
   public boolean registDiagnosisInfo(RegistDiagnosisVO diagnosisInfo) {
-    // TODO 해당 병원의 해당 의사가 진료를 등록 (수정) 하여 성공 여부를 알려주는 것이 목표
-    // 협력 객체 : PatientsDAO, MembersDAO, DiagnosisDAO, DiagnosticsDAO, MedicinesDAO, VitalRecordsDAO
+    // 진료 정보가 존재하지 않는 경우
+    if (diagnosisInfo.isNull()) {
+      log.error("Exception throwed");
+      throw new BadRequestException("진료 등록 정보가 올바르지 않습니다. 다시 시도해주세요.",
+          new Throwable("no_diagnosis_info"));
+    }
 
-    // 1. RegistDiagnosisVO의 값이 올바르게 들어왔는지 검증한다. (객체가 null이 아닌지)
-    // 1.1 만약 RegistDiagnosisVO 객체 중 null인 필드가 존재한다면 BadRequestException을 터트린다.
-    // 2. RegistDiagnosisVO에 들어 있는 diagId를 통하여 RegistDiagnosisResultVO
-    // 2. 객체의 생성자에 RegistDiagnosisVO를 인자로 받아 객체를 생성한다.
-    // 3. DiagnosisDAO의 addDiagnosisInfo(RegistDiagnosisResultVO diagnosisResult)로 update를 한다.
-    // 3.1 만약 생성에 실패하였다면 ConflictRequestException을 터트린다.
-    // 4. RegistDiagnosisVO에 medicines의 값이 0 이상이라면, List<MedicineVO>의 값을 loop하면서
-    // 4. MedicineRecordsDAO의 addMedicineRecord(MedicineResultVO medicineInfo)의 값을 insert 한다.
-    // 4.1 만약 생성에 실패하였다면 ConflictRequestException을 터트린다.
-    // 5. RegistDiagnosisVO의 injectors의 값이 0 이상이라면, List<MedicineVO>의 값을 loop하면서
-    // 5. MedicineRecordsDAO의 addMedicineRecord(MedicineResultVO medicineInfo)의 값을 insert 한다.
-    // 5.1 만약 생성에 실패하였다면 ConflictRequestException을 터트린다.
-    // 6. RegistDiagnosisVO의 diagnostics의 값이 0 이상이라면, 우선 DiagnosticTestDAO의
-    // addDiagnosticTest(DiagnosticTestsDTO diagnosticTestInfo)를 생성해준다.
-    // 7. 만약 생성에 실패하였다면 ConflictRequestException을 터트린다.
-    // 8. RegistDiagnosisVO의 diagnostics의 값을 loop하면서, DiagnosticTestDTO에 있는 diagTestId를 통하여
-    // DiagnosticTestRecordsDTO에 생성 인자로 (int diagTestId,
-    // int diagInspectionId)를 넣어서 객체를 생성한다.
-    // 9. DiagnosticTestRecordsDAO의 addDiagnosticTestRecord(DiagnosticTestRecordsDTO
-    // diagnosticInfo)의 값을 insert 한다.
-    // 9.1 만약 생성에 실패하였다면 ConflictRequestException을 터트린다.
-    // 10. RegistDiagnosisVO의 vital이 null이 아니라면, VitalResultVO 객체를 생성하기 위해 VitalRecordsDAO의
-    // addVitalRecord(VitalResultVO vitalInfo)의 값을 insert 한다.
-    // 10.1 만약 생성에 실패하였다면 ConflictRequestException을 터트린다.
-    // 11. true를 반환한다.
+    RegistDiagnosisResultVO registDiagnosisInfo = new RegistDiagnosisResultVO(diagnosisInfo);
+    int registResult = diagnosisDAO.addDiagnosisInfo(registDiagnosisInfo);
 
-    return false;
+    // 진료가 정상적으로 업데이트 되지 않는 경우
+    if (registResult != 1) {
+      throw new ConflictRequestException("알 수 없는 이유로 진료가 등록되지 않았습니다. 다시 시도해주세요. ",
+          new Throwable("not_updated_diagnosis_info"));
+    }
+
+    List<MedicineVO> medicineInfo = diagnosisInfo.getMedicines();
+    List<MedicineVO> injectorInfo = diagnosisInfo.getInjectors();
+    List<Integer> diagnosticsInfo = diagnosisInfo.getDiagnostics();
+    VitalVO vitalInfo = diagnosisInfo.getVital();
+
+    // 약품의 대한 정보가 존재할 경우 Insert
+    if (medicineInfo.size() > 0) {
+      log.info("medicineInfoIn");
+      medicineInfo.forEach(medicine -> {
+        MedicineResultVO sendMedicineInfo = new MedicineResultVO(medicine, diagnosisInfo);
+        int count = medicinesRecordsDAO.addMedicineRecord(sendMedicineInfo);
+        if (count != 1) {
+          throw new ConflictRequestException("알 수 없는 이유료 진료가 등록되지 않았습니다.",
+              new Throwable("not_updated_medicines_info"));
+        }
+      });
+    }
+
+    if (injectorInfo.size() > 0) {
+      log.info("InjectorInf");
+      injectorInfo.forEach(injector -> {
+        MedicineResultVO sendInjectorInfo = new MedicineResultVO(injector, diagnosisInfo);
+        int count = medicinesRecordsDAO.addMedicineRecord(sendInjectorInfo);
+        if (count != 1) {
+          throw new ConflictRequestException("알 수 없는 이유료 진료가 등록되지 않았습니다.",
+              new Throwable("not_updated_injectors_info"));
+        }
+      });
+    }
+
+    if (diagnosticsInfo.size() > 0) {
+      // 우선 진료를 만듭시다.
+      DiagnosticTestsDTO diagnosticTestInfo = new DiagnosticTestsDTO(diagnosisInfo);
+      diagnosticTestsDAO.addDiagnosticTest(diagnosticTestInfo);
+      diagnosticsInfo.forEach(diagnostics -> {
+        int diagTestId = diagnosticTestInfo.getDiagTestId();
+        log.debug("Registering diagnosticTest Id is " + diagTestId);
+        int diagInspectionId = diagnostics;
+        DiagnosticTestRecordsDTO diagnosticTestRecordInfo =
+            new DiagnosticTestRecordsDTO(diagTestId, diagInspectionId);
+        int count = diagnosticTestRecordsDAO.addDiagnosticTestRecord(diagnosticTestRecordInfo);
+
+        if (count != 1) {
+          throw new ConflictRequestException("알 수 없는 이유로 진료가 등록되지 않았습니다.",
+              new Throwable("not_updated_diagnostics_info"));
+        }
+      });
+    }
+
+    if (vitalInfo != null) {
+      VitalResultVO vitalResultInfo = new VitalResultVO(vitalInfo, diagnosisInfo);
+      int vitalCount = vitalRecordsDAO.addVitalRecord(vitalResultInfo);
+
+      if (vitalCount != 1) {
+        throw new ConflictRequestException("알 수 없는 이유로 진료가 등록되지 않았습니다.",
+            new Throwable("not_updated_vital_info"));
+      }
+    }
+
+
+    return true;
   }
 
 
   @Override
   public List<MedicinesDTO> searchMedicineList(String medicineName) {
-    // TODO 약품의 이름(medicineName)을 검색하면 약품에 대한 리스트를 리턴하는 것이 목표
-    // 협력 객체 : MedicinesDAO
 
-    // 1. medicineName이 null이 아닌지 검증한다.
-    // 1.1 만약 medicineName의 값이 null이라면, BadRequestException을 터트린다.
-    // 2. MedicinesDAO의 getMedicineInfoByMedicineName(String medicineName)으로 값을 가져온다.
-    // 2.1 만약 List<MedicinesDTO>의 값이 0이라면, NoContentException을 터트린다.
-    // 3. List<MedicinesDTO>를 반환한다.
+    if (medicineName == null || medicineName.trim().isEmpty()) {
+      throw new BadRequestException("약품 이름이 입력되지 않았거나, 공백입니다.", new Throwable("no_medicine_name"));
+    }
 
-    return null;
+    List<MedicinesDTO> medicinesInfo = medicinesDAO.getMedicineInfoByMedicineName(medicineName);
+
+    if (medicinesInfo.size() == 0 || medicinesInfo == null) {
+      throw new NoContentException("약품이 존재하지 않습니다.", new Throwable("no_medicines_content"));
+    }
+
+    return medicinesInfo;
   }
 
   @Override
   public List<MedicinesDTO> searchInjectorList(String medicineName) {
-    // TODO 주사의 이름(medicineName)을 검색하면 주사에 대한 리스트를 리턴하는 것이 목표
-    // 협력 객체 : MedicinesDAO
 
-    // 1. medicineName이 null이 아닌지 검증한다.
-    // 1.1 만약 medicineName의 값이 null이라면, BadRequestException을 터트린다.
-    // 2. MedicineDAO의 getInjectorInfoByMedicineName(String medicineName)으로 값을 가져온다.
-    // 2.1 만약 List<MedicinesDTO>의 값이 0이라면, NoContentException을 터트린다.
-    // 3. List<MedicinesDTO>를 반환한다.
+    if (medicineName == null || medicineName.trim().isEmpty()) {
+      throw new BadRequestException("약품 이름이 입력되지 않았거나, 공백입니다.", new Throwable("no_medicine_name"));
+    }
 
-    return null;
+    List<MedicinesDTO> injectorsInfo = medicinesDAO.getInjectorInfoByMedicineName(medicineName);
+
+    if (injectorsInfo.size() == 0 || injectorsInfo == null) {
+      throw new NoContentException("약품이 존재하지 않습니다.", new Throwable("no_medicines_content"));
+    }
+
+    return injectorsInfo;
   }
 
   @Override
+  @Cacheable(value = "bundleName", cacheManager = "userCacheManager")
   public List<DiagnosticInspectionsDTO> searchDiagnosticListByBundleName(String bundleName) {
-    // TODO 그룹 명(bundleName)으로 검색하면 진단 검사에 대한 리스트를 리턴하는 것이 목표
-    // 협력 객체 : DiagnosticInspectionsDAO
 
-    // 1. bundleName이 null이 아닌지 검증한다.
-    // 1.1 만약 bundleName의 값이 null이라면, BadRequestException을 터트린다.
-    // 2. DiagnosticInspectionsDAO의 selectInspectionListByBundleName(String bundleName)으로 값을 가져온다.
-    // 2.1 만약 List<DiagosticInspectionsDTO>의 값이 0이라면, NoContentException을 터트린다.
-    // 3. List<DiagnoticInspectionsDTO>를 반환한다.
+    log.info(bundleName);
+    if (bundleName == null || bundleName.trim().isEmpty()) {
+      throw new BadRequestException("그룹 명이 입력되지 않았거나, 공백입니다.", new Throwable("no_bundle_name"));
+    }
 
+    List<DiagnosticInspectionsDTO> diagnosticInspectionsInfo =
+        diagnosticInspectionsDAO.selectInspectionListByBundleName(bundleName);
 
-    return null;
+    if (diagnosticInspectionsInfo.size() == 0 || diagnosticInspectionsInfo == null) {
+      throw new NoContentException("진단 검사가 존재하지 않습니다.",
+          new Throwable("no_diagnostic_inspection_content"));
+    }
+
+    return diagnosticInspectionsInfo;
   }
 
   @Override
   public List<DiagnosticInspectionsDTO> searchDiagnosticListByBundleCode(String bundleCode) {
-    // TODO 그룹 코드(bundleCode)로 검색하면 진단 검사에 대한 리스트를 리턴하는 것이 목표
-    // 협력 객체 : DiagnosticInspectionsDAO
 
-    // 1. bundleCode가 null이 아닌지 검증한다.
-    // 1.1 만약 bundleCode의 값이 null이라면, BadRequestException을 터트린다.
-    // 2. DiagnosticInspectionsDAO의 selectInspectionListByBundleCode(String bundleCode)으로 값을 가져온다.
-    // 2.1 만약 List<DiagnosticInspectionsDTO>의 값이 0이라면, NoContentException을 터트린다.
-    // 3. List<DiagnosticInspectionsDTO>를 반환한다.
+    if (bundleCode == null) {
+      throw new BadRequestException("그룹 코드가 입력되지 않았습니다.", new Throwable("no_bundle_code"));
+    }
 
-    return null;
+    List<DiagnosticInspectionsDTO> diagnosticInspectionsInfo =
+        diagnosticInspectionsDAO.selectInspectionListByBundleCode(bundleCode);
+
+    if (diagnosticInspectionsInfo.size() == 0 || diagnosticInspectionsInfo == null) {
+      throw new NoContentException("진단 검사가 존재하지 않습니다.",
+          new Throwable("no_diagnostic_inspection_content"));
+    }
+
+    return diagnosticInspectionsInfo;
   }
 
   @Override
@@ -179,46 +279,84 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     // 협력 객체 : DiagnosisDAO, MedicinesDAO, MedicinesRecordsDAO, DiagnosticTestRecordsDAO,
     // VitalRecordsDAO
 
-    // 1. patientId의 값이 0 혹은 null 아닌지 검증한다.
-    // 1.1 만약 patientId의 값이 0 혹은 null이라면, BadRequestException을 터트린다.
-    // 2. DiagnosisDAO의 getCompletedDiagnosisListByPatientId(int patientId)로 값을 가져온다.
-    // 2.1 만약 List<DiagnosisDTO>의 크기가 0이라면, NoContentException을 터트린다.
+    if (patientId == 0 || Integer.toString(patientId) == null) {
+      throw new BadRequestException("회원의 식별자가 입력되지 않았습니다.", new Throwable("no_patient_id"));
+    }
 
-    // 3. List<DiagnosisDTO>를 loop 하면서, diagId를 통해
-    // 3. medicineType이 '내복약' 혹은 '외용약'인 경우를 조회해야 하기 때문에 MedicineRecordsDAO의 select
-    // PharmaciesByDiagId(int diagId)로 조회한다.
-    // 3.1 없으면 스킵한다.
+    List<DiagnosisDTO> completedInfo = diagnosisDAO.getCompletedDiagnosisListByPatientId(patientId);
 
-    // 4. medicineType이 '주사약'인 경우를 조회해야 하기 때문에 MedicineRecordsDAO의 selectInjectorsByDiagId(int
-    // diagId)로 조회한다.
-    // 4.1 없으면 스킵한다.
+    log.info(completedInfo.size() + "");
+    if (completedInfo.size() == 0 || completedInfo == null) {
+      throw new NoContentException("회원이 진료를 받은 기록이 존재하지 않습니다.",
+          new Throwable("no_patient_history"));
+    }
 
-    // 5. '내복약' 혹은 '외용약'인 경우에 List<MedicineRecordsVO> 를 만들어야 하기 떄문에 받아온 List를 looping 한다.
-    // 5.1 MedicinesRecordsDTO가 가지고 있는 데이터인 medicineId로 MedicinesDAO의
-    // getMedicineInfoByMedicineId(int medicineId)로 조회한다.
-    // 5.2 만약 MedicinesDTO를 가지고 있지 않다면, NotFoundException을 터트린다.
-    // 5.3 정상적으로 가지고 있다면, MedicineRecordsVO(MedicinesDTO, MedicinesRecordsDTO)로 객체를 생성한다.
+    List<DiagnosisHistoryVO> historyInfo = new ArrayList<DiagnosisHistoryVO>();
 
-    // 6. '주사약'인 경우에 List<MedicineRecordsVO>를 만들어야 하기 때문에 받아온 List를 looping한다.
-    // 6.1 MedicinesRecordsDTO가 가지고 있는 데이터인 medicineId로 MedicinesDAO의
-    // getMedicineInfoByMedicineId(int medicineId)로 조회한다.
-    // 6.2 만약 MedicinesDTO를 가지고 있지 않다면, NotFoundException을 터트린다.
+    completedInfo.forEach(info -> {
+      // 진료의 식별자
+      int diagId = info.getDiagId();
+      List<MedicineRecordsDTO> medicineRecordInfo =
+          medicinesRecordsDAO.selectPharmaciesByDiagId(diagId);
 
-    // 7. 진단 검사 기록을 가져와야 하기 때문에 diagId를 통해 DiagnosticTestsDAO의 getDiagnosticTestByDiagId로
-    // DiagnosticTestDTO를 가져온다.
-    // 7.1 만약 값이 존재하지 않는다면, 스킵한다.
-    // 7.2 값이 존재한다면, DiagnosticTestRecordsDAO의 getDiagnosticTestRecordByDiagTestId(int diagTestId)로
-    // 조회한다.
-    // 7.2 List<DiagnosticTestRecordsDTO>의 값이 존재하지 않는다면, NotFoundException을 터트린다.
-    // 7.3 존재한다면 DiagnosticTestRecords를 Looping 하는데 이 때에 가지고 있는 diagInspectionId로 Diagnosis 정보를
-    // 가져온다.
-    // 7.3 값이 존재하지 않는다면, NotFoundException을 터트린다.
+      // 보내 줄 정보 내복 약 혹은 외용약의 정보
+      List<MedicineRecordVO> medicineRecordResult = new ArrayList<>();
+      if (medicineRecordInfo.size() > 0) {
 
-    // 8. VitalRecords가 존재하는지 확인한다.
-    // 9. 결과값을 가지고 DiagnosisHistoryVO를 만들고 List에 추가한다.
-    // 10. 반복 후 결과를 반환한다.
+        medicineRecordInfo.forEach(medicineRecord -> {
+          int medicineId = medicineRecord.getMedicineId();
+          MedicinesDTO medicineInfo = medicinesDAO.getMedicineInfoByMedicineId(medicineId);
+          MedicineRecordVO result = new MedicineRecordVO(medicineInfo, medicineRecord);
+          medicineRecordResult.add(result);
+        });
+      }
 
-    return null;
+      List<MedicineRecordsDTO> injectorRecordInfo =
+          medicinesRecordsDAO.selectInjectorsByDiagId(diagId);
+
+      // 보내 줄 정보 주사약의 정보
+      List<MedicineRecordVO> injectorRecordResult = new ArrayList<>();
+
+      if (injectorRecordInfo.size() > 0) {
+        injectorRecordInfo.forEach(injectorRecord -> {
+          int medicineId = injectorRecord.getMedicineId();
+          MedicinesDTO injectorInfo = medicinesDAO.getMedicineInfoByMedicineId(medicineId);
+          MedicineRecordVO result = new MedicineRecordVO(injectorInfo, injectorRecord);
+          injectorRecordResult.add(result);
+        });
+      }
+
+      DiagnosticTestsDTO diagnosticInfo = diagnosticTestsDAO.getDiagnosticTestListByDiagId(diagId);
+
+      // 보내 줄 진단 검사 정보
+      List<DiagnosticTestRecordVO> diagnosticTestResult = new ArrayList<>();
+
+      if (diagnosticInfo != null) {
+        int diagTestId = diagnosticInfo.getDiagTestId();
+        List<DiagnosticTestRecordsDTO> diagnosticTestRecordInfo =
+            diagnosticTestRecordsDAO.getDiagnosticTestRecordByDiagTestId(diagTestId);
+
+        diagnosticTestRecordInfo.forEach(diagnosticTest -> {
+          int diagInspectionId = diagnosticTest.getDiagInspectionId();
+          DiagnosticInspectionsDTO diagInspectionInfo =
+              diagnosticInspectionsDAO.selectInspectionByDiagInspectionId(diagInspectionId);
+          DiagnosticTestRecordVO result =
+              new DiagnosticTestRecordVO(diagnosticTest, diagInspectionInfo);
+          diagnosticTestResult.add(result);
+        });
+
+      }
+
+      VitalRecordsDTO vitalInfo = vitalRecordsDAO.selectVitalRecordByDiagId(diagId);
+
+      DiagnosisHistoryVO sendResult = new DiagnosisHistoryVO(info, medicineRecordResult,
+          injectorRecordResult, diagnosticTestResult, vitalInfo);
+      historyInfo.add(sendResult);
+
+    });
+
+
+    return historyInfo;
   }
 
   @Override
@@ -226,52 +364,106 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     // TODO 환자가 진료시에 진단 검사를 요청한다면 진단 검사를 추가하고 성공 여부를 리턴하는 것이 목표
     // 협력 객체 : DiagnosticTestsDAO
 
-    // 1. diagnosticTestInfo의 값이 null인지 체크한다.
-    // 1.1 만약 diagnosticTestInfo의 값이 null이면, BadRequestException을 터트린다.
-    // 2. DiagnosticTestsDAO의 addDiagnosticTest(DiagnosticTestsDTO diagnosticTestInfo)로 insert를 한다.
-    // 2.1 만약 정상적으로 삽입되지 않았다면, ConflictRequestException을 터트린다.
-    // 3. true를 반환한다.
+    if (diagnosticTestInfo == null) {
+      throw new BadRequestException("진단 검사의 정보가 존재하지 않습니다.",
+          new Throwable("no_diagnostic_test_info"));
+    }
+    int affectedRow = diagnosticTestsDAO.addDiagnosticTest(diagnosticTestInfo);
 
-    return false;
+    if (affectedRow != 1) {
+      throw new ConflictRequestException("알 수 없는 이유로 진단 검사 추가에 실패하였습니다.",
+          new Throwable("no_insert_diagnostic_test"));
+    }
+
+    return true;
+
   }
 
   @Override
-  public List<DiagnosticVO> showDiagnosticTestListByDiagId(int diagId) {
+  public List<DiagnosticTestRecordsVO> showDiagnosticTestListByDiagTestId(int diagTestId) {
     // TODO 진료의 식별자 (diagId)로 해당 환자의 진단 검사 상세 리스트를 리턴하는 것이 목표
-    // 협력 객체 : DiagnosticTestDAO, MembersDAO, PatientsDAO
+    // 협력 객체 : DiagnosticInspectionsDAO, DiagnosticTestRecordsDAO, MembersDAO
 
-    // 1. diagId가 0 혹은 null이라면, BadRequestException을 터트린다.
-    // 2. diagId를 통해 DiagnosticTestsDAO의 getDiagnosticTestListByDiagId(int diagId)를 조회한다.
-    // 3. 없으면 NoContentException을 터트린다.
-    // 4. 존재한다면, DiagnosticTestDTO의 memberId, patientId를 가져와서
-    // 4.1 MembersDAO의 selectMemberInfoByMemberId(int memberId)로 값을 가져온다.
-    // 4.2 PatientsDAO의 selectPatientsByPatientId(int patientId)로 값을 가져온다.
-    // 4.3 MembersDTO와 PatientsDTO의 값이 존재하지 않는 경우 NotFoundException을 터트린다.
-    // 5. DiagnosticVO 객체를 생성하여, DiagnosticVO(DiagnosticTestsDTO, MembersDTO, PatientsDTO) 객체를 생성한다.
-    // 6. 만들어진 객체를 List에 추가해준다.
-    // 7. Looping을 돌면서, 끝이 났다면 List를 반환한다.
+    if (diagTestId == 0) {
+      throw new BadRequestException("올바른 진단 검사 ID를 입력해주세요.", new Throwable("no_diag_test_id"));
+    }
 
-    return null;
+    DiagnosticTestsDTO memberInfo = diagnosticTestsDAO.getDiagnosticTestByDiagTestId(diagTestId);
+
+    int doctorId = memberInfo.getMemberId();
+    List<DiagnosticTestRecordsDTO> diagTestList =
+        diagnosticTestRecordsDAO.getDiagnosticTestRecordByDiagTestId(diagTestId);
+
+    if (diagTestList.size() == 0 || diagTestList == null) {
+      throw new NoContentException("진단 검사가 존재하지 않습니다.", new Throwable("no_result"));
+    }
+
+    MembersDTO doctorInfo = membersDAO.selectMemberInfoByMemberId(doctorId);
+
+    List<DiagnosticTestRecordsVO> sendResult = new ArrayList<>();
+    diagTestList.forEach(diagTest -> {
+      log.info(diagTest.toString());
+      int inspectionId = diagTest.getDiagInspectionId();
+      int inspectorMemberId = diagTest.getInspectorMemberId();
+
+      DiagnosticInspectionsDTO diagnosticInfo =
+          diagnosticInspectionsDAO.selectInspectionByDiagInspectionId(inspectionId);
+      if (inspectorMemberId == 0) {
+        DiagnosticTestRecordsVO result =
+            new DiagnosticTestRecordsVO(diagnosticInfo, diagTest, doctorInfo);
+        sendResult.add(result);
+      } else {
+        MembersDTO inspectorInfo = membersDAO.selectMemberInfoByMemberId(inspectorMemberId);
+
+        // log.info(inspectorInfo.toString());
+        DiagnosticTestRecordsVO result =
+            new DiagnosticTestRecordsVO(diagnosticInfo, diagTest, doctorInfo, inspectorInfo);
+        sendResult.add(result);
+      }
+
+
+
+    });
+
+
+    return sendResult;
   }
 
   @Override
   public List<DiagnosticVO> showWeeklyDiagnosticTestListByMemberId(DateWithMemberVO memberInfo) {
-    // TODO 임직원의 식별자 (memberId)와 날짜(startDate, endDate)로 해당 주의 진단 검사 리스트를 리턴하는 것이 목표
-    // 협력 객체 : DiagnosticTestDAO, MembersDAO, PatientsDAO
 
-    // 1. DateWithMemberVO의 값이 null이라면, BadRequestException을 터트린다.
-    // 2. DiagnosticTestsDAO의 getWeeklyDiagnosticTestListByMemberId(DateWithMemberVO memberInfo)를
-    // 조회한다.
-    // 2.1 값이 존재하지 않으면 NoContentException을 터트린다.
-    // 4. 존재한다면, DiagnosticTestDTO의 memberId, patientId를 가져와서
-    // 4.1 MembersDAO의 selectMemberInfoByMemberId(int memberId)로 값을 가져온다.
-    // 4.2 PatientsDAO의 selectPatientsByPatientId(int patientId)로 값을 가져온다.
-    // 4.3 MembersDTO와 PatientsDTO의 값이 존재하지 않는 경우 NotFoundException을 터트린다.
-    // 5. DiagnosticVO 객체를 생성하여, DiagnosticVO(DiagnosticTestsDTO, MembersDTO, PatientsDTO) 객체를 생성한다.
-    // 6. 만들어진 객체를 List에 추가해준다.
-    // 7. Looping을 돌면서, 끝이 났다면 List를 반환한다.
+    if (memberInfo.isNull()) {
+      throw new BadRequestException("올바른 정보를 입력해주세요", new Throwable("no_date_with_member_info"));
+    }
 
-    return null;
+    List<DiagnosticTestsDTO> weeklyList =
+        diagnosticTestsDAO.getWeeklyDiagnosticTestListByMemberId(memberInfo);
+
+    if (weeklyList.size() == 0 || weeklyList == null) {
+      throw new NoContentException("이번주에는 진단 검사가 존재하지 않습니다.", new Throwable("no_contents"));
+    }
+
+    List<DiagnosticVO> weeklyDiagnosticList = new ArrayList<>();
+
+    weeklyList.forEach(info -> {
+      int memberId = info.getMemberId();
+      int patientId = info.getPatientId();
+      MembersDTO diagMemberInfo = membersDAO.selectMemberInfoByMemberId(memberId);
+      PatientsDTO diagPatientInfo = patientsDAO.selectPatientByPatientId(patientId);
+
+      if (diagMemberInfo == null || diagPatientInfo == null) {
+        throw new NotFoundException("임직원과 환자 정보가 존재하지 않습니다.",
+            new Throwable("no_member_and_patient"));
+      }
+
+      DiagnosticVO result = new DiagnosticVO(info, diagMemberInfo, diagPatientInfo);
+      weeklyDiagnosticList.add(result);
+
+    });
+
+
+
+    return weeklyDiagnosticList;
   }
 
   @Override
@@ -280,18 +472,37 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     // TODO 병원의 식별자 (hospitalCode)와 날짜(startDate, endDate)로 해당 주의 진단 검사 리스트를 리턴하는 것이 목표
     // 협력 객체 : DiagnosticTestDAO, MembersDAO, PatientsDAO
 
-    // 1. DateWithHospitalCode의 값이 null이라면, BadRequestException을 터트린다.
-    // 2. DiagnosticTestsDAO의 getWeeklyDiagnosticTestListByHospitalCode(DateWithHospitalCode
-    // hospitalInfo)를 조회한다.
-    // 2.1 값이 존재하지 않으면 NoContentException을 터트린다.
-    // 4. 존재한다면, DiagnosticTestDTO의 memberId, patientId를 가져와서
-    // 4.1 MembersDAO의 selectMemberInfoByMemberId(int memberId)로 값을 가져온다.
-    // 4.2 PatientsDAO의 selectPatientsByPatientId(int patientId)로 값을 가져온다.
-    // 4.3 MembersDTO와 PatientsDTO의 값이 존재하지 않는 경우 NotFoundException을 터트린다.
-    // 5. DiagnosticVO 객체를 생성하여, DiagnosticVO(DiagnosticTestsDTO, MembersDTO, PatientsDTO) 객체를 생성한다.
-    // 6. 만들어진 객체를 List에 추가해준다.
-    // 7. Looping을 돌면서, 끝이 났다면 List를 반환한다.
-    return null;
+    if (hospitalInfo.isNull()) {
+      throw new BadRequestException("올바른 정보를 입력해주세요.", new Throwable("no_date_with_hospital_info"));
+    }
+
+    List<DiagnosticTestsDTO> weeklyList =
+        diagnosticTestsDAO.getWeeklyDiagnosticTestListByHospitalCode(hospitalInfo);
+
+    if (weeklyList.size() == 0 || weeklyList == null) {
+      throw new NoContentException("이번 주에는 진단 검사가 존재하지 않습니다.", new Throwable("no_contents"));
+    }
+
+    List<DiagnosticVO> weeklyDiagnosticList = new ArrayList<>();
+
+    weeklyList.forEach(info -> {
+      int memberId = info.getMemberId();
+      int patientId = info.getPatientId();
+
+      MembersDTO diagMemberInfo = membersDAO.selectMemberInfoByMemberId(memberId);
+      PatientsDTO diagPatientInfo = patientsDAO.selectPatientByPatientId(patientId);
+
+      log.info(diagMemberInfo.toString());
+      if (diagMemberInfo == null || diagPatientInfo == null) {
+        throw new NotFoundException("임직원과 환자 정보가 존재하지 않습니다.",
+            new Throwable("no_member_and_patient"));
+      }
+
+      DiagnosticVO result = new DiagnosticVO(info, diagMemberInfo, diagPatientInfo);
+      weeklyDiagnosticList.add(result);
+
+    });
+    return weeklyDiagnosticList;
   }
 
   @Override
@@ -299,12 +510,18 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     // TODO 진단 검사의 상태를 완료(DIAGNOSTIC_COMPLETED)로 변경하고 성공 여부를 리턴하는 것이 목표
     // 협력 객체 : DiagnosticTestsDAO
 
-    // 1. diagTestId가 0이라면, BadRequestException을 터트린다.
-    // 2. 아니라면, DiagnosticTestsDAO의 completeDiagnosticTest(int diagTestId)를 실행한다.
-    // 3. 만약 실패했다면 ConflictRequestException을 터트린다.
-    // 4. true를 반환한다.
+    if (diagTestId == 0) {
+      throw new BadRequestException("올바르지 않은 진단 검사의 식별자입니다.", new Throwable("not_diag_test_id"));
+    }
 
-    return false;
+    int result = diagnosticTestsDAO.completeDiagnosticTest(diagTestId);
+
+    if (result != 1) {
+      throw new ConflictRequestException("진단 검사의 상태가 변경되지 않았습니다.",
+          new Throwable("not_updated_diag_test_status"));
+    }
+
+    return true;
   }
 
   @Override
@@ -312,12 +529,19 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     // TODO 진단 검사의 상태를 진행중 | 접수 (DIAGNOSTIC_PROCESSING)로 변경하고 성공 여부를 리턴하는 것이 목표
     // 협력 객체 : DiagnosticTestDAO
 
-    // 1. diagTestId가 0이라면, BadRequestException을 터트린다.
-    // 2. 아니라면, DiagnosticTestsDAO의 processingDiagnosticTest(int diagTestId)를 실행한다.
-    // 3. 만약 실패했다면 ConflictRequestException을 터트린다.
-    // 4. true를 반환한다.
+    if (diagTestId == 0) {
+      throw new BadRequestException("올바르지 않은 진단 검사의 식별자입니다.", new Throwable("not_diag_test_id"));
+    }
 
-    return false;
+    int result = diagnosticTestsDAO.processingDiagnosticTest(diagTestId);
+
+    if (result != 1) {
+      throw new ConflictRequestException("진단 검사의 상태가 변경되지 않았습니다.",
+          new Throwable("not_updated_diag_test_status"));
+    }
+
+    return true;
+
   }
 
   @Override
@@ -325,24 +549,43 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     // TODO 진단 검사의 상태를 대기중 (DIAGNOSTIC_PENDING)으로 변경하고 성공 여부를 리턴하는 것이 목표
     // 협력 객체 : DiagnosticTestDAO
 
-    // 1. diagTestId가 0이라면, BadRequestException을 터트린다.
-    // 2. 아니라면 DiagnosticTestsDAO의 pendingDiagnosticTest(int diagTestId)를 실행한다.
-    // 3. 만약 실패했다면, ConflictRequestException을 터트린다.
-    // 4. true를 반환한다.
-    return false;
+    if (diagTestId == 0) {
+      throw new BadRequestException("올바르지 않은 진단 검사의 식별자입니다.", new Throwable("not_diag_test_id"));
+    }
+
+    int result = diagnosticTestsDAO.pendingDiagnosticTest(diagTestId);
+
+    if (result != 1) {
+      throw new ConflictRequestException("진단 검사의 상태가 변경되지 않았습니다.",
+          new Throwable("not_updated_diag_test_status"));
+    }
+
+    return true;
   }
 
   @Override
   public List<PatientVO> searchPatientInfoByName(PatientSearchVO patientInfo) {
     // TODO 해당 병원의 해당 환자의 이름으로 검색하여 환자의 리스트를 리턴하는 것이 목표
     // 협력 객체 : PatientsDAO
+    if (patientInfo.isNull()) {
+      throw new BadRequestException("병원 코드 혹은 환자의 이름이 없습니다.",
+          new Throwable("no_patient_search_info"));
+    }
 
-    // 1. patientInfo가 null이라면, BadRequestException을 터트린다.
-    // 2. 아니라면 PatientsDAO의 getPatientInfoByName(PatientSearchVO patientSearchInfo)를 실행한다.
-    // 3. 만약 값이 존재하지 않는다면, NoContentException을 터트린다.
-    // 4. List<PatientVO>를 반환한다.
+    List<PatientsDTO> patientInfos = patientsDAO.getPatientInfoByName(patientInfo);
 
-    return null;
+    if (patientInfos.size() == 0 || patientInfos == null) {
+      throw new NoContentException("검색 결과 존재하지 않습니다.", new Throwable("no_result"));
+    }
+
+    List<PatientVO> returnResults = new ArrayList<PatientVO>();
+
+    patientInfos.forEach(info -> {
+      PatientVO newData = new PatientVO(info);
+      returnResults.add(newData);
+    });
+
+    return returnResults;
   }
 
   // ======================== SI HYUN PARK
@@ -388,6 +631,5 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     // TODO Auto-generated method stub
     return null;
   }
-
 
 }

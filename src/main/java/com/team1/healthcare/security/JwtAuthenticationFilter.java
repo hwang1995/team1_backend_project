@@ -12,7 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.GenericFilterBean;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JwtAuthenticationFilter extends GenericFilterBean {
   private UserDetailsService userDetailsService;
 
@@ -23,6 +25,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
+    // log.info("FILTER HELLO");
     HttpServletRequest httpRequest = (HttpServletRequest) request;
 
     String jwtToken = httpRequest.getHeader("authToken");

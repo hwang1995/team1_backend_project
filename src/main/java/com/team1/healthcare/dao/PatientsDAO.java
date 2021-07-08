@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.team1.healthcare.dto.PatientsDTO;
 import com.team1.healthcare.vo.common.PatientSearchVO;
-import com.team1.healthcare.vo.patient.PatientVO;
 
 @Mapper
 public interface PatientsDAO {
@@ -25,7 +24,7 @@ public interface PatientsDAO {
 
   public List<PatientsDTO> selectPatientsByPatientName(PatientSearchVO patientSearchInfo);
 
-  public List<PatientVO> getPatientInfoByName(PatientSearchVO patientSearchInfo);
+  public List<PatientsDTO> getPatientInfoByName(PatientSearchVO patientSearchInfo);
 
 
 }

@@ -21,4 +21,16 @@
 		where bundle_code like CONCAT('%',
 		#{bundleCode}, '%')
 	</select>
+
+	<select id="selectInspectionByDiagInspectionId"
+		parameterType="int" resultType="diagnosticInspections">
+		select diag_inspection_id,
+		bundle_code, bundle_name, pres_code, pres_name,
+		pres_unit,
+		pres_lower_limit, pres_upper_limit, pres_vessel,
+		pres_specimen_name
+		from diagnostic_inspections
+		where diag_inspection_id
+		= #{diagInspectionId}
+	</select>
 </mapper>

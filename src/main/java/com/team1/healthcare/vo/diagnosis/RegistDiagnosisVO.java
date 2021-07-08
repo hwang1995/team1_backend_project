@@ -1,15 +1,18 @@
 package com.team1.healthcare.vo.diagnosis;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Slf4j
 public class RegistDiagnosisVO {
   // 환자의 PK
   private int patientId;
@@ -37,4 +40,14 @@ public class RegistDiagnosisVO {
 
   // 바이탈 검사 정보
   private VitalVO vital;
+
+  @JsonIgnore
+  public boolean isNull() {
+    if (patientId == 0 || memberId == 0 || diagId == 0 || hospitalCode == null
+        || drOpinion == null) {
+      log.info("errorRegistVO");
+      return true;
+    }
+    return false;
+  }
 }

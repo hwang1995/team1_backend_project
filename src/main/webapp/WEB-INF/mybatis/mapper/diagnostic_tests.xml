@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.DiagnosticTestsDAO">
-	<insert id="addDiagnosticTest" parameterType="diagnosticTests">
+	<insert id="addDiagnosticTest" parameterType="diagnosticTests"
+		useGeneratedKeys="true" keyProperty="diagTestId">
 		insert into
 		diagnostic_tests
 		(member_id, patient_id, inspection_status,
-		created_date, diag_id, hospital_code)
+		created_date, diag_id,
+		hospital_code)
 		values
 		(#{memberId}, #{patientId},
-		#{inspectionStatus}, #{createdDate}, #{diagId}, #{hospitalCode})
+		#{inspectionStatus},
+		#{createdDate}, #{diagId}, #{hospitalCode})
 	</insert>
 
 	<select id="getDiagnosticTestListByDiagId" parameterType="int"
@@ -50,7 +53,7 @@
 
 	<update id="completeDiagnosticTest" parameterType="int">
 		update
-		diagnosis_tests set
+		diagnostic_tests set
 		inspection_status = 'DIAGNOSTIC_COMPLETED'
 		where
 		diag_test_id = #{diagTestId}
@@ -58,7 +61,7 @@
 
 	<update id="processingDiagnosticTest" parameterType="int">
 		update
-		diagnosis_tests set
+		diagnostic_tests set
 		inspection_status = 'DIAGNOSTIC_PROCESSING'
 		where
 		diag_test_id = #{diagTestId}
@@ -66,7 +69,7 @@
 
 	<update id="pendingDiagnosticTest" parameterType="int">
 		update
-		diagnosis_tests set
+		diagnostic_tests set
 		inspection_status = 'DIAGNOSTIC_PENDING'
 		where
 		diag_test_id = #{diagTestId}

@@ -3,13 +3,11 @@ package com.team1.healthcare.security;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,8 +20,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import lombok.extern.log4j.Log4j;
 
-@Configuration
-@EnableWebSecurity
+// @Configuration
+// @EnableWebSecurity
 @Log4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
@@ -36,17 +34,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.httpBasic().disable();
 
+
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
     http.csrf().disable();
-
     http.cors();
-
     http.addFilterBefore(new JwtAuthenticationFilter(userDetailsService),
         UsernamePasswordAuthenticationFilter.class);
 
-    http.authorizeRequests().expressionHandler(securityExpressionHandler()).antMatchers("/**")
+    http.authorizeRequests().expressionHandler(securityExpressionHandler()).anyRequest()
         .permitAll();
+
+    // .antMatchers("/**").permitAll();
   }
 
   // DataSource 설정
@@ -76,8 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   // 권한 계층 설정 객체 생성
   public RoleHierarchyImpl roleHierarchyImpl() {
     RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
-    roleHierarchyImpl.setHierarchy(
-        "ROLE_DEVELOP and ROLE_DIRECTOR > ROLE_DOCTOR > ROLE_NURSE and ROLE_INSPECTOR");
+    roleHierarchyImpl.setHierarchy("ROLE_DEVELOP > ROLE_DIRECTOR");
     return roleHierarchyImpl;
   }
 
@@ -85,6 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler =
         new DefaultWebSecurityExpressionHandler();
     defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchyImpl());
+    log.info(defaultWebSecurityExpressionHandler.toString());
     return defaultWebSecurityExpressionHandler;
   }
 

@@ -21,7 +21,7 @@
 
 	<context:property-placeholder
 		location="classpath:config/*" />
-		
-	
+
+
 
 </beans:beans>

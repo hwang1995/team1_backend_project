@@ -88,7 +88,7 @@
 	</select>
 
 	<select id="getPatientInfoByName" parameterType="patientSearch"
-		resultType="patientVO">
+		resultType="patients">
 		select patient_id, patient_name, patient_ssn,
 		patient_gender, patient_tel,
 		patient_addr1, patient_addr2,
