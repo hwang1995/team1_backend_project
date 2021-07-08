@@ -21,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import lombok.extern.log4j.Log4j;
 
 // @Configuration
-// @EnableGlobalAuthentication
 // @EnableWebSecurity
 @Log4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -33,21 +32,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    log.info("HTTP BASIC");
     http.httpBasic().disable();
 
 
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    log.info("SESSION");
     http.csrf().disable();
-    log.info("CSRF");
     http.cors();
-    log.info("CORS");
     http.addFilterBefore(new JwtAuthenticationFilter(userDetailsService),
         UsernamePasswordAuthenticationFilter.class);
-    log.info("FILTER");
 
-    http.authorizeRequests().expressionHandler(securityExpressionHandler()).anyRequest().denyAll();
+    http.authorizeRequests().expressionHandler(securityExpressionHandler()).anyRequest()
+        .permitAll();
 
     // .antMatchers("/**").permitAll();
   }

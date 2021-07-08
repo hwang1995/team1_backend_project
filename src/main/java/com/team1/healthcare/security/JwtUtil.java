@@ -38,6 +38,8 @@ public class JwtUtil {
       JwtParser parser = Jwts.parser();
       parser.setSigningKey(secretKey.getBytes("UTF-8"));
       Jws<Claims> jws = parser.parseClaimsJws(token);
+      Claims claims = jws.getBody();
+      email = claims.get("email", String.class);
     } catch (Exception e) {
       e.printStackTrace();
     }

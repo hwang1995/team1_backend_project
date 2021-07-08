@@ -3,6 +3,7 @@ package com.team1.healthcare.aop;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -124,6 +125,13 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
     log.info("Error Message " + e.getMessage());
     return ResponseEntity.noContent().header("Content-Length", "0").build();
 
+  }
+
+  @ExceptionHandler({AccessDeniedException.class})
+  public final ResponseEntity<Object> handleAccessDeniedException(Exception e, WebRequest request) {
+    ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now().toString(),
+        "noAuthorized", e.getMessage(), request.getDescription(false));
+    return new ResponseEntity<Object>(exceptionResponse, HttpStatus.UNAUTHORIZED);
   }
 
 
