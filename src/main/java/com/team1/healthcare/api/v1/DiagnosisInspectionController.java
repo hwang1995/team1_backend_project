@@ -67,6 +67,15 @@ public class DiagnosisInspectionController {
 
   // 7. PUT 해당 환자의 진단 검사 상세에서 결과를 입력시에 값을 추가
 
+  @PutMapping("")
+  public boolean changeDiagnosticValue() {
+    return true;
+  }
+
+  @GetMapping("/csv/{diagTestId}")
+  public void getCSVfileByDiagTestId(@PathVariable int diagTestId) {
+
+  }
   // 1. GET 해당 환자의 진단 검사 목록 가져오기
   // 3. GET 해당 환자의 진단 검사 상세 페이지에서 엑셀 저장을 누를 시에 CSV 제공
   // 4. GET 해당 병원의 진단 검사 목록 가져오기

@@ -6,12 +6,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.team1.healthcare.commons.CommonUtils;
 import com.team1.healthcare.dto.HospitalsDTO;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.exception.UserNotFoundException;
@@ -39,12 +37,13 @@ public class AuthController {
   private AuthServiceImpl authService;
 
 
-  @GetMapping("")
+  @PostMapping("")
   public UserInfoVO getAuth(@Valid @RequestBody LoginVO loginInfo) {
     HospitalsDTO hospitalInfo = authService.isExistedHospital(loginInfo);
     String memberEmail = loginInfo.getMemberEmail();
     String memberPw = loginInfo.getMemberPw();
 
+    log.info(loginInfo.toString());
     if (hospitalInfo == null) {
       throw new UserNotFoundException("병원 정보가 존재하지 않습니다.", new Throwable("no_hospital"));
     }
@@ -71,17 +70,6 @@ public class AuthController {
 
   }
 
-  @PostMapping("")
-  public String addMembers(@RequestBody MembersDTO memberInfo) {
-    boolean result = CommonUtils.isEmpty(memberInfo);
-    log.info("DTO의 값은 Null인가? " + result);
-    memberService.addMember(memberInfo);
-    return "success";
-
-  }
-
-  @GetMapping("/test")
-  public void testMethod() {}
 
 
 }
