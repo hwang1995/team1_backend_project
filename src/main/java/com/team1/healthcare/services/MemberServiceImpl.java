@@ -175,10 +175,20 @@ public class MemberServiceImpl implements IMemberService {
       throw new BadRequestException("EmailCheckVO값이 존재하지 않습니다.", new Throwable("null-info"));
     }
 
-    // 3. 만약 MembersDTO가 null이 아니면, throw new ConflictRequestException
+    List<MembersDTO> memberInfo =
+        membersDAO.selectMembersListByHospitalCode(emailCheckInfo.getHospitalCode());
+    // 해당 병원 임직원의 정보가 없으면
+    if (memberInfo == null || memberInfo.size() <= 0) {
+      throw new BadRequestException("잘못된 병원코드값을 입력하였습니다.", new Throwable("wrong-hospitalCode"));
+    }
+
     MembersDTO isExistMemberEmail = membersDAO.isExistedEmail(emailCheckInfo);
 
+    // 이메일이 있으면서 병원코드도 있음 NULL 아님.
+    // 이메일만 있고 병원코드 없음 -> 둘다 NULL
+    // 이메일은 없고 병원코드 있음 -> 둘다 NULL.
     if (isExistMemberEmail != null) {
+      log.info(isExistMemberEmail.toString());
       throw new ConflictRequestException("이미 존재하는 이메일 주소입니다. 다른 이메일 주소를 입력해주세요",
           new Throwable("existed-email"));
     }
