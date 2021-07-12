@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.io.Files;
 import com.team1.healthcare.commons.CommonUtils;
+import com.team1.healthcare.dao.HospitalsDAO;
 import com.team1.healthcare.dao.MembersDAO;
+import com.team1.healthcare.dto.HospitalsDTO;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.exception.BadRequestException;
 import com.team1.healthcare.exception.ConflictRequestException;
 import com.team1.healthcare.exception.NoContentException;
 import com.team1.healthcare.vo.common.MemberSearchVO;
-import com.team1.healthcare.vo.member.EmailCheckVO;
 import com.team1.healthcare.vo.notice.AddNoticeImageVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,45 +46,55 @@ public class MemberServiceImpl implements IMemberService {
   @Autowired
   private MembersDAO membersDAO;
 
+  @Autowired
+  private HospitalsDAO hospitalsDAO;
+
 
   @Override
   public boolean addMember(MembersDTO memberInfo) {
 
     if (memberInfo.isNull()) {
-      log.info("isNull이다");
       throw new BadRequestException("필수 값이 누락되어있습니다.", new Throwable("null-info"));
     }
 
     if (!isEmail(memberInfo.getMemberEmail())) {
-      log.info("이메일 유효성 안맞음");
       throw new BadRequestException("이메일 값이 잘못되었습니다.", new Throwable("invalid-email"));
     }
 
     if (!isPhone(memberInfo.getMemberTel())) {
-      log.info("전화번호 유효성 안맞음");
       throw new BadRequestException("전화번호 값이 잘못되었습니다.", new Throwable("invalid-tel"));
     }
 
     if (!isPassword(memberInfo.getMemberPw())) {
-      log.info("비번 유효성 안맞");
       throw new BadRequestException("비밀번호 값이 잘못되었습니다.", new Throwable("invalid-pw"));
     }
 
-    // 해딩 이메일이 존재하는지 체크
-    MembersDTO existedMemberInfo = membersDAO.isExistedUser(memberInfo);
-    if (existedMemberInfo != null) {
-      throw new BadRequestException("이미 존재하는 이메일 주소입니다. 다른 이메일 주소를 입력해주세요",
-          new Throwable("existed-email"));
+    // 해당 이메일이 존재하는지 여부 검사
+    int memberEmailCount = membersDAO.countExistedEmail(memberInfo.getMemberEmail());
+    if (memberEmailCount >= 1) { // 존재(중복)
+      throw new BadRequestException("이메일 값이 중복됩니다.", new Throwable("overlapped-memberEmail"));
+    } else if (memberEmailCount < 0) {
+      throw new RuntimeException("알 수 없는 이유로 임직원 추가도중 이메일 중복체크가 실패하였습니다.");
+    }
+
+    HospitalsDTO existedHospitalInfo = hospitalsDAO.getHospitalInfo(memberInfo.getHospitalCode());
+    if (existedHospitalInfo == null) {
+      throw new BadRequestException("해당 병원이 존재하지 않습니다.", new Throwable("invalid-hospitalCode"));
+    }
+
+    // 의사의 진료실(doctorRoom)을 세팅
+    if (memberInfo.getMemberAuthority().equals("ROLE_DOCTOR")) {
+      int doctorRoomNum = membersDAO.countDoctorByHospitalCode(memberInfo.getHospitalCode());
+      memberInfo.setDoctorRoom(doctorRoomNum + 1);
     }
 
     // 임직원의 입사일과 암호화를 실시
     memberInfo.setCurrentTime();
     memberInfo.encryptPassword();
 
+    // 추가할때 영향받은 행 수
     int result = membersDAO.insertMember(memberInfo);
-
     if (result == 1) {
-      log.info("성공@@@@@@@@@@@@");
       return true;
     }
 
@@ -166,23 +177,25 @@ public class MemberServiceImpl implements IMemberService {
     return memberInfo;
   }
 
-
-  // 해당 병원에서 임직원 이메일이 중복되었는지 체크
+  // 임직원 이메일이 중복되었는지 체크
   @Override
-  public boolean isExistedEmail(EmailCheckVO emailCheckInfo) {
+  public boolean isExistedEmail(String memberEmail) {
 
-    if (emailCheckInfo.isNull()) {
-      throw new BadRequestException("EmailCheckVO값이 존재하지 않습니다.", new Throwable("null-info"));
+    if (memberEmail.trim().isEmpty() || memberEmail == null) {
+      throw new BadRequestException("이메일값이 입력되지 않았습니다.", new Throwable("null-memberEmail"));
+    }
+    if (!isEmail(memberEmail)) {
+      throw new BadRequestException("이메일 값이 잘못되었습니다.", new Throwable("invalid-email"));
     }
 
-    // 3. 만약 MembersDTO가 null이 아니면, throw new ConflictRequestException
-    MembersDTO isExistMemberEmail = membersDAO.isExistedEmail(emailCheckInfo);
-
-    if (isExistMemberEmail != null) {
-      throw new ConflictRequestException("이미 존재하는 이메일 주소입니다. 다른 이메일 주소를 입력해주세요",
-          new Throwable("existed-email"));
+    int memberEmailCount = membersDAO.countExistedEmail(memberEmail);
+    if (memberEmailCount == 0) { // 존재하지 않음
+      return true;
+    } else if (memberEmailCount >= 1) { // 존재
+      throw new BadRequestException("이메일 값이 중복됩니다.", new Throwable("overlapped-memberEmail"));
     }
-    return true;
+
+    throw new RuntimeException("알 수 없는 이유로 이메일 중복체크에 실패하였습니다.");
   }
 
 

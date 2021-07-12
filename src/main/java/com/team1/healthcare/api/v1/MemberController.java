@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.services.MemberServiceImpl;
 import com.team1.healthcare.vo.common.MemberSearchVO;
-import com.team1.healthcare.vo.member.EmailCheckVO;
 import com.team1.healthcare.vo.notice.AddNoticeImageVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,8 +92,8 @@ public class MemberController {
   // 7. GET 중복된 이메일이 있는지에 대해 검사
   // '중복체크' 버튼을 클릭 시 클라이언트 요청
   @GetMapping("/email-check")
-  public boolean memberEmailCheck(@RequestBody EmailCheckVO emailCheckInfo) {
-    memberService.isExistedEmail(emailCheckInfo);
+  public boolean memberEmailCheck(String memberEmail) {
+    memberService.isExistedEmail(memberEmail);
     return true;
   }
 

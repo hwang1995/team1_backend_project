@@ -99,9 +99,6 @@
 			alias="weekNoMember" />
 
 		<typeAlias
-			type="com.team1.healthcare.vo.member.EmailCheckVO" alias="emailCheck" />
-
-		<typeAlias
 			type="com.team1.healthcare.vo.common.DateWithHospitalAndIdVO"
 			alias="dateWithHospitalAndId" />
 

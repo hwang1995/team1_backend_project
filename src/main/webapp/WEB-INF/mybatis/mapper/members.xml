@@ -59,29 +59,27 @@
 		CONCAT('%',
 		#{memberName}, '%') and hospital_code = #{hospitalCode}
 	</select>
-
-	<select id="isExistedEmail" parameterType="emailCheck"
-		resultType="members">
-		select member_id,
-		member_email,
-		member_name, member_tel,
-		member_addr1,
-		member_addr2,
-		member_authority, member_postal,
-		member_image,
-		member_birth,
-		member_color from members where
-		member_email
-		=
-		#{memberEmail} and hospital_code = #{hospitalCode}
+	
+	<!-- 임직원의 이메일이 있는지 검사 -->
+	<select id="countExistedEmail" parameterType="String"
+		resultType="int">
+		select count(*)
+		from members 
+		where member_email = #{memberEmail}
 	</select>
-
+	
 	<select id="countMembersByNameAndCode"
 		parameterType="memberSearch" resultType="int">
 		select count(*) from members
 		where member_name = #{memberName} and hospital_code = #{hospitalCode}
 	</select>
-
+	
+	<!-- 해당 병원의 의사 수 -->
+	<select id="countDoctorByHospitalCode" parameterType="String" resultType="int">
+		select count(*) from members
+		where member_authority ='ROLE_DOCTOR' and hospital_code = #{hospitalCode} 
+	</select>
+	
 	<update id="updateMemberInfo" parameterType="members">
 		update members set
 		member_authority = #{memberAuthority},
@@ -120,16 +118,12 @@
 		resultType="members">
 		select member_id, member_email,
 		member_name, member_tel,
-		member_addr1, member_addr2, member_authority,
-
-		member_postal,
-		member_image, member_birth, member_color,
-		doctor_room
-
+		member_addr1, member_addr2,
+		member_authority, member_postal,
+		member_image, member_birth,
+		member_color, doctor_room
 		from members
-		where
-		member_id =
-		#{memberId}
+		where member_id = #{memberId}
 	</select>
 
 </mapper>
