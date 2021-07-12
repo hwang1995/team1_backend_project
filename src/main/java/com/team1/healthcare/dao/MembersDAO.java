@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Param;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.vo.auth.LoginVO;
 import com.team1.healthcare.vo.common.MemberSearchVO;
-import com.team1.healthcare.vo.member.EmailCheckVO;
 
 @Mapper
 public interface MembersDAO {
@@ -17,6 +16,14 @@ public interface MembersDAO {
    * @return numbers (영향 받은 행의 수)
    */
   public int insertMember(MembersDTO memberInfo);
+
+  /**
+   * 해당 병원의 의사의 수를 추출하기 위한 쿼리
+   * 
+   * @param String hospitalCode
+   * @return numbers (해당 병원의 의사의 수)
+   */
+  public int countDoctorByHospitalCode(String hospitalCode);
 
   /**
    * 로그인 성공 시에 JWT 토큰에 넘겨줄 loginInfo를 조회하기 위한 쿼리
@@ -56,7 +63,7 @@ public interface MembersDAO {
    * @param EmailCheckVO emailCheckInfo
    * @return MembersDTO
    */
-  public MembersDTO isExistedEmail(EmailCheckVO emailCheckInfo);
+  public int countExistedEmail(String memberEmail);
 
   /**
    * 병원 이름과 임직원의 이름으로 카운트를 가져오기 위한 쿼리

@@ -3,7 +3,6 @@ package com.team1.healthcare.services;
 import java.util.List;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.vo.common.MemberSearchVO;
-import com.team1.healthcare.vo.member.EmailCheckVO;
 import com.team1.healthcare.vo.notice.AddNoticeImageVO;
 
 public interface IMemberService {
@@ -49,12 +48,12 @@ public interface IMemberService {
   public List<MembersDTO> showMembersListByNameAndCode(MemberSearchVO memberSearchInfo);
 
   /**
-   * 존재하는 이메일인지 체크하기 위한 서비스 인터페이스
+   * 중복되는 이메일인지 체크하기 위한 서비스 인터페이스
    * 
-   * @param EmailCheckVO emailCheckInfo
+   * @param String memberEmail
    * @return true or false (존재 여부)
    */
-  public boolean isExistedEmail(EmailCheckVO emailCheckInfo);
+  public boolean isExistedEmail(String memberEmail);
 
   /**
    * 임직원의 비밀번호를 초기화하기 위한 서비스 인터페이스
