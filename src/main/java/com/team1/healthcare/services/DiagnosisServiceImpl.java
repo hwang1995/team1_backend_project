@@ -680,7 +680,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
         diagnosisDAO.selectDiagnosisListByMemberIdAndWeekNo(dateInfo);
 
     if (diagnosisInfo.size() == 0) {
-      throw new NoContentException("데이터가 검색이되지 않았습니다.", new Throwable("No Data"));
+      throw new NotFoundException("데이터가 검색이되지 않았습니다.", new Throwable("No Data"));
     }
 
     for (DiagnosisDTO diagnosis : diagnosisInfo) {
