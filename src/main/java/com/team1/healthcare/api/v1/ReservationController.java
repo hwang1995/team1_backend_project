@@ -63,9 +63,10 @@ public class ReservationController {
   }
 
   // 1. GET 진료 접수(예약) 목록 보기
-  @GetMapping("")
+  @PostMapping("/data")
   public List<ReservationVO> getReservationInfo(
       @RequestBody WeekNoWithMemberVO weekNoWithMemberVO) {
+    log.info(weekNoWithMemberVO.toString());
     List<ReservationVO> diagnosisInfo =
         diagnosisService.showWeeklyReservationList(weekNoWithMemberVO);
     return diagnosisInfo;

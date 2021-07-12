@@ -2,6 +2,7 @@ package com.team1.healthcare.vo.diagnosis;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.MembersDTO;
@@ -16,7 +17,9 @@ public class ReservationVO {
   private int calendarId; // weekNum
   private String title; // patientName
   private String category; // time
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime start;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime end;
   private String bgColor; // member -> color
   private String color; // textColor -> white
