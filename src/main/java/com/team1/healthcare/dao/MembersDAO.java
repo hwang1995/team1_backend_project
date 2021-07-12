@@ -106,6 +106,22 @@ public interface MembersDAO {
    */
   public List<MembersDTO> selectDoctorInfoByHospitalCode(String hospitalCode);
 
+  /**
+   * 임직원 정보를 반환하기 위한 쿼리
+   * 
+   * @param int memberId
+   * @return MembersDTO
+   */
   public MembersDTO selectMemberInfoByMemberId(@Param("memberId") int memberId);
+
+  /**
+   * 임직원 정보를 반환하기 위한 쿼리
+   * 
+   * @param memberId
+   * @param hospitalCode
+   * @return MembersDTO
+   */
+  public MembersDTO selectMemberInfoByMemberIdAndHospitalCode(@Param("memberId") int memberId,
+      @Param("hospitalCode") String hospitalCode);
 
 }

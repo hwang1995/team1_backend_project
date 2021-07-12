@@ -15,6 +15,7 @@ import com.team1.healthcare.dto.PatientsDTO;
 import com.team1.healthcare.services.DiagnosisServiceImpl;
 import com.team1.healthcare.vo.common.PatientSearchVO;
 import com.team1.healthcare.vo.common.WeekNoWithMemberVO;
+import com.team1.healthcare.vo.diagnosis.DiagnosisUpdateVO;
 import com.team1.healthcare.vo.diagnosis.ReservationVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +25,16 @@ import lombok.extern.slf4j.Slf4j;
 public class ReservationController {
   @Autowired
   private DiagnosisServiceImpl diagnosisService;
+
+  // 1. POST 진료 접수(예약) 목록 보기
+  @PostMapping("/data")
+  public List<ReservationVO> getReservationInfo(
+      @RequestBody WeekNoWithMemberVO weekNoWithMemberVO) {
+    log.info(weekNoWithMemberVO.toString());
+    List<ReservationVO> diagnosisInfo =
+        diagnosisService.showWeeklyReservationList(weekNoWithMemberVO);
+    return diagnosisInfo;
+  }
 
 
   // 2. POST 진료 접수(예약) 하기
@@ -35,8 +46,8 @@ public class ReservationController {
 
   // 3. PUT 진료 접수(예약) 수정하기
   @PutMapping("")
-  public boolean modifyReservationInfo(int diagId, String visitPurpose) {
-    boolean result = diagnosisService.modifyReservationInfo(diagId, visitPurpose);
+  public boolean modifyReservationInfo(DiagnosisUpdateVO diagnosisUpdateVO) {
+    boolean result = diagnosisService.modifyReservationInfo(diagnosisUpdateVO);
 
     return result;
   }
@@ -56,21 +67,16 @@ public class ReservationController {
     return patients;
   }
 
+  // 의사 검색
   @GetMapping("/doctor/{hospitalCode}")
   public List<MembersDTO> getDoctorInfo(@PathVariable String hospitalCode) {
     List<MembersDTO> doctors = diagnosisService.getDoctorsInfo(hospitalCode);
     return doctors;
   }
 
-  // 1. GET 진료 접수(예약) 목록 보기
-  @PostMapping("/data")
-  public List<ReservationVO> getReservationInfo(
-      @RequestBody WeekNoWithMemberVO weekNoWithMemberVO) {
-    log.info(weekNoWithMemberVO.toString());
-    List<ReservationVO> diagnosisInfo =
-        diagnosisService.showWeeklyReservationList(weekNoWithMemberVO);
-    return diagnosisInfo;
-  }
+
+
+  // 예약환자 검색
 
   @GetMapping("/waitingPatient")
   public List<ReservationVO> getSearchReservationPatient(

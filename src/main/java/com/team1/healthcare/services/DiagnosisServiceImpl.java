@@ -38,6 +38,7 @@ import com.team1.healthcare.vo.common.PatientSearchVO;
 import com.team1.healthcare.vo.common.WeekNoWithMemberVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisHistoryVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisListVO;
+import com.team1.healthcare.vo.diagnosis.DiagnosisUpdateVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosticTestRecordVO;
 import com.team1.healthcare.vo.diagnosis.MedicineRecordVO;
 import com.team1.healthcare.vo.diagnosis.MedicineResultVO;
@@ -633,34 +634,58 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
   @Override
   public boolean addReservationInfo(DiagnosisDTO diagnosisInfo) {
-    log.info("data" + diagnosisInfo.toString());
+
     boolean result = true;
     LocalDateTime currentTime = LocalDateTime.now();
     // 추가하가전 몇가지 확인 작업절차
-    // 1) 환자가 예약한 시간에 같은 환자가 예약되어 있는지 확인하는 작업
+    // 1) weekNo가 0초과 52이하 범위에 있는지 확인하기 위한 작업
+    if (diagnosisInfo.getWeekNo() < 0 || diagnosisInfo.getWeekNo() > 52) {
+      throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 데이터인지 확인해주세요",
+          new Throwable("Wrong Data : WeekNo"));
+    }
+
+    // 2)-1 수정작업 들어가기전 진료할 환자가 해당병원에 있는지 확인
+    PatientsDTO patient = patientsDAO.selectPatientByPatienIdAndHospitalCode(
+        diagnosisInfo.getPatientId(), diagnosisInfo.getHospitalCode());
+
+    if (patient == null) {
+      throw new ConflictRequestException("해당 병원에 환자가 존재하지 않습니다. 다시 확인해주세요",
+          new Throwable("Wrong Update : No Patient Data in hospital"));
+    }
+    // 2)-2 수정작업 들어가기전 진료할 의사가 해당병원에 있는지 확인
+    MembersDTO member = membersDAO.selectMemberInfoByMemberIdAndHospitalCode(
+        diagnosisInfo.getMemberId(), diagnosisInfo.getHospitalCode());
+
+    if (member == null) {
+      throw new ConflictRequestException("해당 병원에 의사가 존재하지 않습니다. 다시 확인해주세요",
+          new Throwable("Wrong Update : No Doctor Data in hospital"));
+    }
+
+    // 3) 환자가 예약한 시간에 같은 환자가 예약되어 있는지 확인하는 작업
     DateWithHospitalAndIdVO dateWithHospitalAndIdVO =
         new DateWithHospitalAndIdVO(diagnosisInfo.getStartDate(), diagnosisInfo.getPatientId(),
             diagnosisInfo.getHospitalCode());
 
-    // 2) 예약정보를 확인하기전, 예약 확인을 위한 데이터가 올바르지 않다면, 에러를 발생시킨다
+    // 4) 예약정보를 확인하기전, 예약 확인을 위한 데이터가 올바르지 않다면, 에러를 발생시킨다
     if (dateWithHospitalAndIdVO.isNull()) {
-      throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 데이터인지 확인해주세요", new Throwable("Wrong data"));
+      throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 데이터인지 확인해주세요",
+          new Throwable("Wrong data : dateWithHospitalAndIdVO value is Null"));
     }
 
-    // 3) 예약시간이 현재 날짜 기준으로 과거일때 에러를 발생시킨다
+    // 5) 예약시간이 현재 날짜 기준으로 과거일때 에러를 발생시킨다
     if (diagnosisInfo.getStartDate().isBefore(currentTime)) {
       throw new ConflictRequestException("예약할 수 없는 시간입니다.", new Throwable("Fail ReservationTime"));
     }
 
-    // 4) 예약이 되어 있다는 것을 확인하기 위한 작업
+    // 6) 예약이 되어 있다는 것을 확인하기 위한 작업
     DiagnosisDTO diagnosisDTO = diagnosisDAO.getDuplicatedDiagnosisTime(dateWithHospitalAndIdVO);
 
-    // 5) 이미 예약이 되어있는 환자일 경우, 에러를 발생시킨다.
+    // 7) 이미 예약이 되어있는 환자일 경우, 에러를 발생시킨다.
     if (diagnosisDTO != null) {
       throw new ConflictRequestException("이미 예약이되어 있는 환자입니다", new Throwable("Fail Reservation"));
     } else {
 
-      // 6) diagnosisDTO 값이 null일 경우, 추가 작업을 진행한다.
+      // 8) diagnosisDTO 값이 null일 경우, 추가 작업을 진행한다.
       if (diagnosisDAO.addDiagnosisReservation(diagnosisInfo) != 1) {
         result = false;
       } ;
@@ -672,15 +697,33 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
 
   @Override
-  public boolean modifyReservationInfo(int diagId, String visitPurpose) {
-    Integer checkDiagId = new Integer(diagId);
-    // 1) diagId, visitPurpose가 null 일때나 "" 값일 때 에러 발생
-    if (checkDiagId == null || visitPurpose == null || visitPurpose == "") {
-      throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요", new Throwable("Wrong data"));
+  public boolean modifyReservationInfo(DiagnosisUpdateVO diagnosisUpdateVO) {
+
+    // 1)diagnosisUpdateVO 요소가 null 일때나 "" 값일 때 에러 발생
+    if (diagnosisUpdateVO.isNull()) {
+      throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
+          new Throwable("Wrong data : DiagnosisUpateVO is null"));
     }
-    // 2) diagId, visitPurpose를 넘겨 데이터를 수정을 한다
-    int updateResult = diagnosisDAO.updateDiagnosisReservation(diagId, visitPurpose);
-    // 3) 수정결과가 1이 아닐때는 에러를 발생시킨다
+    PatientsDTO patient = patientsDAO.selectPatientByPatienIdAndHospitalCode(
+        diagnosisUpdateVO.getPatientId(), diagnosisUpdateVO.getHospitalCode());
+    // 2) 수정하기전 해당 환자가 해당 병원에 등록되어 있는지 확인
+    if (patient == null) {
+      throw new ConflictRequestException("해당 병원에 환자가 존재하지 않습니다. 다시 확인해주세요",
+          new Throwable("Wrong Update : No Patient Data in hospital"));
+    }
+
+    MembersDTO member = membersDAO.selectMemberInfoByMemberIdAndHospitalCode(
+        diagnosisUpdateVO.getMemberId(), diagnosisUpdateVO.getHospitalCode());
+    // 3) 수정하기전 해당 의사가 해당 병원에 등록되어 있는지 확인
+    if (member == null) {
+      throw new ConflictRequestException("해당 병원에 의사가 존재하지 않습니다. 다시 확인해주세요",
+          new Throwable("Wrong Update : No Doctor Data in hospital"));
+    }
+
+    // 4) diagId, visitPurpose를 넘겨 데이터를 수정을 한다
+    int updateResult = diagnosisDAO.updateDiagnosisReservation(diagnosisUpdateVO.getDiagId(),
+        diagnosisUpdateVO.getVisitPurpose());
+    // 5) 수정결과가 1이 아닐때는 에러를 발생시킨다
     if (updateResult != 1) {
       throw new ConflictRequestException("수정하는데 실패하였습니다", new Throwable("Wrong Update"));
     }
@@ -690,10 +733,10 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
   @Override
   public boolean removeReservationInfo(int diagId) {
-    Integer checkDiagId = new Integer(diagId);
-
-    if (checkDiagId == null) {
-      throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요", new Throwable("Wrong data"));
+    // 1) diagId 값이 올바르지 않을 경우
+    if (diagId == 0) {
+      throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
+          new Throwable("Wrong data : removeData is null"));
     }
 
     int deleteResult = diagnosisDAO.deleteDiagnosisReservation(diagId);
@@ -709,24 +752,35 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
   public List<ReservationVO> showWeeklyReservationList(WeekNoWithMemberVO dateInfo) {
 
     List<ReservationVO> reservationInfoList = new ArrayList<>();
-
+    // 1) dateInfo의 데이터들이 null 일 때
     if (dateInfo.isNull()) {
-      throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요", new Throwable("Wrong data"));
+      throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
+          new Throwable("Wrong data : WeekNoWithMemberVo data is null"));
     }
 
+    MembersDTO CheckMember = membersDAO.selectMemberInfoByMemberIdAndHospitalCode(
+        dateInfo.getMemberId(), dateInfo.getHospitalCode());
+    // 2) 수정하기전 해당 의사가 해당 병원에 등록되어 있는지 확인
+    if (CheckMember == null) {
+      throw new ConflictRequestException("해당 병원에 의사가 존재하지 않습니다. 다시 확인해주세요",
+          new Throwable("Wrong Update : No Doctor Data in hospital"));
+    }
+
+    // 3) diagnosisInfo 정보에 대한 리스트 갖고오기
     List<DiagnosisDTO> diagnosisInfo =
         diagnosisDAO.selectDiagnosisListByMemberIdAndWeekNo(dateInfo);
 
+    // 4) 리스트에 대한 정보가 없을 때, 에러를 일으킨다
     if (diagnosisInfo.size() == 0) {
       throw new NotFoundException("데이터가 검색이되지 않았습니다.", new Throwable("No Data"));
     }
 
+    // 5) ReservationVO에 필요한 MemberDTO, PatinetDTO, DiagnosisDTO를 구해 ReservationVO에 세팅하는 과정
     for (DiagnosisDTO diagnosis : diagnosisInfo) {
 
       Integer memberId = new Integer(diagnosis.getMemberId());
       Integer patientId = new Integer(diagnosis.getPatientId());
-      log.info("memberId " + memberId);
-      log.info("patientId " + patientId);
+
       if (memberId == null || patientId == null) {
         throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
             new Throwable("Wrong data"));
@@ -767,8 +821,15 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
             new Throwable("Wrong data"));
       }
 
-      MembersDTO member = membersDAO.selectMemberInfoByMemberId(diagnosis.getMemberId());
-      PatientsDTO patient = patientsDAO.selectPatientByPatientId(diagnosis.getPatientId());
+      MembersDTO member = membersDAO.selectMemberInfoByMemberIdAndHospitalCode(
+          diagnosis.getMemberId(), patientSearchVO.getHospitalCode());
+      PatientsDTO patient = patientsDAO.selectPatientByPatienIdAndHospitalCode(
+          diagnosis.getPatientId(), patientSearchVO.getHospitalCode());
+
+      if (member == null || patient == null) {
+        throw new ConflictRequestException("해당 병원에 환자 또는 의사에 대한 데이터 존재하지 않습니다. 다시 확인해주세요",
+            new Throwable("Wrong Data : No Doctor or Patient Data in hospital"));
+      }
 
       ReservationVO reservationVO = new ReservationVO(diagnosis, patient, member);
 
