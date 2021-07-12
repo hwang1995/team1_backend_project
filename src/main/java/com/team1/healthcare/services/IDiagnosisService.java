@@ -17,6 +17,7 @@ import com.team1.healthcare.vo.diagnosis.DiagnosisListVO;
 import com.team1.healthcare.vo.diagnosis.RegistDiagnosisVO;
 import com.team1.healthcare.vo.diagnosis.ReservationVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticTestRecordsVO;
+import com.team1.healthcare.vo.diagnostic.DiagnosticTestResultVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticVO;
 import com.team1.healthcare.vo.patient.PatientVO;
 
@@ -198,4 +199,22 @@ public interface IDiagnosisService {
    * @return List<PatientsDTO>
    */
   public List<PatientsDTO> getPatientsInfo(PatientSearchVO patientInfo);
+
+  /**
+   * 진단 검사의 결과 값을 추가하기 위한 서비스 인터페이스
+   * 
+   * @param List<DiagnosticTestResultVO> resultInfo
+   * @return true | false
+   */
+  public boolean changeDiagnosticValue(List<DiagnosticTestResultVO> resultInfo);
+
+  /**
+   * 환자의 ID로 진단 검사 목록을 가져오기 위한 서비스 인터페이스
+   * 
+   * @param int patientId
+   * @return List<DiagnosticTestsDTO>
+   */
+  public List<DiagnosticTestsDTO> getDiagnosticTestsByPatientId(int patientId);
+
+
 }

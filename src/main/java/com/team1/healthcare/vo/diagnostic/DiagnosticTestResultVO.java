@@ -12,4 +12,6 @@ import lombok.ToString;
 public class DiagnosticTestResultVO {
   private int diagTestRecordId;
   private double diagTestValue;
+  private int inspectorMemberId;
+
 }

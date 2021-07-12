@@ -48,6 +48,7 @@ import com.team1.healthcare.vo.diagnosis.ReservationVO;
 import com.team1.healthcare.vo.diagnosis.VitalResultVO;
 import com.team1.healthcare.vo.diagnosis.VitalVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticTestRecordsVO;
+import com.team1.healthcare.vo.diagnostic.DiagnosticTestResultVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticVO;
 import com.team1.healthcare.vo.patient.PatientVO;
 import lombok.extern.slf4j.Slf4j;
@@ -591,6 +592,43 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     return returnResults;
   }
 
+  @Override
+  public boolean changeDiagnosticValue(List<DiagnosticTestResultVO> resultInfo) {
+    // TODO 진단 검사 상세의 결과를 바꾸는 것이 목표
+    if (resultInfo.size() == 0) {
+      throw new BadRequestException("진단 검사의 기록이 들어온 것이 없습니다.",
+          new Throwable("no_diagnostic_test_result"));
+    }
+
+    resultInfo.forEach(result -> {
+      int affectedRow = diagnosticTestRecordsDAO.addDiagnosticTestRecordResult(result);
+      if (affectedRow != 1) {
+        throw new ConflictRequestException("알 수 없는 이유로 인해 진단 검사의 등록에 실패하였습니다.",
+            new Throwable("not_updated_diagnostic_test_result"));
+      }
+
+    });
+
+    return true;
+  }
+
+  @Override
+  public List<DiagnosticTestsDTO> getDiagnosticTestsByPatientId(int patientId) {
+    // TODO: 환자의 ID로 진단 검사의 목록을 가져오기
+    if (patientId == 0) {
+      throw new BadRequestException("잘못된 환자의 식별자가 입력되었습니다.", new Throwable("no_patient_id"));
+    }
+
+    List<DiagnosticTestsDTO> patientInfo =
+        diagnosticTestsDAO.getDiagnosticTestByPatientId(patientId);
+
+    if (patientInfo.size() == 0) {
+      throw new NotFoundException("환자가 진단 검사를 받은 기록이 존재하지 않습니다.", new Throwable("no_result"));
+    }
+
+    return patientInfo;
+  }
+
   // ======================== SI HYUN PARK
 
   @Override
@@ -780,5 +818,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     }
     return getPatientList;
   }
+
+
 
 }

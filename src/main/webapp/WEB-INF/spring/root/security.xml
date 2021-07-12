@@ -34,7 +34,7 @@
 
 		<security:intercept-url pattern="/api/v1/auth"
 			access="permitAll" method="GET" />
-				<security:intercept-url pattern="/api/v1/auth"
+		<security:intercept-url pattern="/api/v1/auth"
 			access="permitAll" method="POST" />
 
 		<security:intercept-url
@@ -298,6 +298,29 @@
 			pattern="/api/v1/todo/**"
 			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="DELETE" />
+
+
+		<security:intercept-url pattern="/api/v1/mqtt"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="POST" />
+		<security:intercept-url
+			pattern="/api/v1/mqtt/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="POST" />
+
+
+		<security:intercept-url pattern="/api/v1/mqtt"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="GET" />
+		<security:intercept-url
+			pattern="/api/v1/mqtt/**"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="GET" />
+
+
+		<security:intercept-url pattern="/image"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			method="GET" />
 
 		<security:intercept-url pattern="/**"
 			access="denyAll" />

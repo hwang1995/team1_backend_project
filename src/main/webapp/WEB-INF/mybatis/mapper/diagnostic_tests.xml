@@ -84,4 +84,16 @@
 		where
 		diag_test_id = #{diagTestId}
 	</select>
+
+	<select id="getDiagnosticTestByPatientId" parameterType="int"
+		resultType="diagnosticTests">
+		select diag_test_id, member_id, patient_id,
+		inspection_status, created_date,
+		diag_id, hospital_code
+		from
+		diagnostic_tests
+		where
+		patient_id =
+		#{patientId}
+	</select>
 </mapper>
