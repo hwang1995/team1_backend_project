@@ -7,11 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Slf4j
 public class UserInfoVO {
   @NonNull
   private String authToken;
@@ -27,10 +29,15 @@ public class UserInfoVO {
   @NonNull
   private String hospitalCode;
 
+  private String memberName;
+
 
   public UserInfoVO(MembersDTO memberInfo, String authToken) {
     this.authToken = authToken;
+    log.info(memberInfo.toString());
     this.memberId = memberInfo.getMemberId();
+
+    this.memberName = memberInfo.getMemberName();
     this.memberEmail = memberInfo.getMemberEmail();
     this.memberAuthority = memberInfo.getMemberAuthority();
     this.hospitalCode = memberInfo.getHospitalCode();

@@ -13,9 +13,12 @@ import com.team1.healthcare.exception.BadRequestException;
 import com.team1.healthcare.services.DiagnosisServiceImpl;
 import com.team1.healthcare.vo.common.DateWithHospitalCode;
 import com.team1.healthcare.vo.diagnostic.DiagnosticTestRecordsVO;
+import com.team1.healthcare.vo.diagnostic.DiagnosticTestResultVO;
 import com.team1.healthcare.vo.diagnostic.DiagnosticVO;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/v1/diagnosis/inspection")
 public class DiagnosisInspectionController {
   @Autowired
@@ -66,16 +69,12 @@ public class DiagnosisInspectionController {
   }
 
   // 7. PUT 해당 환자의 진단 검사 상세에서 결과를 입력시에 값을 추가
-
   @PutMapping("")
-  public boolean changeDiagnosticValue() {
-    return true;
+  public boolean changeDiagnosticValue(@RequestBody List<DiagnosticTestResultVO> resultInfo) {
+    boolean result = diagnosisService.changeDiagnosticValue(resultInfo);
+    return result;
   }
 
-  @GetMapping("/csv/{diagTestId}")
-  public void getCSVfileByDiagTestId(@PathVariable int diagTestId) {
-
-  }
   // 1. GET 해당 환자의 진단 검사 목록 가져오기
   // 3. GET 해당 환자의 진단 검사 상세 페이지에서 엑셀 저장을 누를 시에 CSV 제공
   // 4. GET 해당 병원의 진단 검사 목록 가져오기

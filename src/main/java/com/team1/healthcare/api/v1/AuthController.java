@@ -43,7 +43,6 @@ public class AuthController {
     String memberEmail = loginInfo.getMemberEmail();
     String memberPw = loginInfo.getMemberPw();
 
-    log.info(loginInfo.toString());
     if (hospitalInfo == null) {
       throw new UserNotFoundException("병원 정보가 존재하지 않습니다.", new Throwable("no_hospital"));
     }
@@ -57,7 +56,6 @@ public class AuthController {
 
       String authToken = JwtUtil.createToken(memberEmail);
       MembersDTO memberInfo = authService.getLoginMemberInfo(loginInfo);
-      log.info(memberInfo.toString());
       UserInfoVO userInfo = new UserInfoVO(memberInfo, authToken);
 
       return userInfo;
