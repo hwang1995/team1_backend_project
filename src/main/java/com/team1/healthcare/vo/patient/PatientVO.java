@@ -18,7 +18,10 @@ public class PatientVO {
   private String patientGender;
 
   private String patientBirth;
-
+  private String patientAddr1;
+  private String patientAddr2;
+  private String patientPostal;
+  private String recentDate;
   private String hospitalCode;
 
   public PatientVO(PatientsDTO patientInfo) {
@@ -29,6 +32,14 @@ public class PatientVO {
 
     this.patientBirth = CommonUtils.dateToString(convertDate);
     this.hospitalCode = patientInfo.getHospitalCode();
+
+    this.patientAddr1 = patientInfo.getPatientAddr1();
+    this.patientAddr2 = patientInfo.getPatientAddr2();
+    this.patientPostal = patientInfo.getPatientPostal();
+    LocalDate oriRecentDate = patientInfo.getRecentDate().toLocalDate();
+    this.recentDate = CommonUtils.dateToString(oriRecentDate);
+
+
   }
 
 

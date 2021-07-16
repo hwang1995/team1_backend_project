@@ -13,6 +13,7 @@ import com.team1.healthcare.vo.common.DateWithMemberVO;
 import com.team1.healthcare.vo.common.PatientSearchVO;
 import com.team1.healthcare.vo.common.WeekNoWithMemberVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisHistoryVO;
+import com.team1.healthcare.vo.diagnosis.DiagnosisInfoVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisListVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisUpdateVO;
 import com.team1.healthcare.vo.diagnosis.RegistDiagnosisVO;
@@ -113,6 +114,14 @@ public interface IDiagnosisService {
       DateWithHospitalCode hospitalInfo);
 
   /**
+   * 환자의 ID로 진단 검사 리스트를 출력하기 위한 서비스 인터페이스
+   * 
+   * @param patientId
+   * @return
+   */
+  public List<DiagnosticVO> showDiagnosticTestListByPatientId(int patientId);
+
+  /**
    * 진단 검사의 상태를 완료로 바꿔주기 위한 인터페이스 (채혈 완료)
    * 
    * @param diagTestId
@@ -135,6 +144,15 @@ public interface IDiagnosisService {
    * @return boolean (성공 여부)
    */
   public boolean changeStatusPending(int diagTestId);
+
+  public boolean changeStatusRegister(int diagTestId);
+
+
+  public boolean changeStatusCompletedDiagTestRecord(int diagTestRecordId);
+
+  public boolean changeStatusPendingDiagTestRecord(int diagTestRecordId);
+
+  public boolean changeStatusProcessingDiagTestRecord(int diagTestRecordId);
 
   /**
    * 병원 정보와 환자의 이름을 통해 환자의 리스트를 출력하기 위한 인터페이스
@@ -217,5 +235,18 @@ public interface IDiagnosisService {
    */
   public List<DiagnosticTestsDTO> getDiagnosticTestsByPatientId(int patientId);
 
+  /**
+   * 진료의 식별자로 환자의 ID를 알아내어 진료 정보를 만들어 내기 위한 서비스 인터페이스
+   * 
+   * @param diagId
+   * @return DiagnosisInfoVO
+   */
+  public DiagnosisInfoVO getDiagnosisInfo(int diagId);
 
+
+  public boolean changeStatusToProcessingWithMemberId(List<DiagnosticTestResultVO> diagnosticInfo);
+
+  public boolean changeStatusToPendingWithMemberId(List<DiagnosticTestResultVO> diagnosticInfo);
+
+  public boolean changeStatusToCompletedWithMemberId(List<DiagnosticTestResultVO> diagnosticInfo);
 }

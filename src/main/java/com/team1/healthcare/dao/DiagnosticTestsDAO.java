@@ -65,6 +65,8 @@ public interface DiagnosticTestsDAO {
    */
   public int pendingDiagnosticTest(int diagTestId);
 
+  public int registerDiagnosticTest(int diagTestId);
+
   public DiagnosticTestsDTO getDiagnosticTestByDiagTestId(int diagTestId);
 
   public List<DiagnosticTestsDTO> getDiagnosticTestByPatientId(int patientId);

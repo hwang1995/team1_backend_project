@@ -87,11 +87,6 @@ public class MembersDTO {
     this.memberPw = CommonUtils.encryptPassword(memberPw);
   }
 
-  // 임직원의 진료실을 정해주기 위한 메소드
-  public void setDoctorRoom(int doctorRoomNum) {
-    this.doctorRoom = "진료실" + doctorRoomNum;
-  }
-
   // 임직원에 필수적으로 존재해야하는 데이터가 있는지 없는지 확인하기 위한 메소드
   @JsonIgnore
   public boolean isNull() {

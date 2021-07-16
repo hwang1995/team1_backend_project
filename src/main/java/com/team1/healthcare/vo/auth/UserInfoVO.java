@@ -45,8 +45,7 @@ public class UserInfoVO {
 
   @JsonIgnore
   public boolean isNull() {
-    if (authToken == null || memberId == 0 || memberEmail == null || memberAuthority == null
-        || hospitalCode == null) {
+    if (memberId == 0 || memberEmail == null || memberAuthority == null || hospitalCode == null) {
       return true;
     }
     return false;

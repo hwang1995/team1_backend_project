@@ -119,7 +119,6 @@
 		patient_birth, hospital_code
 		from patients
 		where hospital_code =
-		#{hospitalCode} and patient_name =
-		#{patientName}
+		#{hospitalCode} and patient_name like CONCAT('%', #{patientName}, '%')
 	</select>
 </mapper>

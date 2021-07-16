@@ -37,6 +37,7 @@ import com.team1.healthcare.vo.common.DateWithMemberVO;
 import com.team1.healthcare.vo.common.PatientSearchVO;
 import com.team1.healthcare.vo.common.WeekNoWithMemberVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisHistoryVO;
+import com.team1.healthcare.vo.diagnosis.DiagnosisInfoVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisListVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosisUpdateVO;
 import com.team1.healthcare.vo.diagnosis.DiagnosticTestRecordVO;
@@ -103,7 +104,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
     // 검색 결과가 없는 경우
     if (diagnosisList.size() == 0) {
-      throw new NoContentException("검색 시점에 해당 병원의 진료 목록이 존재하지 않습니다.",
+      throw new NotFoundException("검색 시점에 해당 병원의 진료 목록이 존재하지 않습니다.",
           new Throwable("no_diagnosis_list"));
     }
 
@@ -218,7 +219,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     List<MedicinesDTO> medicinesInfo = medicinesDAO.getMedicineInfoByMedicineName(medicineName);
 
     if (medicinesInfo.size() == 0 || medicinesInfo == null) {
-      throw new NoContentException("약품이 존재하지 않습니다.", new Throwable("no_medicines_content"));
+      throw new NotFoundException("약품이 존재하지 않습니다.", new Throwable("no_medicines_content"));
     }
 
     return medicinesInfo;
@@ -234,7 +235,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     List<MedicinesDTO> injectorsInfo = medicinesDAO.getInjectorInfoByMedicineName(medicineName);
 
     if (injectorsInfo.size() == 0 || injectorsInfo == null) {
-      throw new NoContentException("약품이 존재하지 않습니다.", new Throwable("no_medicines_content"));
+      throw new NotFoundException("약품이 존재하지 않습니다.", new Throwable("no_medicines_content"));
     }
 
     return injectorsInfo;
@@ -253,7 +254,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
         diagnosticInspectionsDAO.selectInspectionListByBundleName(bundleName);
 
     if (diagnosticInspectionsInfo.size() == 0 || diagnosticInspectionsInfo == null) {
-      throw new NoContentException("진단 검사가 존재하지 않습니다.",
+      throw new NotFoundException("진단 검사가 존재하지 않습니다.",
           new Throwable("no_diagnostic_inspection_content"));
     }
 
@@ -271,7 +272,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
         diagnosticInspectionsDAO.selectInspectionListByBundleCode(bundleCode);
 
     if (diagnosticInspectionsInfo.size() == 0 || diagnosticInspectionsInfo == null) {
-      throw new NoContentException("진단 검사가 존재하지 않습니다.",
+      throw new NotFoundException("진단 검사가 존재하지 않습니다.",
           new Throwable("no_diagnostic_inspection_content"));
     }
 
@@ -290,16 +291,17 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
     List<DiagnosisDTO> completedInfo = diagnosisDAO.getCompletedDiagnosisListByPatientId(patientId);
 
-    log.info(completedInfo.size() + "");
     if (completedInfo.size() == 0 || completedInfo == null) {
-      throw new NoContentException("회원이 진료를 받은 기록이 존재하지 않습니다.",
-          new Throwable("no_patient_history"));
+      throw new NotFoundException("회원이 진료를 받은 기록이 존재하지 않습니다.", new Throwable("no_patient_history"));
     }
-
+    completedInfo.forEach(info -> {
+      log.info(info.toString());
+    });
     List<DiagnosisHistoryVO> historyInfo = new ArrayList<DiagnosisHistoryVO>();
 
     completedInfo.forEach(info -> {
       // 진료의 식별자
+      log.info(info.getDiagId() + "");
       int diagId = info.getDiagId();
       List<MedicineRecordsDTO> medicineRecordInfo =
           medicinesRecordsDAO.selectPharmaciesByDiagId(diagId);
@@ -332,7 +334,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
       }
 
       DiagnosticTestsDTO diagnosticInfo = diagnosticTestsDAO.getDiagnosticTestListByDiagId(diagId);
-
+      log.info("실행이 될까요?");
       // 보내 줄 진단 검사 정보
       List<DiagnosticTestRecordVO> diagnosticTestResult = new ArrayList<>();
 
@@ -485,7 +487,9 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
         diagnosticTestsDAO.getWeeklyDiagnosticTestListByHospitalCode(hospitalInfo);
 
     if (weeklyList.size() == 0 || weeklyList == null) {
-      throw new NoContentException("이번 주에는 진단 검사가 존재하지 않습니다.", new Throwable("no_contents"));
+      throw new NotFoundException("해당 주에는 진단 검사가 존재하지 않습니다. 기간 : "
+          + hospitalInfo.getStartDate().toString() + " ~ " + hospitalInfo.getEndDate().toString(),
+          new Throwable("no_contents"));
     }
 
     List<DiagnosticVO> weeklyDiagnosticList = new ArrayList<>();
@@ -508,6 +512,42 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
     });
     return weeklyDiagnosticList;
+  }
+
+  @Override
+  public List<DiagnosticVO> showDiagnosticTestListByPatientId(int patientId) {
+    // TODO 환자의 ID로 진단 검사의 리스트를 리턴하는 것이 목표
+    if (patientId == 0) {
+      throw new BadRequestException("올바른 정보를 입력해주세요.", new Throwable("no_patient_id_info"));
+    }
+
+    List<DiagnosticTestsDTO> patientTestInfo =
+        diagnosticTestsDAO.getDiagnosticTestByPatientId(patientId);
+
+    if (patientTestInfo.size() == 0 || patientTestInfo == null) {
+      throw new NotFoundException("해당 환자의 진단 검사 기록이 존재하지 않습니다.",
+          new Throwable("no_patient_test_info"));
+    }
+
+    List<DiagnosticVO> patientDiagnosticTestList = new ArrayList<>();
+
+    patientTestInfo.forEach(info -> {
+      int memberId = info.getMemberId();
+
+      MembersDTO diagMemberInfo = membersDAO.selectMemberInfoByMemberId(memberId);
+      PatientsDTO diagPatientInfo = patientsDAO.selectPatientByPatientId(patientId);
+
+      if (diagMemberInfo == null || diagPatientInfo == null) {
+        throw new NotFoundException("임직원과 환자 정보가 존재하지 않습니다.",
+            new Throwable("no_member_and_patient"));
+      }
+
+      DiagnosticVO result = new DiagnosticVO(info, diagMemberInfo, diagPatientInfo);
+      patientDiagnosticTestList.add(result);
+
+    });
+
+    return patientDiagnosticTestList;
   }
 
   @Override
@@ -569,6 +609,74 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
   }
 
   @Override
+  public boolean changeStatusRegister(int diagTestId) {
+    if (diagTestId == 0) {
+      throw new BadRequestException("올바르지 않은 진단 검사의 식별자입니다.", new Throwable("not_diag_test_id"));
+    }
+
+    int result = diagnosticTestsDAO.registerDiagnosticTest(diagTestId);
+
+    if (result != 1) {
+      throw new ConflictRequestException("진단 검사의 상태가 변경되지 않았습니다.",
+          new Throwable("not_updated_diag_test_status"));
+    }
+
+    return true;
+  }
+
+  @Override
+  public boolean changeStatusCompletedDiagTestRecord(int diagTestRecordId) {
+    if (diagTestRecordId == 0) {
+      throw new BadRequestException("올바르지 않은 진단 검사의 식별자입니다.",
+          new Throwable("not_diag_test_record_id"));
+    }
+
+    int result = diagnosticTestRecordsDAO.changeStatusToCompleted(diagTestRecordId);
+
+    if (result != 1) {
+      throw new ConflictRequestException("진단 검사의 상태가 변경되지 않았습니다.",
+          new Throwable("not_updated_diag_test_record_status"));
+    }
+
+    return true;
+  }
+
+  @Override
+  public boolean changeStatusPendingDiagTestRecord(int diagTestRecordId) {
+    if (diagTestRecordId == 0) {
+      throw new BadRequestException("올바르지 않은 진단 검사의 식별자입니다.",
+          new Throwable("not_diag_test_record_id"));
+    }
+
+    int result = diagnosticTestRecordsDAO.changeStatusToPending(diagTestRecordId);
+
+    if (result != 1) {
+      throw new ConflictRequestException("진단 검사의 상태가 변경되지 않았습니다.",
+          new Throwable("not_updated_diag_test_record_status"));
+    }
+
+    return true;
+  }
+
+  @Override
+  public boolean changeStatusProcessingDiagTestRecord(int diagTestRecordId) {
+    if (diagTestRecordId == 0) {
+      throw new BadRequestException("올바르지 않은 진단 검사의 식별자입니다.",
+          new Throwable("not_diag_test_record_id"));
+    }
+
+    int result = diagnosticTestRecordsDAO.changeStatusToProcessing(diagTestRecordId);
+
+    if (result != 1) {
+      throw new ConflictRequestException("진단 검사의 상태가 변경되지 않았습니다.",
+          new Throwable("not_updated_diag_test_record_status"));
+    }
+
+    return true;
+  }
+
+
+  @Override
   public List<PatientVO> searchPatientInfoByName(PatientSearchVO patientInfo) {
     // TODO 해당 병원의 해당 환자의 이름으로 검색하여 환자의 리스트를 리턴하는 것이 목표
     // 협력 객체 : PatientsDAO
@@ -580,7 +688,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     List<PatientsDTO> patientInfos = patientsDAO.getPatientInfoByName(patientInfo);
 
     if (patientInfos.size() == 0 || patientInfos == null) {
-      throw new NoContentException("검색 결과 존재하지 않습니다.", new Throwable("no_result"));
+      throw new NotFoundException("검색 결과 존재하지 않습니다.", new Throwable("no_result"));
     }
 
     List<PatientVO> returnResults = new ArrayList<PatientVO>();
@@ -629,6 +737,59 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
     return patientInfo;
   }
+
+  @Override
+  public boolean changeStatusToProcessingWithMemberId(List<DiagnosticTestResultVO> diagnosticInfo) {
+    if (diagnosticInfo.size() == 0 || diagnosticInfo == null) {
+      throw new BadRequestException("잘못된 진단 검사의 값이 들어왔습니다.", new Throwable("no_diagnostic_info"));
+    }
+
+    diagnosticInfo.forEach(diagnostic -> {
+      int affectedRow = diagnosticTestRecordsDAO.changeStatusToProcessingWithMemberId(diagnostic);
+      if (affectedRow != 1) {
+        throw new ConflictRequestException("알 수 없는 이유로 변경되지 않았습니다.",
+            new Throwable("conflict_diagnostic_info"));
+      }
+    });
+
+    return true;
+  }
+
+  @Override
+  public boolean changeStatusToPendingWithMemberId(List<DiagnosticTestResultVO> diagnosticInfo) {
+    if (diagnosticInfo.size() == 0 || diagnosticInfo == null) {
+      throw new BadRequestException("잘못된 진단 검사의 값이 들어왔습니다.", new Throwable("no_diagnostic_info"));
+    }
+
+    diagnosticInfo.forEach(diagnostic -> {
+      int affectedRow = diagnosticTestRecordsDAO.changeStatusToPendingWithMemberId(diagnostic);
+      if (affectedRow != 1) {
+        throw new ConflictRequestException("알 수 없는 이유로 변경되지 않았습니다.",
+            new Throwable("conflict_diagnostic_info"));
+      }
+    });
+
+    return true;
+  }
+
+  @Override
+  public boolean changeStatusToCompletedWithMemberId(List<DiagnosticTestResultVO> diagnosticInfo) {
+    if (diagnosticInfo.size() == 0 || diagnosticInfo == null) {
+      throw new BadRequestException("잘못된 진단 검사의 값이 들어왔습니다.", new Throwable("no_diagnostic_info"));
+    }
+
+    diagnosticInfo.forEach(diagnostic -> {
+      int affectedRow = diagnosticTestRecordsDAO.changeStatusToCompletedWithMemberId(diagnostic);
+      if (affectedRow != 1) {
+        throw new ConflictRequestException("알 수 없는 이유로 변경되지 않았습니다.",
+            new Throwable("conflict_diagnostic_info"));
+      }
+    });
+
+    return true;
+  }
+
+
 
   // ======================== SI HYUN PARK
 
@@ -878,6 +1039,28 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
       throw new NoContentException("데이터가 검색되지 않았습니다.", new Throwable("No Data"));
     }
     return getPatientList;
+  }
+
+  @Override
+  public DiagnosisInfoVO getDiagnosisInfo(int diagId) {
+    if (diagId == 0) {
+      throw new BadRequestException("진료 ID가 들어오지 않았습니다.", new Throwable("no_diag_id"));
+    }
+    DiagnosisDTO diagnosisInfo = diagnosisDAO.getDiagnosisInfo(diagId);
+
+    if (diagnosisInfo == null) {
+      throw new NotFoundException("진료 정보가 존재하지 않습니다.", new Throwable("no_diagnosis_info"));
+    }
+
+    int patientId = diagnosisInfo.getPatientId();
+
+    PatientsDTO patientInfo = patientsDAO.selectPatientByPatientId(patientId);
+
+    if (patientInfo == null) {
+      throw new NotFoundException("환자 정보가 존재하지 않습니다.", new Throwable("no_patient_info"));
+    }
+
+    return new DiagnosisInfoVO(diagnosisInfo, patientInfo);
   }
 
 

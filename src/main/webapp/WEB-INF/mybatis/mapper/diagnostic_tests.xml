@@ -75,6 +75,15 @@
 		diag_test_id = #{diagTestId}
 	</update>
 
+	<update id="registerDiagnosticTest" parameterType="int">
+		update
+		diagnostic_tests set
+		inspection_status = 'DIAGNOSTIC_REGISTER'
+		where
+		diag_test_id = #{diagTestId}
+	</update>
+
+
 	<select id="getDiagnosticTestByDiagTestId" parameterType="int"
 		resultType="diagnosticTests">
 		select diag_test_id, member_id, patient_id,

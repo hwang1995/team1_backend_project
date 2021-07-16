@@ -10,6 +10,7 @@ import lombok.ToString;
 public class MedicineRecordVO {
   private String medicineCode;
   private String medicineType;
+  private String medicineName;
   private String medicineUnit;
   private String medicineExplain;
 
@@ -20,6 +21,7 @@ public class MedicineRecordVO {
     this.medicineType = medicineInfo.getMedicineType();
     this.medicineUnit = medicineInfo.getMedicineUnit();
     this.medicineExplain = medicineInfo.getMedicineExplain();
+    this.medicineName = medicineInfo.getMedicineName();
 
     this.medicineDose = medicineRecordInfo.getMedicineDose();
   }
