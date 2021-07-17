@@ -21,7 +21,7 @@
 		patient_weight, recent_date,
 		patient_birth, hospital_code
 		from patients
-		where patient_id=#{patientId} and hosptial_code=#{hospitalCode}
+		where patient_id=#{patientId} and hospital_code=#{hospitalCode}
 	</select>
 	
 	<select id="selectPatientByPostalCode" parameterType="string" resultType="patients">

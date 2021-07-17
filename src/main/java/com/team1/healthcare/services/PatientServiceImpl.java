@@ -8,9 +8,12 @@ import com.team1.healthcare.dto.PatientsDTO;
 import com.team1.healthcare.exception.BadRequestException;
 import com.team1.healthcare.exception.ConflictRequestException;
 import com.team1.healthcare.exception.NoContentException;
+import com.team1.healthcare.exception.NotFoundException;
 import com.team1.healthcare.vo.common.PatientSearchVO;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class PatientServiceImpl implements IPatientService {
 
   @Autowired
@@ -52,7 +55,7 @@ public class PatientServiceImpl implements IPatientService {
     List<PatientsDTO> resultDTO = patientsDAO.selectPatientsByPatientName(patientSearchInfo);
 
     if (resultDTO.size() == 0) {
-      throw new NoContentException("검색 결과가 없습니다.",
+      throw new NotFoundException("검색 결과가 없습니다.",
           new Throwable("No Searching Data with getPatientsListInfo"));
     }
 
@@ -79,6 +82,7 @@ public class PatientServiceImpl implements IPatientService {
   public boolean modifyPatientInfo(PatientsDTO patientInfo) {
     // 1) controller에서 넘어온 patientInfo 값이 null인지 아닌지 체크
     if (patientInfo.isUpdateNull() || new Integer(patientInfo.getPatientId()) == null) {
+      log.info("badReqeust");
       throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
           new Throwable("Wrong data with modifyPatientInfo"));
     }
@@ -87,6 +91,7 @@ public class PatientServiceImpl implements IPatientService {
 
     // 3) 업데이트 된 행수가 1이 아닐 경우 에러를 발생시킨다
     if (result != 1) {
+      log.info("conflickRequest");
       throw new ConflictRequestException("수정하는데 실패하였습니다",
           new Throwable("Wrong update with updatePatient"));
     }

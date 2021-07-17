@@ -85,7 +85,7 @@ public class MemberServiceImpl implements IMemberService {
     // 의사의 진료실(doctorRoom)을 세팅
     if (memberInfo.getMemberAuthority().equals("ROLE_DOCTOR")) {
       int doctorRoomNum = membersDAO.countDoctorByHospitalCode(memberInfo.getHospitalCode());
-      memberInfo.setDoctorRoom(doctorRoomNum + 1);
+      memberInfo.setDoctorRoom("진료실" + (doctorRoomNum + 1));
     }
 
     // 임직원의 입사일과 암호화를 실시
