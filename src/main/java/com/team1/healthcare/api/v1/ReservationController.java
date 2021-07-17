@@ -46,10 +46,11 @@ public class ReservationController {
 
   // 3. PUT 진료 접수(예약) 수정하기
   @PutMapping("")
-  public boolean modifyReservationInfo(DiagnosisUpdateVO diagnosisUpdateVO) {
+  public String modifyReservationInfo(@RequestBody DiagnosisUpdateVO diagnosisUpdateVO) {
+    log.info(diagnosisUpdateVO.toString());
     boolean result = diagnosisService.modifyReservationInfo(diagnosisUpdateVO);
 
-    return result;
+    return "수정이 완료되었습니다.";
   }
 
   // 4. DELETE 진료 접수(예약) 삭제하기
@@ -61,7 +62,7 @@ public class ReservationController {
   }
 
   // 환자 검색
-  @GetMapping("/patient")
+  @PostMapping("/patient")
   public List<PatientsDTO> getPatientInfo(@RequestBody PatientSearchVO patientVo) {
     List<PatientsDTO> patients = diagnosisService.getPatientsInfo(patientVo);
     return patients;
@@ -70,6 +71,7 @@ public class ReservationController {
   // 의사 검색
   @GetMapping("/doctor/{hospitalCode}")
   public List<MembersDTO> getDoctorInfo(@PathVariable String hospitalCode) {
+    log.info("실행", hospitalCode);
     List<MembersDTO> doctors = diagnosisService.getDoctorsInfo(hospitalCode);
     return doctors;
   }
@@ -78,7 +80,7 @@ public class ReservationController {
 
   // 예약환자 검색
 
-  @GetMapping("/waitingPatient")
+  @PostMapping("/waitingPatient")
   public List<ReservationVO> getSearchReservationPatient(
       @RequestBody PatientSearchVO patientSearchVO) {
 

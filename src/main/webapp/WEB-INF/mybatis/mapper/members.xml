@@ -43,7 +43,9 @@
 		parameterType="string" resultType="members">
 		select member_id, member_email,
 		member_name, member_tel, member_addr1, member_addr2, member_authority,
-		member_postal, member_image, member_birth, member_introduction, member_color
+
+		member_postal, member_image, member_birth, member_introduction, member_color, doctor_room
+
 		from members
 		where hospital_code = #{hospitalCode}
 	</select>

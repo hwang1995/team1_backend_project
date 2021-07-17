@@ -32,6 +32,8 @@ public class ReservationVO {
   private String patientName;
   private LocalDate patientBirth;
 
+  private int memberId;
+
   public ReservationVO(DiagnosisDTO diagnosisInfo, PatientsDTO patientInfo, MembersDTO memberInfo) {
     // DiagnosisDTO
     this.id = diagnosisInfo.getDiagId();
@@ -47,6 +49,7 @@ public class ReservationVO {
     this.patientBirth = patientInfo.getPatientBirth();
 
     // MembersDTO
+    this.memberId = memberInfo.getMemberId();
     this.bgColor = memberInfo.getMemberColor();
     this.doctorName = memberInfo.getMemberName();
     this.doctorRoom = memberInfo.getDoctorRoom();

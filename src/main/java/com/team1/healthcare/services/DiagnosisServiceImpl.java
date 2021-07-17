@@ -806,9 +806,10 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     }
 
     // 2)-1 수정작업 들어가기전 진료할 환자가 해당병원에 있는지 확인
+    log.info(diagnosisInfo.toString());
     PatientsDTO patient = patientsDAO.selectPatientByPatienIdAndHospitalCode(
         diagnosisInfo.getPatientId(), diagnosisInfo.getHospitalCode());
-
+    log.info(patient.toString());
     if (patient == null) {
       throw new ConflictRequestException("해당 병원에 환자가 존재하지 않습니다. 다시 확인해주세요",
           new Throwable("Wrong Update : No Patient Data in hospital"));
@@ -1036,7 +1037,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
     // 3) list 크기가 0일떄, 에러를 발생시킨다
     if (getPatientList.size() == 0) {
-      throw new NoContentException("데이터가 검색되지 않았습니다.", new Throwable("No Data"));
+      throw new NotFoundException("데이터가 검색되지 않았습니다.", new Throwable("No Data"));
     }
     return getPatientList;
   }

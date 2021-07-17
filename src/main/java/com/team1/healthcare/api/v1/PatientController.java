@@ -30,7 +30,7 @@ public class PatientController {
   }
 
   // 2. GET 해당 병원의 해당 환자 검색하기
-  @GetMapping("")
+  @PostMapping("/search")
   public List<PatientsDTO> getPatientsList(@RequestBody PatientSearchVO patientSearchVO) {
     return patientServiceImpl.getPatientsListInfo(patientSearchVO);
   }
@@ -46,6 +46,7 @@ public class PatientController {
   // 4. PUT 해당 병원의 해당 환자의 정보를 수정하기
   @PutMapping("")
   public boolean modifyPatient(@RequestBody PatientsDTO patientInfo) {
+    log.info("update:", patientInfo.toString());
     boolean result = patientServiceImpl.modifyPatientInfo(patientInfo);
     return result;
   }

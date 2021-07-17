@@ -5,13 +5,13 @@
 		resultType="hospitals">
 		select hospital_code,
 		hospital_name, hospital_tel,
-		hospital_address from hospitals where
+		hospital_address, hospital_description from hospitals where
 		hospital_code=#{hospitalCode}
 	</select>
 
 	<select id="getHospitalInfoList" resultType="hospitals">
 		select
-		hospital_code, hospital_name, hospital_tel, hospital_address from
+		hospital_code, hospital_name, hospital_tel, hospital_address, hospital_description from
 		hospitals
 		order by hospital_name desc
 	</select>
@@ -23,9 +23,9 @@
 
 	<insert id="addHospitalInfo" parameterType="hospitals">
 		insert into hospitals
-		(hospital_code, hospital_name, hospital_tel, hospital_address)
+		(hospital_code, hospital_name, hospital_tel, hospital_address, hospital_description)
 		values
-		(#{hospitalCode}, #{hospitalName}, #{hospitalTel}, #{hospitalAddress})
+		(#{hospitalCode}, #{hospitalName}, #{hospitalTel}, #{hospitalAddress}, #{hospitalDescription})
 	</insert>
 
 	<update id="updateHospitalInfo" parameterType="hospitals">
@@ -33,7 +33,8 @@
 		set
 		hospital_name = #{hospitalName},
 		hospital_tel = #{hospitalTel},
-		hospital_address = #{hospitalAddress}
+		hospital_address = #{hospitalAddress},
+		hospital_description = #{hospitalDescrption}
 		where hospital_code = #{hospitalCode}
 	</update>
 
