@@ -3,6 +3,8 @@ package com.team1.healthcare.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -49,14 +51,17 @@ public class PatientsDTO {
 
   // 환자의 마지막 진료일
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDateTime recentDate;
 
   // 환자의 생일
   @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate patientBirth;
 
   private String hospitalCode;
 
+  @JsonIgnore
   public boolean isNull() {
     Integer height = new Integer(patientHeight);
     Integer weight = new Integer(patientWeight);
@@ -70,6 +75,7 @@ public class PatientsDTO {
     return false;
   }
 
+  @JsonIgnore
   public boolean isUpdateNull() {
     Integer height = new Integer(patientHeight);
     Integer weight = new Integer(patientWeight);

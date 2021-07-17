@@ -75,6 +75,14 @@ public interface DiagnosisDAO {
    */
   public DiagnosisDTO getDuplicatedDiagnosisTime(DateWithHospitalAndIdVO dateInfo);
 
+  /**
+   * 진료 ID로 진료의 정보를 가져오기 위한 쿼리
+   * 
+   * @param int diagId
+   * @return DiagnosisDTO
+   */
+  public DiagnosisDTO getDiagnosisInfo(int diagId);
+
 
 
 }

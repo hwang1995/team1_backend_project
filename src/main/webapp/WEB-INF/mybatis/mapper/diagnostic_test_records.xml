@@ -51,6 +51,15 @@
 		diag_test_record_id = #{diagTestRecordId}
 	</update>
 
+
+	<update id="changeStatusToRegister" parameterType="int">
+		update
+		diagnostic_test_records set
+		diag_test_status = 'DIAGNOSTIC_REGISTER'
+		where
+		diag_test_record_id = #{diagTestRecordId}
+	</update>
+
 	<update id="changeStatusToCompleted" parameterType="int">
 		update
 		diagnostic_test_records set
@@ -59,8 +68,37 @@
 		diag_test_record_id = #{diagTestRecordId}
 	</update>
 
+	<update id="changeStatusToProcessingWithMemberId"
+		parameterType="diagnosticTestResult">
+		update diagnostic_test_records set
+		diag_test_status =
+		'DIAGNOSTIC_REGISTER',
+		inspector_member_id = #{inspectorMemberId}
+		where
+		diag_test_record_id =
+		#{diagTestRecordId}
+	</update>
 
+	<update id="changeStatusToPendingWithMemberId"
+		parameterType="diagnosticTestResult">
+		update diagnostic_test_records set
+		diag_test_status =
+		'DIAGNOSTIC_PENDING',
+		inspector_member_id = null
+		where
+		diag_test_record_id =
+		#{diagTestRecordId}
+	</update>
 
-
+	<update id="changeStatusToCompletedWithMemberId"
+		parameterType="diagnosticTestResult">
+		update diagnostic_test_records set
+		diag_test_status =
+		'DIAGNOSTIC_COMPLETED',
+		inspector_member_id = #{inspectorMemberId}
+		where
+		diag_test_record_id =
+		#{diagTestRecordId}
+	</update>
 
 </mapper>

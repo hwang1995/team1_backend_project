@@ -31,6 +31,14 @@ public interface DiagnosticTestRecordsDAO {
    */
   public int addDiagnosticTestRecordResult(DiagnosticTestResultVO diagnosticResultInfo);
 
+
+  public int changeStatusToProcessingWithMemberId(DiagnosticTestResultVO diagnosticResultInfo);
+
+  public int changeStatusToPendingWithMemberId(DiagnosticTestResultVO diagnosticResultInfo);
+
+
+  public int changeStatusToCompletedWithMemberId(DiagnosticTestResultVO diagnosticResultInfo);
+
   /**
    * 진단 검사 상세의 상태를 진행중으로 바꾸기 위한 쿼리
    * 
@@ -54,4 +62,7 @@ public interface DiagnosticTestRecordsDAO {
    * @return number (영향받은 행 수를 알기 위해)
    */
   public int changeStatusToCompleted(int diagTestRecordId);
+
+
+  public int changeStatusToRegister(int diagTestRecordId);
 }

@@ -8,7 +8,9 @@
 		is_diagnostic_test, is_vital, reservation_status, member_id,
 		patient_id, hospital_code
 		from diagnosis
-		where member_id=#{memberId}
+		where member_id=#{memberId} and
+		reservation_status =
+		'RESERVATION_REGISTER'
 	</select>
 
 	<select id="getCompletedDiagnosisListByPatientId"
@@ -98,7 +100,8 @@
 		(#{weekNo}, #{startDate},
 		#{endDate}, #{visitPurpose}, #{isPharmacy}, #{isInjector},
 		#{isDiagnosticTest}, #{isVital}, #{reservationStatus},
-		#{memberId}, #{patientId}, #{hospitalCode})
+		#{memberId},
+		#{patientId}, #{hospitalCode})
 	</insert>
 
 	<update id="updateDiagnosisReservation" parameterType="map">
@@ -124,6 +127,20 @@
 		parameterType="dateWithHospitalAndId" resultType="diagnosis">
 		select diag_id from
 		diagnosis where start_date = #{startDate} and patient_id =
-		#{peopleId} and hospital_code = #{hospitalCode}
+		#{peopleId}
+		and hospital_code = #{hospitalCode}
+	</select>
+
+	<select id="getDiagnosisInfo" parameterType="int"
+		resultType="diagnosis">
+		select diag_id, week_no, start_date,
+		end_date,
+		visit_purpose, dr_opinion, is_pharmacy, is_injector,
+		is_diagnostic_test, is_vital, reservation_status, member_id,
+		patient_id , hospital_code
+		from diagnosis
+		where diag_id =
+		#{diagId}
+
 	</select>
 </mapper>

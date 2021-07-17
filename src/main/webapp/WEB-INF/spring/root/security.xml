@@ -56,19 +56,19 @@
 
 		<security:intercept-url
 			pattern="/api/v1/diagnosis/**"
-			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
 			pattern="/api/v1/diagnosis/**"
-			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="POST" />
 		<security:intercept-url
 			pattern="/api/v1/diagnosis/**"
-			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="PUT" />
 		<security:intercept-url
 			pattern="/api/v1/diagnosis/**"
-			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE')"
+			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class DiagnosisInspectionController {
   }
 
   // 2. 병원 코드로 일주일 동안의 진단 검사의 기록 리스트를 출력
-  @GetMapping("")
+  @PostMapping("")
   public List<DiagnosticVO> showWeeklyDiagnosticTestListByHospitalCode(
       @RequestBody DateWithHospitalCode hospitalInfo) {
     List<DiagnosticVO> result =
@@ -64,14 +65,72 @@ public class DiagnosisInspectionController {
       boolean result = diagnosisService.changeStatusPending(diagTestId);
       return result;
     }
+
+    if (status.equals("register")) {
+      boolean result = diagnosisService.changeStatusRegister(diagTestId);
+      return result;
+    }
+
+
     // boolean result = diagnosisService.changeStatusCompleted(diagTestId);
     throw new BadRequestException("정확한 매개변수를 입력해주세요", new Throwable("incorrect_parameters"));
   }
+
+  @PutMapping("/diagTestStatus")
+  public boolean changeDiagTestStatus(@RequestBody Map<String, Object> statusInfo) {
+    String status = statusInfo.get("status").toString();
+
+    int diagTestId = Integer.parseInt(statusInfo.get("diagTestRecordId").toString());
+
+    if (status.equals("completed")) {
+
+      boolean result = diagnosisService.changeStatusCompletedDiagTestRecord(diagTestId);
+      return result;
+    }
+
+    if (status.equals("processing")) {
+      boolean result = diagnosisService.changeStatusProcessingDiagTestRecord(diagTestId);
+      return result;
+    }
+
+    if (status.equals("pending")) {
+      boolean result = diagnosisService.changeStatusPendingDiagTestRecord(diagTestId);
+      return result;
+    }
+
+
+    // boolean result = diagnosisService.changeStatusCompleted(diagTestId);
+    throw new BadRequestException("정확한 매개변수를 입력해주세요", new Throwable("incorrect_parameters"));
+  }
+
 
   // 7. PUT 해당 환자의 진단 검사 상세에서 결과를 입력시에 값을 추가
   @PutMapping("")
   public boolean changeDiagnosticValue(@RequestBody List<DiagnosticTestResultVO> resultInfo) {
     boolean result = diagnosisService.changeDiagnosticValue(resultInfo);
+    return result;
+  }
+
+  @PutMapping("/barcodePrint")
+  public boolean changeStatusToProcessingWithMemberId(
+      @RequestBody List<DiagnosticTestResultVO> diagnosticInfo) {
+    boolean result = diagnosisService.changeStatusToProcessingWithMemberId(diagnosticInfo);
+    return result;
+
+  }
+
+  @PutMapping("/pending")
+  public boolean changeStatusToPendingWithMemberId(
+      @RequestBody List<DiagnosticTestResultVO> diagnosticInfo) {
+    boolean result = diagnosisService.changeStatusToPendingWithMemberId(diagnosticInfo);
+    return result;
+
+  }
+
+  @PutMapping("/completed")
+  public boolean changeStatusToCompletedWithMemberId(
+      @RequestBody List<DiagnosticTestResultVO> diagnosticInfo) {
+    boolean result = diagnosisService.changeStatusToCompletedWithMemberId(diagnosticInfo);
     return result;
   }
 

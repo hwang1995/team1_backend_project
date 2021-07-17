@@ -3,6 +3,7 @@ package com.team1.healthcare.api.v1;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,7 @@ public class DiagnosisController {
   @Autowired
   private DiagnosisServiceImpl diagnosisService;
 
-  @GetMapping("")
+  @PostMapping("")
   public List<DiagnosisListVO> getDiagnosisList(@RequestBody UserInfoVO userInfo) {
     List<DiagnosisListVO> result = diagnosisService.showTodayDiagnosisList(userInfo);
 

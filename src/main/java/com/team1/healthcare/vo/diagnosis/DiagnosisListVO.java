@@ -28,7 +28,14 @@ public class DiagnosisListVO {
     // Patients 엔티티
     this.patientId = patientInfo.getPatientId();
     this.patientName = patientInfo.getPatientName();
-    this.patientGender = patientInfo.getPatientGender();
+
+    if (patientInfo.getPatientGender().equals("male")) {
+      this.patientGender = "남자";
+    }
+    if (patientInfo.getPatientGender().equals("female")) {
+      this.patientGender = "여자";
+    }
+
     LocalDate originalBirth = patientInfo.getPatientBirth();
     this.patientBirth = CommonUtils.dateToString(originalBirth);
 

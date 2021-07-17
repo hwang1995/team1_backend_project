@@ -69,6 +69,7 @@ public class MqttServiceImpl implements IMqttService {
       PushMessageVO pushVO;
       try {
         pushVO = objectMapper.readValue(str, PushMessageVO.class);
+        log.info(pushVO.toString());
         result.add(pushVO);
       } catch (JsonProcessingException e) {
         e.printStackTrace();
