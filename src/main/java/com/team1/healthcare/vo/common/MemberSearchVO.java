@@ -16,7 +16,8 @@ public class MemberSearchVO {
 
   @JsonIgnore
   public boolean isNull() {
-    if (this.hospitalCode == null || this.memberName == null) {
+    if (this.hospitalCode == null || this.memberName == null || this.hospitalCode.trim().isEmpty()
+        || this.memberName.trim().isEmpty()) {
       return true;
     } else {
       return false;

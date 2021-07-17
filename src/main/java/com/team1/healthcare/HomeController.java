@@ -18,7 +18,6 @@ public class HomeController {
       String home = System.getProperty("user.home");
       String specifyDest = home + "/images" + path;
       response.setContentType("image/jpeg");
-      response.setHeader("Content-Disposition", "attachment");
 
       InputStream is = new FileInputStream(specifyDest);
       OutputStream os = response.getOutputStream();

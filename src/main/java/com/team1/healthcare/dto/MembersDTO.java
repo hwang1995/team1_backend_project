@@ -87,11 +87,6 @@ public class MembersDTO {
     this.memberPw = CommonUtils.encryptPassword(memberPw);
   }
 
-  // 임직원의 진료실을 정해주기 위한 메소드
-  public void setDoctorRoom(int doctorRoomNum) {
-    this.doctorRoom = "진료실" + doctorRoomNum;
-  }
-
   // 임직원에 필수적으로 존재해야하는 데이터가 있는지 없는지 확인하기 위한 메소드
   @JsonIgnore
   public boolean isNull() {
@@ -126,8 +121,11 @@ public class MembersDTO {
     boolean isPostal = this.memberPostal.trim().isEmpty();
     boolean isAuthority = this.memberAuthority.trim().isEmpty();
     boolean isColor = this.memberColor.trim().isEmpty();
+    boolean isPw = this.memberPw.trim().isEmpty();
+    boolean isEmail = this.memberEmail.trim().isEmpty();
+
     if (this.memberId == 0 || isName || isTel || isMemAddr1 || isMemAddr2 || isPostal || isAuthority
-        || isColor) {
+        || isColor || isPw || isEmail) {
       return true;
     } else {
       return false;
