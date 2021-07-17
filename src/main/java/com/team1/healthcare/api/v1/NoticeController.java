@@ -52,6 +52,7 @@ public class NoticeController {
 
   @PostMapping("")
   public boolean createNotice(@RequestBody NoticesDTO noticeInfo) {
+    log.info(noticeInfo.toString());
     boolean result = noticeService.addNotice(noticeInfo);
     return result;
   }
@@ -60,6 +61,8 @@ public class NoticeController {
   @PostMapping("/comment")
   public boolean createNoticeComment(@RequestBody NoticeCommentsDTO noiceCommentInfo) {
     boolean result = noticeService.addComment(noiceCommentInfo);
+    log.info(noiceCommentInfo.toString());
+
     return result;
   }
 
@@ -68,7 +71,10 @@ public class NoticeController {
 
   @PostMapping("/images")
   public String uploadNoticeImages(@RequestBody AddNoticeImageVO noticeImageInfo) {
+    log.info("123123123123", noticeImageInfo.toString());
+
     String Base64String = noticeService.addNoticeImage(noticeImageInfo);
+
     return Base64String;
   }
 
@@ -97,6 +103,12 @@ public class NoticeController {
   @DeleteMapping("/comment")
   public boolean removeComment(@RequestParam int noticeCommentId) {
     boolean result = noticeService.removeComment(noticeCommentId);
+    return result;
+  }
+
+  @DeleteMapping("/comments")
+  public boolean removeComments(@RequestParam int noticeId) {
+    boolean result = noticeService.removeComments(noticeId);
     return result;
   }
 

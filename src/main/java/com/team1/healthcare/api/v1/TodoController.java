@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +39,7 @@ public class TodoController {
   @PostMapping("")
   public boolean createTodo(@RequestBody TodosDTO todoInfo) {
     boolean result = todoService.addTodo(todoInfo);
-    // log.info(todoInfo.toString());
+    log.info(todoInfo.toString());
     return result;
   }
 
@@ -50,5 +51,16 @@ public class TodoController {
     return result;
   }
 
+  // 3. PUT TODO CHECKED 수정하기
+  @PutMapping("/in")
+  public boolean modifyCheckedIn(int todoId) {
+    boolean result = todoService.updateTodoCheckedIn(todoId);
+    return result;
+  }
 
+  @PutMapping("/out")
+  public boolean modifyCheckedOut(int todoId) {
+    boolean result = todoService.updateTodoCheckedOut(todoId);
+    return result;
+  }
 }

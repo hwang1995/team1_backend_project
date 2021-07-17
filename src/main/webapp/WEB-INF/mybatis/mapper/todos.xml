@@ -5,31 +5,48 @@
 	<select id="selectTodosByHospitalCode" parameterType="string"
 		resultType="todos">
 		select todo_id, todo_content, created_date, member_id,
-		hospital_code
+		hospital_code, checked, member_name
 		from todos
 		where
 		hospital_code = #{hospitalCode}
+		order by
+		todo_id DESC
 
 	</select>
 
 	<select id="selectTodosByMemberId" parameterType="int"
 		resultType="todos">
 		select todo_id, todo_content, created_date, member_id,
-		hospital_code
+		hospital_code, checked, member_name
 		from
 		todos
 		where
 		member_id = #{memberId}
+		order by
+		todo_id DESC
 
 	</select>
 
 	<insert id="insertTodo" parameterType="todos">
 		insert into todos
-		(todo_content, created_date, member_id, hospital_code)
+		(todo_content, created_date, member_id, hospital_code, member_name)
 		values
-		(#{todoContent}, CURDATE(), #{memberId}, #{hospitalCode})
+		(#{todoContent}, #{createdDate}, #{memberId}, #{hospitalCode}, #{memberName})
 	</insert>
 
+	<update id="updateCheckedIn" parameterType="int">
+		update todos
+		set
+		checked = 1
+		where todo_id=#{todoId}
+	</update>
+	
+	<update id="updateCheckedOut" parameterType="int">
+		update todos
+		set
+		checked = 0
+		where todo_id=#{todoId}
+	</update>
 
 	<delete id="deleteByTodoId" parameterType="int">
 		delete from todos
