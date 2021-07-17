@@ -91,6 +91,14 @@ public interface INoticeService {
   public boolean removeComment(int noticeCommentId);
 
   /**
+   * 해당 게시물의 덧글들을 삭제하기 위한 서비스 인터페이스
+   * 
+   * @param int noticeId
+   * @return true or false (덧글들이 성공적으로 삭제된 여부를 알기 위해)
+   */
+  public boolean removeComments(int noticeId);
+
+  /**
    * 해당 게시물의 덧글을 수정하기 위한 서비스 인터페이스
    * 
    * @param UpdateNoticeCommentVO updateCommentInfo
@@ -107,10 +115,14 @@ public interface INoticeService {
   public String addNoticeImage(AddNoticeImageVO noticeImageInfo);
 
   /**
-   * 해당 병원의 공지사항 게시물 리스트를 가져오기 위한 서비스 클래스
+   * 댓글을 삭제하기 위한 서비스 메서드 시나리오 : 1-1. 요청받은 noticeId이 null인 경우 BadRequestException을 처리해준다. 2-1. 올바른
+   * 요청이 들어왔을 경우, noticeCommentsDAO.deleteComment의 값이 1이 아닐 경우 result = false를 리턴해준다. 2-2. 올바른 요청이
+   * 들어왔을 경우, noticeCommentsDAO.deleteComment의 값이 1일 경우 result = true를 리턴해준다.
    * 
-   * @param : String hospitalCode
-   * @return : List<NoticesDTO>
-   * @협력 객체 : NoticesDAO
+   * @param : int noticeCommentsId
+   * @return : True or False (댓글이 삭제된 여부를 알기 위해)
+   * @협력 객체 : NoticeCommentsDAO
    */
+
+
 }

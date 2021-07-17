@@ -319,7 +319,7 @@
 
 
 		<security:intercept-url pattern="/image"
-			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
+			access="permitAll"
 			method="GET" />
 
 		<security:intercept-url pattern="/**"

@@ -18,7 +18,27 @@ public interface ITodoService {
    * @param int todoId
    * @return boolean (Todo가 제거 되었는지 여부를 알기 위해)
    */
+  public boolean updateTodoCheckedIn(int todoId);
+
+  /**
+   * Todo의 checked의 값을 변경하기 위한 서비스 인터페이스
+   * 
+   * @param int todoId
+   * @return true or false (Todo가 수정 되었는지 여부를 알기 위해)
+   */
+
+  public boolean updateTodoCheckedOut(int todoId);
+
+  /**
+   * Todo의 checked의 값을 변경하기 위한 서비스 인터페이스
+   * 
+   * @param int todoId
+   * @return true or false (Todo가 수정 되었는지 여부를 알기 위해)
+   */
+
   public boolean removeTodo(int todoId);
+
+
 
   /**
    * 병원 코드 (식별자)로 Todo를 조회하기 위한 서비스 인터페이스

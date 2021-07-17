@@ -261,6 +261,29 @@ public class NoticeServiceImpl implements INoticeService {
   }
 
   /**
+   * 댓글을 삭제하기 위한 서비스 메서드 시나리오 : 1-1. 요청받은 noticeId이 null인 경우 BadRequestException을 처리해준다. 2-1. 올바른
+   * 요청이 들어왔을 경우, noticeCommentsDAO.deleteComment의 값이 1이 아닐 경우 result = false를 리턴해준다. 2-2. 올바른 요청이
+   * 들어왔을 경우, noticeCommentsDAO.deleteComment의 값이 1일 경우 result = true를 리턴해준다.
+   * 
+   * @param : int noticeId
+   * @return : True or False (댓글이 삭제된 여부를 알기 위해)
+   * @협력 객체 : NoticeCommentsDAO
+   */
+  @Override
+  public boolean removeComments(int noticeId) {
+    // TODO Auto-generated method stub
+    if (noticeId == 0) {
+      throw new BadRequestException("잘못된 todoInfo값을 받았습니다.", new Throwable("Request-Error"));
+    }
+    int row = noticeCommentsDAO.deleteComments(noticeId);
+    if (row != 1) {
+      throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
+          new Throwable("Conflict-Request"));
+    }
+    return true;
+  }
+
+  /**
    * 덧글을 수정하기 위한 서비스 메서드 시나리오 : 1-1. 요청받은 updateCommentInfo.isNull의 값이 true인 경우 BadRequestException을
    * 처리해준다. 2-1. 올바른 요청이 들어왔을 경우, noticeCommentsDAO.modifyComment의 값이 1이 아닐 경우 result = false를
    * 리턴해준다. 2-2. 올바른 요청이 들어왔을 경우, noticeCommentsDAO.modifyComment의 값이 1일 경우 result = true를 리턴해준다.
@@ -320,4 +343,6 @@ public class NoticeServiceImpl implements INoticeService {
     }
     return filePath;
   }
+
+
 }

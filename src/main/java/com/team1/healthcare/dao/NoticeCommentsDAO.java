@@ -39,4 +39,12 @@ public interface NoticeCommentsDAO {
    */
   public int deleteComment(int noticeCommentId);
 
+  /**
+   * 덧글들을 삭제하기 위한 쿼리
+   * 
+   * @param int noticeId
+   * @return number (영향 받은 행 수)
+   */
+  public int deleteComments(int noticeId);
+
 }

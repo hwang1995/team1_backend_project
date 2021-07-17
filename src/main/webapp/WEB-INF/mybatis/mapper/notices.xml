@@ -10,6 +10,8 @@
       from
       notices
       where hospital_code = #{hospitalCode}
+      order by
+	  notice_id DESC
    </select>
 
 	<select id="selectNoticeDetailByNoticeId" parameterType="int"

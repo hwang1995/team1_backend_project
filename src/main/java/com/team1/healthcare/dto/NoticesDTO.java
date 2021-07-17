@@ -1,6 +1,8 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +31,8 @@ public class NoticesDTO {
   private String noticeAuthor;
 
   // 공지사항 게시물의 작성일
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime createDate;
 
   // hospitals 엔티티의 FK (병원을 식별하기 위하여)

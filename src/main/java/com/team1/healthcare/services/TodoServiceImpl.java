@@ -120,4 +120,30 @@ public class TodoServiceImpl implements ITodoService {
     return todos;
   }
 
+  @Override
+  public boolean updateTodoCheckedIn(int todoId) {
+    if (todoId == 0) {
+      throw new BadRequestException("잘못된 noticeId값을 받았습니다.", new Throwable("Request-Error"));
+    }
+    int row = todosDAO.updateCheckedIn(todoId);
+    if (row != 1) {
+      throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
+          new Throwable("ConflictRequest"));
+    }
+    return true;
+  }
+
+  @Override
+  public boolean updateTodoCheckedOut(int todoId) {
+    if (todoId == 0) {
+      throw new BadRequestException("잘못된 noticeId값을 받았습니다.", new Throwable("Request-Error"));
+    }
+    int row = todosDAO.updateCheckedOut(todoId);
+    if (row != 1) {
+      throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
+          new Throwable("ConflictRequest"));
+    }
+    return true;
+  }
+
 }

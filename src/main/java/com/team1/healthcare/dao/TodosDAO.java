@@ -37,4 +37,20 @@ public interface TodosDAO {
    * @return number (영향받은 행 수)
    */
   public int deleteByTodoId(int todoId);
+
+  /**
+   * Todo의 checked의 값을 변경하기 위한 쿼리
+   * 
+   * @param int todoId
+   * @return number (영향받은 행 수)
+   */
+  public int updateCheckedIn(int todoId);
+
+  /**
+   * Todo의 checked의 값을 변경하기 위한 쿼리
+   * 
+   * @param int todoId
+   * @return number (영향받은 행 수)
+   */
+  public int updateCheckedOut(int todoId);
 }

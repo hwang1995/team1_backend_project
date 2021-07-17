@@ -8,6 +8,8 @@
 		member_id
 		from notice_comments
 		where notice_id = #{noticeId}
+		order by
+	    notice_comment_id DESC
 	</select>
 
 	<insert id="insertComment" parameterType="noticeComments">
@@ -28,6 +30,11 @@
 	<delete id="deleteComment" parameterType="int">
 		delete from notice_comments
 		where notice_comment_id=#{noticeCommentId}
+	</delete>
+	
+	<delete id="deleteComments" parameterType="int">
+		delete from notice_comments
+		where notice_id=#{notice_id}
 	</delete>
 
 </mapper>
