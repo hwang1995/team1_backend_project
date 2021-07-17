@@ -121,8 +121,11 @@ public class MembersDTO {
     boolean isPostal = this.memberPostal.trim().isEmpty();
     boolean isAuthority = this.memberAuthority.trim().isEmpty();
     boolean isColor = this.memberColor.trim().isEmpty();
+    boolean isPw = this.memberPw.trim().isEmpty();
+    boolean isEmail = this.memberEmail.trim().isEmpty();
+
     if (this.memberId == 0 || isName || isTel || isMemAddr1 || isMemAddr2 || isPostal || isAuthority
-        || isColor) {
+        || isColor || isPw || isEmail) {
       return true;
     } else {
       return false;

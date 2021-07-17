@@ -114,17 +114,20 @@
 			method="DELETE" />
 
 		<security:intercept-url
-			pattern="/api/v1/member/*"
+			pattern="/api/v1/member/**"
 			access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="GET" />
 		<security:intercept-url
-			pattern="/api/v1/member/*" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
+			pattern="/api/v1/member/search" access="hasAnyRole('DEVELOP', 'DIRECTOR', 'DOCTOR', 'NURSE', 'INSPECTOR')"
 			method="POST" />
 		<security:intercept-url
-			pattern="/api/v1/member/*" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
+			pattern="/api/v1/member/**" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
+			method="POST" />
+		<security:intercept-url
+			pattern="/api/v1/member/**" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="PUT" />
 		<security:intercept-url
-			pattern="/api/v1/member/*" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
+			pattern="/api/v1/member/**" access="hasAnyRole('DEVELOP', 'DIRECTOR')"
 			method="DELETE" />
 
 		<security:intercept-url

@@ -43,26 +43,20 @@
 		parameterType="string" resultType="members">
 		select member_id, member_email,
 		member_name, member_tel, member_addr1, member_addr2, member_authority,
-		member_postal, member_image, member_birth, member_color
+		member_postal, member_image, member_birth, member_introduction, member_color
 		from members
 		where hospital_code = #{hospitalCode}
 	</select>
 
 	<select id="selectMembersListByMemberName"
 		parameterType="memberSearch" resultType="members">
-		select member_id,
-		member_email,
-		member_name, member_tel, member_addr1,
-		member_addr2,
-		member_authority, member_postal,
-		member_image,
-		member_birth,
-		member_color
+		select member_id, member_email,
+		member_name, member_tel, member_addr1, member_addr2, member_authority,
+		member_postal, member_image, member_birth, member_introduction, member_color
 		from members
 		where
 		member_name like
-		CONCAT('%',
-		#{memberName}, '%') and hospital_code = #{hospitalCode}
+		CONCAT('%', #{memberName}, '%') and hospital_code = #{hospitalCode}
 	</select>
 	
 	<!-- 임직원의 이메일이 있는지 검사 -->
@@ -88,11 +82,16 @@
 	<update id="updateMemberInfo" parameterType="members">
 		update members set
 		member_authority = #{memberAuthority},
-		member_name = #{memberName},
+		member_email = #{memberEmail},
+		member_pw = #{memberPw},
 		member_tel = #{memberTel},
+		member_name = #{memberName},
 		member_postal = #{memberPostal},
 		member_addr1 = #{memberAddr1},
-		member_addr2 = #{memberAddr2}
+		member_addr2 = #{memberAddr2},
+		member_image = #{memberImage},
+		member_introduction = #{memberIntroduction},
+		member_color = #{memberColor}
 		where
 		member_id = #{memberId}
 	</update>

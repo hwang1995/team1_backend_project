@@ -49,7 +49,7 @@ public class MemberServiceImpl implements IMemberService {
   @Autowired
   private HospitalsDAO hospitalsDAO;
 
-
+  // 임직원 추가
   @Override
   public boolean addMember(MembersDTO memberInfo) {
 
@@ -85,7 +85,8 @@ public class MemberServiceImpl implements IMemberService {
     // 의사의 진료실(doctorRoom)을 세팅
     if (memberInfo.getMemberAuthority().equals("ROLE_DOCTOR")) {
       int doctorRoomNum = membersDAO.countDoctorByHospitalCode(memberInfo.getHospitalCode()) + 1;
-      memberInfo.setDoctorRoom("진료실 " + doctorRoomNum);
+      memberInfo.setDoctorRoom("진료실" + doctorRoomNum);
+
     }
 
     // 임직원의 입사일과 암호화를 실시
@@ -106,12 +107,25 @@ public class MemberServiceImpl implements IMemberService {
   @Override
   public boolean modifyMemberInfo(MembersDTO memberInfo) {
 
-    log.info(memberInfo.toString());
 
     if (memberInfo.isModifyDataNull()) {
       throw new BadRequestException("필수 값이 누락되어 있습니다.", new Throwable("null-info"));
     }
 
+    if (!isEmail(memberInfo.getMemberEmail())) {
+      throw new BadRequestException("이메일 값이 잘못되었습니다.", new Throwable("invalid-email"));
+    }
+
+    if (!isPhone(memberInfo.getMemberTel())) {
+      throw new BadRequestException("전화번호 값이 잘못되었습니다.", new Throwable("invalid-tel"));
+    }
+
+    if (!isPassword(memberInfo.getMemberPw())) {
+      throw new BadRequestException("비밀번호 값이 잘못되었습니다.", new Throwable("invalid-pw"));
+    }
+
+    memberInfo.encryptPassword();
+    log.info(memberInfo.toString());
     int modifyRows = membersDAO.updateMemberInfo(memberInfo);
 
     // 변경이 안되면
@@ -165,7 +179,7 @@ public class MemberServiceImpl implements IMemberService {
   @Override
   public List<MembersDTO> showMembersListByNameAndCode(MemberSearchVO memberSearchInfo) {
 
-    if (memberSearchInfo.isNull() || memberSearchInfo.getMemberName().trim().isEmpty()) {
+    if (memberSearchInfo.isNull()) {
       throw new BadRequestException("MemberSearchVO값이 존재하지 않습니다.", new Throwable("null-info"));
     }
 
