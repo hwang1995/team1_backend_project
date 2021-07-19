@@ -19,6 +19,7 @@ public class PatientServiceImpl implements IPatientService {
   @Autowired
   PatientsDAO patientsDAO;
 
+  // 환자 추가하
   @Override
   public boolean addPatientInfo(PatientsDTO patientInfo) {
     // 1) controller에서 넘어온 patientInfo 값이 null인지 아닌지 체크
@@ -43,6 +44,7 @@ public class PatientServiceImpl implements IPatientService {
     return true;
   }
 
+  // 검색을 통한 환자리스트 가져오기
   @Override
   public List<PatientsDTO> getPatientsListInfo(PatientSearchVO patientSearchInfo) {
 
@@ -51,9 +53,10 @@ public class PatientServiceImpl implements IPatientService {
       throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
           new Throwable("Wrong data with getPatientListInfo"));
     }
-
+    // 2) patientSearchInfo 를 통해 PatientDTO 리스트를 가져온다
     List<PatientsDTO> resultDTO = patientsDAO.selectPatientsByPatientName(patientSearchInfo);
 
+    // 3) 리스트 안에 데이터가 없다면 익셉션 발생시킨다
     if (resultDTO.size() == 0) {
       throw new NotFoundException("검색 결과가 없습니다.",
           new Throwable("No Searching Data with getPatientsListInfo"));
@@ -62,14 +65,17 @@ public class PatientServiceImpl implements IPatientService {
     return resultDTO;
   }
 
+  // hospitalCode를 통해 환자리스트 가져오
   public List<PatientsDTO> getPatientListInfoByHospitalCode(String hospitalCode) {
+    // hospitalCode가 null이면 익셉션 발
     if (hospitalCode == null) {
       throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
           new Throwable("Wrong data with getPatientListInfoByHospitalCode"));
     }
-
+    // hospitalCode를 통해 가져온 결과 리스트 값이다.
     List<PatientsDTO> resultDTO = patientsDAO.selectPatients(hospitalCode);
 
+    // 리스트 안에 데이터가 없다면 익셉션 발생
     if (resultDTO.size() == 0) {
       throw new NoContentException("검색 결과가 없습니다.",
           new Throwable("No Searching Data with getPatientListInfoByHospitalCode"));
@@ -78,6 +84,7 @@ public class PatientServiceImpl implements IPatientService {
     return resultDTO;
   }
 
+  // 환자 수
   @Override
   public boolean modifyPatientInfo(PatientsDTO patientInfo) {
     // 1) controller에서 넘어온 patientInfo 값이 null인지 아닌지 체크
@@ -91,7 +98,6 @@ public class PatientServiceImpl implements IPatientService {
 
     // 3) 업데이트 된 행수가 1이 아닐 경우 에러를 발생시킨다
     if (result != 1) {
-      log.info("conflickRequest");
       throw new ConflictRequestException("수정하는데 실패하였습니다",
           new Throwable("Wrong update with updatePatient"));
     }

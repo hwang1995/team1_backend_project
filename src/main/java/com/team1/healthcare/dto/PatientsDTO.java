@@ -51,7 +51,7 @@ public class PatientsDTO {
 
   // 환자의 마지막 진료일
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-  @JsonFormat(pattern = "yyyy-MM-dd")
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime recentDate;
 
   // 환자의 생일
@@ -61,6 +61,7 @@ public class PatientsDTO {
 
   private String hospitalCode;
 
+  // 엔티티를 나타내는 값들이 null 이라면 return false를 통해 익셉션을 발생시키기 위한 함수이다
   @JsonIgnore
   public boolean isNull() {
     Integer height = new Integer(patientHeight);
@@ -75,6 +76,7 @@ public class PatientsDTO {
     return false;
   }
 
+  // 엔티티를 나타내는 값들이 모두 null 이라면 return false를 통해 익셉션을 발생시키기 위한 함수이다
   @JsonIgnore
   public boolean isUpdateNull() {
     Integer height = new Integer(patientHeight);

@@ -30,7 +30,6 @@ public class ReservationController {
   @PostMapping("/data")
   public List<ReservationVO> getReservationInfo(
       @RequestBody WeekNoWithMemberVO weekNoWithMemberVO) {
-    log.info(weekNoWithMemberVO.toString());
     List<ReservationVO> diagnosisInfo =
         diagnosisService.showWeeklyReservationList(weekNoWithMemberVO);
     return diagnosisInfo;
@@ -47,7 +46,6 @@ public class ReservationController {
   // 3. PUT 진료 접수(예약) 수정하기
   @PutMapping("")
   public String modifyReservationInfo(@RequestBody DiagnosisUpdateVO diagnosisUpdateVO) {
-    log.info(diagnosisUpdateVO.toString());
     boolean result = diagnosisService.modifyReservationInfo(diagnosisUpdateVO);
 
     return "수정이 완료되었습니다.";
@@ -71,7 +69,6 @@ public class ReservationController {
   // 의사 검색
   @GetMapping("/doctor/{hospitalCode}")
   public List<MembersDTO> getDoctorInfo(@PathVariable String hospitalCode) {
-    log.info("실행", hospitalCode);
     List<MembersDTO> doctors = diagnosisService.getDoctorsInfo(hospitalCode);
     return doctors;
   }
