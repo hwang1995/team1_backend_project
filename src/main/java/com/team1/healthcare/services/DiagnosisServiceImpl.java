@@ -792,7 +792,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
 
 
   // ======================== SI HYUN PARK
-
+  // 예약 접수를 하기 위한 메소드
   @Override
   public boolean addReservationInfo(DiagnosisDTO diagnosisInfo) {
 
@@ -806,7 +806,6 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     }
 
     // 2)-1 수정작업 들어가기전 진료할 환자가 해당병원에 있는지 확인
-    log.info(diagnosisInfo.toString());
     PatientsDTO patient = patientsDAO.selectPatientByPatienIdAndHospitalCode(
         diagnosisInfo.getPatientId(), diagnosisInfo.getHospitalCode());
     log.info(patient.toString());
@@ -857,7 +856,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
   }
 
 
-
+  // 예약 수정하기
   @Override
   public boolean modifyReservationInfo(DiagnosisUpdateVO diagnosisUpdateVO) {
 
@@ -893,6 +892,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     return true;
   }
 
+  // 예약 취소하기
   @Override
   public boolean removeReservationInfo(int diagId) {
     // 1) diagId 값이 올바르지 않을 경우
@@ -910,6 +910,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     return true;
   }
 
+  // 예약 목록 보여주기
   @Override
   public List<ReservationVO> showWeeklyReservationList(WeekNoWithMemberVO dateInfo) {
 
@@ -952,7 +953,7 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
       PatientsDTO patient = patientsDAO.selectPatientByPatientId(diagnosis.getPatientId());
 
       ReservationVO reservationVO = new ReservationVO(diagnosis, patient, member);
-
+      // reservationVO 안의 값들이 모두 null이라면 발생시킬 익셉션
       if (reservationVO.isNull()) {
         throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
             new Throwable("Wrong data"));
@@ -964,50 +965,66 @@ public class DiagnosisServiceImpl implements IDiagnosisService {
     return reservationInfoList;
   }
 
+  // 예약 환자 목록을 검색하기
   @Override
   public List<ReservationVO> showReservationWaitingList(PatientSearchVO patientSearchVO) {
 
     List<ReservationVO> reservationInfoList = new ArrayList<>();
+    // patientSearchVO 안의 값들이 null 이라면 발생시킬 익셉션
     if (patientSearchVO.isNull()) {
       throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요", new Throwable("Wrong data"));
     }
 
+    // hospitalCode를 통해 해당 병원의 예약환자를 모두 가져온다
     List<DiagnosisDTO> diagnosisInfo =
         diagnosisDAO.getReservationDiagnosisListByHospitalCode(patientSearchVO.getHospitalCode());
 
     for (DiagnosisDTO diagnosis : diagnosisInfo) {
       Integer memberId = new Integer(diagnosis.getMemberId());
       Integer patientId = new Integer(diagnosis.getPatientId());
+      // diagnosis안의 memberId와 patientId가 둘중 하나라도 null이라면 익셉션을 발생시킨다
       if (memberId == null || patientId == null) {
         throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
             new Throwable("Wrong data"));
       }
-
+      // diagnosis 에서 가져온 의사데이터(memberId)를 가지고 의사가 해당 병원에 존재하는지 확인하기 위해 가져온 DTO
       MembersDTO member = membersDAO.selectMemberInfoByMemberIdAndHospitalCode(
           diagnosis.getMemberId(), patientSearchVO.getHospitalCode());
+
+      // diagnosis 에서 가져온 환자데이터(patientId)를 가지고 환자가 해당 병원에 존재하는지 확인하기 위해 가져온 DTO
       PatientsDTO patient = patientsDAO.selectPatientByPatienIdAndHospitalCode(
           diagnosis.getPatientId(), patientSearchVO.getHospitalCode());
 
+      // 환자, 의사 둘중하나라도 null이면 익셉션 발생
       if (member == null || patient == null) {
-        throw new ConflictRequestException("해당 병원에 환자 또는 의사에 대한 데이터 존재하지 않습니다. 다시 확인해주세요",
+        throw new NotFoundException("해당 병원에 환자 또는 의사에 대한 데이터 존재하지 않습니다. 다시 확인해주세요",
             new Throwable("Wrong Data : No Doctor or Patient Data in hospital"));
       }
 
+      // diagnosis, patient, member dto를 통해 reservationVO에 데이터를 세팅한다
       ReservationVO reservationVO = new ReservationVO(diagnosis, patient, member);
 
+      // 세팅된 데이터 중 하나라도 null이 있다면 익셉션을 발생시킨다
       if (reservationVO.isNull()) {
         throw new BadRequestException("잘못된 데이터 정보입니다. 올바른 정보인지 확인해주세요",
             new Throwable("Wrong data"));
       }
 
+      // 검색한 keyword: getPatientName과 patient dto 중 환자이름이 같다면 리스트에 추가시킨다
       if (patient.getPatientName().equals(patientSearchVO.getPatientName())) {
         reservationInfoList.add(reservationVO);
       }
+    }
+    // 예약정보 리스트에 데이터가 존재하지 않다면, 익셉션을 발생시킨다
+    if (reservationInfoList.size() == 0) {
+      throw new NotFoundException("검색결과가 없습니다.", new Throwable(
+          "No data : reservationInfoList data is not Found in showReservationWaitingList"));
     }
 
     return reservationInfoList;
   }
 
+  // 의사 정보를 가져오기
   @Override
   public List<MembersDTO> getDoctorsInfo(String hospitalCode) {
     // 1) hospitalCode가 null일때 에러를 발생시킨다

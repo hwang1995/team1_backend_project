@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 @Slf4j
 public class PatientVO {
+  // patient 엔티티
   private int patientId;
   private String patientName;
   private String patientGender;
@@ -24,6 +25,7 @@ public class PatientVO {
   private String recentDate;
   private String hospitalCode;
 
+  // patientDTO를 통해 엔티티에 값을 세팅
   public PatientVO(PatientsDTO patientInfo) {
     this.patientId = patientInfo.getPatientId();
     this.patientName = patientInfo.getPatientName();
