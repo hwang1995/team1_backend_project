@@ -128,7 +128,7 @@
 		select diag_id from
 		diagnosis where start_date = #{startDate} and patient_id =
 		#{peopleId}
-		and hospital_code = #{hospitalCode}
+		and hospital_code = #{hospitalCode} and reservation_status = 'RESERVATION_REGISTER'
 	</select>
 
 	<select id="getDiagnosisInfo" parameterType="int"
