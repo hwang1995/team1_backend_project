@@ -113,10 +113,7 @@ public class TodoServiceImpl implements ITodoService {
       throw new BadRequestException("잘못된 memberId 값을 받았습니다.", new Throwable("Request-Error"));
     }
     List<TodosDTO> todos = todosDAO.selectTodosByMemberId(memberId);
-    if (todos == null || todos.size() == 0) {
-      throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
-          new Throwable("Conflict-Request"));
-    }
+
     return todos;
   }
 

@@ -26,6 +26,7 @@ public class HospitalsDTO {
   // 병원 주소
   private String hospitalAddress;
 
+  // 병원 소개
   private String hospitalDescription;
 
   public boolean isNull() {
