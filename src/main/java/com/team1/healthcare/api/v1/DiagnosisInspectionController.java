@@ -76,6 +76,7 @@ public class DiagnosisInspectionController {
     throw new BadRequestException("정확한 매개변수를 입력해주세요", new Throwable("incorrect_parameters"));
   }
 
+  // 진단 검사의 상태를 바꾸기 위한 컨트롤러
   @PutMapping("/diagTestStatus")
   public boolean changeDiagTestStatus(@RequestBody Map<String, Object> statusInfo) {
     String status = statusInfo.get("status").toString();
@@ -111,6 +112,7 @@ public class DiagnosisInspectionController {
     return result;
   }
 
+  // 바코드 출력시 진단 검사의 상태를 진행중으로 변경하기 위한 컨트롤러
   @PutMapping("/barcodePrint")
   public boolean changeStatusToProcessingWithMemberId(
       @RequestBody List<DiagnosticTestResultVO> diagnosticInfo) {
@@ -119,6 +121,7 @@ public class DiagnosisInspectionController {
 
   }
 
+  // 진단 검사의 상태를 대기 중으로 변경하기 위한 컨트롤러
   @PutMapping("/pending")
   public boolean changeStatusToPendingWithMemberId(
       @RequestBody List<DiagnosticTestResultVO> diagnosticInfo) {
@@ -127,6 +130,7 @@ public class DiagnosisInspectionController {
 
   }
 
+  // 진단 검사의 상태를 완료로 변경하기 위한 컨트롤러
   @PutMapping("/completed")
   public boolean changeStatusToCompletedWithMemberId(
       @RequestBody List<DiagnosticTestResultVO> diagnosticInfo) {
@@ -134,9 +138,6 @@ public class DiagnosisInspectionController {
     return result;
   }
 
-  // 1. GET 해당 환자의 진단 검사 목록 가져오기
-  // 3. GET 해당 환자의 진단 검사 상세 페이지에서 엑셀 저장을 누를 시에 CSV 제공
-  // 4. GET 해당 병원의 진단 검사 목록 가져오기
 
 
 }
