@@ -85,7 +85,6 @@
 		update members set
 		member_authority = #{memberAuthority},
 		member_email = #{memberEmail},
-		member_pw = #{memberPw},
 		member_tel = #{memberTel},
 		member_name = #{memberName},
 		member_postal = #{memberPostal},
