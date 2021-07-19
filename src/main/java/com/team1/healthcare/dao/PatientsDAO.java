@@ -33,7 +33,8 @@ public interface PatientsDAO {
    * @param String postal
    * @return PatientsDTO
    */
-  public PatientsDTO selectPatientByPostalCode(@Param("postal") String postal);
+  public PatientsDTO selectPatientByPostalCode(@Param("postal") String postal,
+      @Param("name") String patientName);
 
   /**
    * 병원코드를 통해 환자에 대한 리스트를 가져오기

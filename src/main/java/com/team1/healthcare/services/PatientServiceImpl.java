@@ -28,7 +28,8 @@ public class PatientServiceImpl implements IPatientService {
           new Throwable("Wrong data with addPatientInfo"));
     }
     // 2) 추가하기전 해당 환자의 정보가 저장되어있는지 확인
-    PatientsDTO patients = patientsDAO.selectPatientByPostalCode(patientInfo.getPatientPostal());
+    PatientsDTO patients = patientsDAO.selectPatientByPostalCode(patientInfo.getPatientPostal(),
+        patientInfo.getPatientName());
 
     if (patients != null) {
       throw new ConflictRequestException("이미 존재하는 환자입니다. 추가할 수 없습니다.",

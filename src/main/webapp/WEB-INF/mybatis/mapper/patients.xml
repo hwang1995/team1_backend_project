@@ -32,7 +32,7 @@
 		patient_weight, recent_date,
 		patient_birth, hospital_code
 		from patients
-		where patient_postal=#{postal}
+		where patient_postal=#{postal} and patient_name=#{name}
 	</select>
 
 	<select id="selectHospitalPatientByPatientName"
@@ -41,7 +41,7 @@
 		patient_gender, patient_birth, hospital_code
 		from patients
 		where
-		patient_name = #{patientName} and hospital_code = #{hospitalCode}
+		patient_name like CONCAT('%', #{patientName}, '%') and hospital_code = #{hospitalCode}
 	</select>
 
 	<insert id="addPatient" parameterType="patients">
@@ -105,8 +105,7 @@
 		patient_birth, hospital_code
 		from patients
 		where
-		hospital_code = #{hospitalCode} and patient_name =
-		#{patientName}
+		hospital_code = #{hospitalCode} and patient_name like CONCAT('%', #{patientName}, '%')
 	</select>
 
 	<select id="getPatientInfoByName" parameterType="patientSearch"
