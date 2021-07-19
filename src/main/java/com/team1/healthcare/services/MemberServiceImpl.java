@@ -21,7 +21,6 @@ import com.team1.healthcare.vo.common.MemberSearchVO;
 import com.team1.healthcare.vo.notice.AddNoticeImageVO;
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
 @Service
 public class MemberServiceImpl implements IMemberService {
@@ -32,11 +31,13 @@ public class MemberServiceImpl implements IMemberService {
         memberEmail);
   }
 
+  // 전화번호 정규식
   private boolean isPhone(String memberTel) {
     return Pattern.matches("^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$",
         memberTel);
   }
 
+  // 비밀번호 정규식
   private boolean isPassword(String memberPw) {
     return Pattern.matches(
         "(?=.*\\d{1,50})(?=.*[~`!@#$%\\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$", memberPw);
@@ -120,12 +121,6 @@ public class MemberServiceImpl implements IMemberService {
       throw new BadRequestException("전화번호 값이 잘못되었습니다.", new Throwable("invalid-tel"));
     }
 
-    if (!isPassword(memberInfo.getMemberPw())) {
-      throw new BadRequestException("비밀번호 값이 잘못되었습니다.", new Throwable("invalid-pw"));
-    }
-
-    memberInfo.encryptPassword();
-    log.info(memberInfo.toString());
     int modifyRows = membersDAO.updateMemberInfo(memberInfo);
 
     // 변경이 안되면
