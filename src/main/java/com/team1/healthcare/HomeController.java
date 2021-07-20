@@ -18,7 +18,7 @@ public class HomeController {
       String home = System.getProperty("user.home");
       String specifyDest = home + "/images" + path;
       response.setContentType("image/jpeg");
-  
+
 
       InputStream is = new FileInputStream(specifyDest);
       OutputStream os = response.getOutputStream();
@@ -29,6 +29,11 @@ public class HomeController {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  @GetMapping("/")
+  public String home() {
+    return "index";
   }
 
 }

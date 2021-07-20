@@ -326,7 +326,7 @@
 			method="GET" />
 
 		<security:intercept-url pattern="/**"
-			access="denyAll" />
+			access="permitAll" />
 	</security:http>
 
 	<bean id="corsSource"

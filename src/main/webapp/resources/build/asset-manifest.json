@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.js": "/static/js/main.c84f316d.chunk.js",
+    "main.js.map": "/static/js/main.c84f316d.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.ce6b1f46.js",
+    "runtime-main.js.map": "/static/js/runtime-main.ce6b1f46.js.map",
+    "static/css/2.5f2e6c4d.chunk.css": "/static/css/2.5f2e6c4d.chunk.css",
+    "static/js/2.a8bc6fcd.chunk.js": "/static/js/2.a8bc6fcd.chunk.js",
+    "static/js/2.a8bc6fcd.chunk.js.map": "/static/js/2.a8bc6fcd.chunk.js.map",
+    "static/js/3.964e6666.chunk.js": "/static/js/3.964e6666.chunk.js",
+    "static/js/3.964e6666.chunk.js.map": "/static/js/3.964e6666.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.5f2e6c4d.chunk.css.map": "/static/css/2.5f2e6c4d.chunk.css.map",
+    "static/js/2.a8bc6fcd.chunk.js.LICENSE.txt": "/static/js/2.a8bc6fcd.chunk.js.LICENSE.txt",
+    "static/media/UploadIcon.svg": "/static/media/UploadIcon.469126df.svg",
+    "static/media/index.css": "/static/media/roboto-vietnamese-400-normal.c0bec65d.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ce6b1f46.js",
+    "static/css/2.5f2e6c4d.chunk.css",
+    "static/js/2.a8bc6fcd.chunk.js",
+    "static/js/main.c84f316d.chunk.js"
+  ]
+}
