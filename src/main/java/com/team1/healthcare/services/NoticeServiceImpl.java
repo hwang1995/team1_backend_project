@@ -109,7 +109,7 @@ public class NoticeServiceImpl implements INoticeService {
       throw new BadRequestException("잘못된 hospitalCode값을 받았습니다.", new Throwable("Request-Error"));
     }
     List<NoticesDTO> notices = noticesDAO.selectNoticesByHospitalCode(hospitalCode);
-    if (notices == null || notices.size() == 0) {
+    if (notices == null) {
       throw new ConflictRequestException("ConflictRequest가 발생했습니다.",
           new Throwable("Conflict-Request"));
     }
