@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.VitalRecordsDAO">
+	<insert id="addVitalRecord" parameterType="vitalResult">
+		insert into
+		vital_records
+		(diag_id, blood_pressure, pulse, respiration_rate,
+		temperature, member_id)
+		values
+		(#{diagId}, #{bloodPressure}, #{pulse},
+		#{respirationRate}, #{temperature}, #{memberId})
+	</insert>
+
+	<select id="selectVitalRecordByDiagId" parameterType="int"
+		resultType="vitalRecords">
+		select vr_id, diag_id, blood_pressure, pulse, respiration_rate, temperature,
+		member_id
+		from vital_records
+		where diag_id = #{diagId}
+	</select>
 </mapper>

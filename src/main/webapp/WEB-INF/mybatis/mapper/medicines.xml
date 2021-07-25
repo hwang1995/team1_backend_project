@@ -1,4 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.MedicinesDAO">
+	<select id="getMedicineInfoByMedicineName"
+		parameterType="string" resultType="medicines">
+		select medicine_id, medicine_code,
+		medicine_name, medicine_type, medicine_unit, medicine_explain
+		from
+		medicines
+		where medicine_name like CONCAT('%', #{medicineName}, '%')
+	</select>
+
+	<select id="getMedicineInfoByMedicineNameWithMedicines"
+		parameterType="string" resultType="medicines">
+		select medicine_id, medicine_code,
+		medicine_name, medicine_type, medicine_unit, medicine_explain
+		from
+		medicines
+		where medicine_name like CONCAT('%', #{medicineName}, '%')
+		and
+		(medicine_type =
+		'내용약' OR medicine_type = '외용약')
+	</select>
+
+	<select id="getInjectorInfoByMedicineName"
+		parameterType="string" resultType="medicines">
+		select medicine_id, medicine_code,
+		medicine_name, medicine_type,
+		medicine_unit, medicine_explain
+		from
+		medicines
+		where medicine_name like CONCAT('%', #{medicineName}, '%')
+		and medicine_type =
+		'주사약'
+	</select>
+
+	<select id="getMedicineInfoByMedicineId" parameterType="int"
+		resultType="medicines">
+		select medicine_id, medicine_code,
+		medicine_name, medicine_type,
+		medicine_unit, medicine_explain
+		from
+		medicines
+		where medicine_id =
+		#{medicineId}
+	</select>
 </mapper>

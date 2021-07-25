@@ -1,6 +1,10 @@
 package com.team1.healthcare.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -46,9 +50,44 @@ public class PatientsDTO {
   private int patientWeight;
 
   // 환자의 마지막 진료일
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime recentDate;
 
   // 환자의 생일
-  private LocalDateTime patientBirth;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  private LocalDate patientBirth;
+
+  private String hospitalCode;
+
+  // 엔티티를 나타내는 값들이 null 이라면 return false를 통해 익셉션을 발생시키기 위한 함수이다
+  @JsonIgnore
+  public boolean isNull() {
+    Integer height = new Integer(patientHeight);
+    Integer weight = new Integer(patientWeight);
+
+    if (height == null || weight == null || patientName == null || patientSsn == null
+        || patientGender == null || patientTel == null || patientAddr1 == null
+        || patientPostal == null || recentDate == null || patientBirth == null
+        || hospitalCode == null) {
+      return true;
+    }
+    return false;
+  }
+
+  // 엔티티를 나타내는 값들이 모두 null 이라면 return false를 통해 익셉션을 발생시키기 위한 함수이다
+  @JsonIgnore
+  public boolean isUpdateNull() {
+    Integer height = new Integer(patientHeight);
+    Integer weight = new Integer(patientWeight);
+
+    if (height == null && weight == null && patientName == null && patientSsn == null
+        && patientGender == null && patientTel == null && patientAddr1 == null
+        && patientAddr2 == null && patientPostal == null) {
+      return true;
+    }
+    return false;
+  }
 
 }

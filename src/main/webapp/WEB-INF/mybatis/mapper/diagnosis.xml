@@ -1,4 +1,146 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.DiagnosisDAO">
+	<select id="selectDiagnosisListByMemberId" parameterType="int"
+		resultType="diagnosis">
+		select diag_id, week_no, start_date, end_date,
+		visit_purpose, dr_opinion, is_pharmacy, is_injector,
+		is_diagnostic_test, is_vital, reservation_status, member_id,
+		patient_id, hospital_code
+		from diagnosis
+		where member_id=#{memberId} and
+		reservation_status =
+		'RESERVATION_REGISTER'
+	</select>
+
+	<select id="getCompletedDiagnosisListByPatientId"
+		parameterType="int" resultType="diagnosis">
+		select diag_id, week_no, start_date,
+		end_date,
+		visit_purpose, dr_opinion, is_pharmacy, is_injector,
+		is_diagnostic_test, is_vital, reservation_status, member_id,
+		patient_id , hospital_code
+		from diagnosis
+		where patient_id =
+		#{patientId} and
+		reservation_status = 'RESERVATION_COMPLETED'
+		order by
+		diag_id DESC
+	</select>
+
+	<update id="addDiagnosisInfo"
+		parameterType="registDiagnosisResult">
+		update diagnosis set
+		dr_opinion = #{drOpinion},
+		is_pharmacy = #{isPharmacy},
+		is_injector = #{isInjector},
+		is_diagnostic_test = #{isDiagnosticTest},
+		is_vital = #{isVital},
+		reservation_status = 'RESERVATION_COMPLETED'
+		where
+		diag_id = #{diagId}
+	</update>
+
+	<select id="selectDiagnosisListByMemberIdAndWeekNo"
+		parameterType="weekNoMember" resultType="diagnosis">
+		select diag_id, week_no,
+		start_date,
+		end_date,
+		visit_purpose, dr_opinion,
+		is_pharmacy,
+		is_injector,
+		is_diagnostic_test, is_vital,
+		reservation_status,
+		member_id,
+		patient_id , hospital_code
+		from diagnosis
+		where member_id =
+		#{memberId} and
+		reservation_status =
+		'RESERVATION_REGISTER'
+		and week_no =
+		#{weekNo}
+		order by
+		diag_id DESC
+	</select>
+
+	<select id="getReservationDiagnosisListByHospitalCode"
+		parameterType="string" resultType="diagnosis">
+		select diag_id, week_no,
+		start_date,
+		end_date,
+		visit_purpose, dr_opinion,
+		is_pharmacy,
+		is_injector,
+		is_diagnostic_test, is_vital,
+		reservation_status,
+		member_id,
+		patient_id ,
+		hospital_code
+		from diagnosis
+		where hospital_code =
+		#{hospitalCode} and
+		reservation_status =
+		'RESERVATION_REGISTER'
+		and start_date >= CURDATE()
+		order by
+		diag_id DESC
+	</select>
+
+	<insert id="addDiagnosisReservation" parameterType="diagnosis">
+		insert into
+		diagnosis
+		(week_no, start_date, end_date, visit_purpose, is_pharmacy,
+		is_injector,
+		is_diagnostic_test, is_vital,
+		reservation_status,
+		member_id,
+		patient_id , hospital_code )
+		values
+		(#{weekNo}, #{startDate},
+		#{endDate}, #{visitPurpose}, #{isPharmacy}, #{isInjector},
+		#{isDiagnosticTest}, #{isVital}, #{reservationStatus},
+		#{memberId},
+		#{patientId}, #{hospitalCode})
+	</insert>
+
+	<update id="updateDiagnosisReservation" parameterType="map">
+		update
+		diagnosis
+		set
+		visit_purpose = #{visitPurpose}
+		where
+		diag_id = #{diagId}
+	</update>
+
+	<update id="deleteDiagnosisReservation" parameterType="int">
+		update
+		diagnosis
+		set
+		reservation_status = 'RESERVATION_CANCELED'
+		where
+		diag_id =
+		#{diagId}
+	</update>
+
+	<select id="getDuplicatedDiagnosisTime"
+		parameterType="dateWithHospitalAndId" resultType="diagnosis">
+		select diag_id from
+		diagnosis where start_date = #{startDate} and patient_id =
+		#{peopleId}
+		and hospital_code = #{hospitalCode} and reservation_status = 'RESERVATION_REGISTER'
+	</select>
+
+	<select id="getDiagnosisInfo" parameterType="int"
+		resultType="diagnosis">
+		select diag_id, week_no, start_date,
+		end_date,
+		visit_purpose, dr_opinion, is_pharmacy, is_injector,
+		is_diagnostic_test, is_vital, reservation_status, member_id,
+		patient_id , hospital_code
+		from diagnosis
+		where diag_id =
+		#{diagId}
+
+	</select>
 </mapper>

@@ -1,7 +1,9 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
+import com.team1.healthcare.vo.diagnosis.RegistDiagnosisVO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -14,6 +16,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
 public class DiagnosticTestsDTO {
   // diagnostic_test 엔티티의 PK
@@ -36,5 +39,16 @@ public class DiagnosticTestsDTO {
 
   // diagnosis 엔티티의 FK (환자가 어떠한 진료를 받았는지 식별하기 위해)
   private int diagId;
+
+  private String hospitalCode;
+
+  public DiagnosticTestsDTO(RegistDiagnosisVO diagnosisInfo) {
+    this.memberId = diagnosisInfo.getMemberId();
+    this.patientId = diagnosisInfo.getPatientId();
+    this.diagId = diagnosisInfo.getDiagId();
+    this.hospitalCode = diagnosisInfo.getHospitalCode();
+    this.inspectionStatus = "DIAGNOSTIC_PENDING";
+    this.createdDate = LocalDateTime.now();
+  }
 
 }

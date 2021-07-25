@@ -1,6 +1,9 @@
 package com.team1.healthcare.dto;
 
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,6 +31,8 @@ public class NoticesDTO {
   private String noticeAuthor;
 
   // 공지사항 게시물의 작성일
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   private LocalDateTime createDate;
 
   // hospitals 엔티티의 FK (병원을 식별하기 위하여)
@@ -44,4 +49,31 @@ public class NoticesDTO {
 
   // 공지사항의 조회수
   private int noticeCount;
+
+  @JsonIgnore
+  public boolean isNull() {
+    Integer memberIdWrapper = new Integer(memberId);
+    boolean isTitle = this.noticeTitle.trim().isEmpty();
+    boolean isContent = this.noticeContent.trim().isEmpty();
+    boolean isAuthor = this.noticeAuthor.trim().isEmpty();
+    boolean isCode = this.hospitalCode.trim().isEmpty();
+    boolean isHeadText = this.noticeHeadText.trim().isEmpty();
+    if (memberIdWrapper == null || isTitle || isContent || isAuthor || isCode || isHeadText) {
+      return true;
+    }
+    return false;
+
+  }
+
+  @JsonIgnore
+  public boolean isUpdateNull() {
+    boolean isTitle = this.noticeTitle.trim().isEmpty();
+    boolean isContent = this.noticeContent.trim().isEmpty();
+    boolean isHeadText = this.noticeHeadText.trim().isEmpty();
+    if (isTitle || isContent || isHeadText) {
+      return true;
+    }
+    return false;
+
+  }
 }

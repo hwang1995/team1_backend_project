@@ -1,4 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.TodosDAO">
+
+	<select id="selectTodosByHospitalCode" parameterType="string"
+		resultType="todos">
+		select todo_id, todo_content, created_date, member_id,
+		hospital_code, checked, member_name
+		from todos
+		where
+		hospital_code = #{hospitalCode}
+		order by
+		todo_id DESC
+
+	</select>
+
+	<select id="selectTodosByMemberId" parameterType="int"
+		resultType="todos">
+		select todo_id, todo_content, created_date, member_id,
+		hospital_code, checked, member_name
+		from
+		todos
+		where
+		member_id = #{memberId}
+		order by
+		todo_id DESC
+
+	</select>
+
+	<insert id="insertTodo" parameterType="todos">
+		insert into todos
+		(todo_content, created_date, member_id, hospital_code, member_name)
+		values
+		(#{todoContent}, #{createdDate}, #{memberId}, #{hospitalCode}, #{memberName})
+	</insert>
+
+	<update id="updateCheckedIn" parameterType="int">
+		update todos
+		set
+		checked = 1
+		where todo_id=#{todoId}
+	</update>
+	
+	<update id="updateCheckedOut" parameterType="int">
+		update todos
+		set
+		checked = 0
+		where todo_id=#{todoId}
+	</update>
+
+	<delete id="deleteByTodoId" parameterType="int">
+		delete from todos
+		where todo_id=#{todoId}
+	</delete>
+
 </mapper>
+

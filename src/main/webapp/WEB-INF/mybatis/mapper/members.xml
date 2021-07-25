@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team1.healthcare.dao.MembersDAO">
+	<insert id="insertMember" parameterType="members">
+		insert into members
+		(member_email, member_pw, member_name, member_tel, member_addr1,
+		member_addr2,
+		member_postal, member_authority, member_enabled,
+		hospital_code, doctor_room,
+		member_image, member_gender, member_birth,
+		joined_date,
+		member_introduction, member_color)
+		values
+		(#{memberEmail},
+		#{memberPw}, #{memberName}, #{memberTel}, #{memberAddr1},
+		#{memberAddr2}, #{memberPostal}, #{memberAuthority}, #{memberEnabled},
+		#{hospitalCode}, #{doctorRoom}, #{memberImage}, #{memberGender},
+		#{memberBirth},
+		#{joinedDate}, #{memberIntroduction}, #{memberColor})
+	</insert>
+
+	<select id="getLoginMemberInfo" parameterType="loginInfo"
+		resultType="members">
+		select member_id, member_email,
+		member_name, member_tel,
+		member_addr1, member_addr2, member_authority,
+		member_postal,
+		member_image, member_birth, member_color, hospital_code from members
+		where
+		member_email =
+		#{memberEmail} and hospital_code = #{hospitalCode}
+	</select>
+
+	<select id="isExistedUser" parameterType="members"
+		resultType="members">
+		select member_id, member_email, member_authority,
+		hospital_code from members
+		where member_email = #{memberEmail} and
+		hospital_code = #{hospitalCode}
+	</select>
+
+	<select id="selectMembersListByHospitalCode"
+		parameterType="string" resultType="members">
+		select member_id, member_email,
+		member_name, member_tel, member_addr1, member_addr2, member_authority,
+
+		member_postal, member_image, member_birth, member_introduction, member_color, doctor_room
+
+		from members
+		where hospital_code = #{hospitalCode}
+	</select>
+
+	<select id="selectMembersListByMemberName"
+		parameterType="memberSearch" resultType="members">
+		select member_id, member_email,
+		member_name, member_tel, member_addr1, member_addr2, member_authority,
+		member_postal, member_image, member_birth, member_introduction, member_color
+		from members
+		where
+		member_name like
+		CONCAT('%', #{memberName}, '%') and hospital_code = #{hospitalCode}
+	</select>
+	
+	<!-- 임직원의 이메일이 있는지 검사 -->
+	<select id="countExistedEmail" parameterType="String"
+		resultType="int">
+		select count(*)
+		from members 
+		where member_email = #{memberEmail}
+	</select>
+	
+	<select id="countMembersByNameAndCode"
+		parameterType="memberSearch" resultType="int">
+		select count(*) from members
+		where member_name = #{memberName} and hospital_code = #{hospitalCode}
+	</select>
+	
+	<!-- 해당 병원의 의사 수 -->
+	<select id="countDoctorByHospitalCode" parameterType="String" resultType="int">
+		select count(*) from members
+		where member_authority ='ROLE_DOCTOR' and hospital_code = #{hospitalCode} 
+	</select>
+	
+	<update id="updateMemberInfo" parameterType="members">
+		update members set
+		member_authority = #{memberAuthority},
+		member_email = #{memberEmail},
+		member_tel = #{memberTel},
+		member_name = #{memberName},
+		member_postal = #{memberPostal},
+		member_addr1 = #{memberAddr1},
+		member_addr2 = #{memberAddr2},
+		member_image = #{memberImage},
+		member_introduction = #{memberIntroduction},
+		member_color = #{memberColor}
+		where
+		member_id = #{memberId}
+	</update>
+
+	<update id="updateMemberPw" parameterType="map">
+		update members set
+		member_pw = #{memberPw}
+		where
+		member_id = #{memberId}
+	</update>
+
+	<delete id="deleteMember" parameterType="int">
+		delete from members
+		where member_id = #{memberId}
+	</delete>
+
+	<select id="selectDoctorInfoByHospitalCode"
+		parameterType="string" resultType="members">
+		select member_id, member_name,
+		doctor_room, hospital_code
+		from members
+		where hospital_code =
+		#{hospitalCode}
+		and member_authority = 'ROLE_DOCTOR'
+	</select>
+
+	<select id="selectMemberInfoByMemberId" parameterType="int"
+		resultType="members">
+		select member_id, member_email,
+		member_name, member_tel,
+		member_addr1, member_addr2,
+		member_authority, member_postal,
+		member_image, member_birth,
+		member_color, doctor_room
+		from members
+		where member_id = #{memberId}
+	</select>
+	
+	<select id="selectMemberInfoByMemberIdAndHospitalCode" resultType="members">
+		select member_id, member_email,
+		member_name, member_tel,
+		member_addr1, member_addr2, member_authority,
+
+		member_postal,
+		member_image, member_birth, member_color,
+		doctor_room
+
+		from members
+		where
+		member_id =
+		#{memberId} and
+		hospital_code =
+		#{hospitalCode}
+	</select>
+
+</mapper>

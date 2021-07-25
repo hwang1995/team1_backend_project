@@ -1,4 +1,104 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.team1.healthcare.dao.DiagnosticTestRecordsDAO">
+<mapper
+	namespace="com.team1.healthcare.dao.DiagnosticTestRecordsDAO">
+	<insert id="addDiagnosticTestRecord"
+		parameterType="diagnosticTestRecords" useGeneratedKeys="true"
+		keyProperty="diagInspectionId">
+		insert into diagnostic_test_records
+		(diag_test_id,
+		diag_inspection_id, diag_test_status)
+		values
+		(#{diagTestId},
+		#{diagInspectionId}, #{diagTestStatus})
+	</insert>
+
+	<select id="getDiagnosticTestRecordByDiagTestId"
+		parameterType="int" resultType="diagnosticTestRecords">
+		select diag_test_record_id,
+		diag_test_id, diag_inspection_id, diag_test_value, diag_test_status,
+		inspector_member_id
+		from diagnostic_test_records
+		where diag_test_id =
+		#{diagTestId}
+	</select>
+
+	<update id="addDiagnosticTestRecordResult"
+		parameterType="diagnosticTestResult">
+		update diagnostic_test_records set
+		diag_test_value =
+		#{diagTestValue},
+		diag_test_status = 'DIAGNOSTIC_COMPLETED',
+		inspector_member_id = #{inspectorMemberId}
+		where
+		diag_test_record_id =
+		#{diagTestRecordId}
+	</update>
+
+	<update id="changeStatusToProcessing" parameterType="int">
+		update
+		diagnostic_test_records set
+		diag_test_status = 'DIAGNOSTIC_PROCESSING'
+		where
+		diag_test_record_id = #{diagTestRecordId}
+	</update>
+
+	<update id="changeStatusToPending" parameterType="int">
+		update
+		diagnostic_test_records set
+		diag_test_status = 'DIAGNOSTIC_PENDING'
+		where
+		diag_test_record_id = #{diagTestRecordId}
+	</update>
+
+
+	<update id="changeStatusToRegister" parameterType="int">
+		update
+		diagnostic_test_records set
+		diag_test_status = 'DIAGNOSTIC_REGISTER'
+		where
+		diag_test_record_id = #{diagTestRecordId}
+	</update>
+
+	<update id="changeStatusToCompleted" parameterType="int">
+		update
+		diagnostic_test_records set
+		diag_test_status = 'DIAGNOSTIC_COMPLETED'
+		where
+		diag_test_record_id = #{diagTestRecordId}
+	</update>
+
+	<update id="changeStatusToProcessingWithMemberId"
+		parameterType="diagnosticTestResult">
+		update diagnostic_test_records set
+		diag_test_status =
+		'DIAGNOSTIC_REGISTER',
+		inspector_member_id = #{inspectorMemberId}
+		where
+		diag_test_record_id =
+		#{diagTestRecordId}
+	</update>
+
+	<update id="changeStatusToPendingWithMemberId"
+		parameterType="diagnosticTestResult">
+		update diagnostic_test_records set
+		diag_test_status =
+		'DIAGNOSTIC_PENDING',
+		inspector_member_id = null
+		where
+		diag_test_record_id =
+		#{diagTestRecordId}
+	</update>
+
+	<update id="changeStatusToCompletedWithMemberId"
+		parameterType="diagnosticTestResult">
+		update diagnostic_test_records set
+		diag_test_status =
+		'DIAGNOSTIC_COMPLETED',
+		inspector_member_id = #{inspectorMemberId}
+		where
+		diag_test_record_id =
+		#{diagTestRecordId}
+	</update>
+
 </mapper>

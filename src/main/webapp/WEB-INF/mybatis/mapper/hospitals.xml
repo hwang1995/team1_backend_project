@@ -1,4 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team1.healthcare.dao.HospitalsDAO">
+	<select id="getHospitalInfo" parameterType="string"
+		resultType="hospitals">
+		select hospital_code,
+		hospital_name, hospital_tel,
+		hospital_address, hospital_description from hospitals where
+		hospital_code=#{hospitalCode}
+	</select>
+
+	<select id="getHospitalInfoList" resultType="hospitals">
+		select
+		hospital_code, hospital_name, hospital_tel, hospital_address, hospital_description from
+		hospitals
+		order by hospital_name desc
+	</select>
+
+
+	<select id="getCount" resultType="int">
+		select count(*) from hospitals
+	</select>
+
+	<insert id="addHospitalInfo" parameterType="hospitals">
+		insert into hospitals
+		(hospital_code, hospital_name, hospital_tel, hospital_address, hospital_description)
+		values
+		(#{hospitalCode}, #{hospitalName}, #{hospitalTel}, #{hospitalAddress}, #{hospitalDescription})
+	</insert>
+
+	<update id="updateHospitalInfo" parameterType="hospitals">
+		update hospitals
+		set
+		hospital_name = #{hospitalName},
+		hospital_tel = #{hospitalTel},
+		hospital_address = #{hospitalAddress},
+		hospital_description = #{hospitalDescrption}
+		where hospital_code = #{hospitalCode}
+	</update>
+
+	<delete id="deleteHospitalInfo">
+		delete from hospitals where hospital_code =
+		#{hospitalCode}
+	</delete>
 </mapper>
