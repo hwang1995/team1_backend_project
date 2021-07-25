@@ -31,7 +31,9 @@ public class HomeController {
     }
   }
 
-  @GetMapping("/")
+  @GetMapping(value = {"/", "/dashboard", "/dashboard/diagnosis", "/dashboard/diagnosis-history",
+      "/dashboard/diagnostic", "/dashboard/member", "/dashboard/patient", "/dashboard/reservation",
+      "/dashboard/tutorial"})
   public String home() {
     return "index";
   }
