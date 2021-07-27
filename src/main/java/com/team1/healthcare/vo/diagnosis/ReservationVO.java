@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team1.healthcare.commons.CommonUtils;
 import com.team1.healthcare.dto.DiagnosisDTO;
 import com.team1.healthcare.dto.MembersDTO;
 import com.team1.healthcare.dto.PatientsDTO;
@@ -56,7 +57,7 @@ public class ReservationVO {
 
     // Constant
     this.category = "time";
-    this.color = "white";
+    this.color = CommonUtils.getTextColor(memberInfo.getMemberColor());
 
   }
 

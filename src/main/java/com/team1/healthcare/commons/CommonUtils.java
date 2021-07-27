@@ -80,5 +80,13 @@ public class CommonUtils {
         .toString();
   }
 
+  public static String getTextColor(String color) {
+    if (color.equals("#cddc39") || color.equals("#ffeb3b") || color.equals("#ffc107")
+        || color.equals("#ff9800") || color.equals("#ff5722")) {
+      return "black";
+    }
+    return "white";
+  }
+
 
 }
